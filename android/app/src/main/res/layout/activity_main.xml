@@ -12,52 +12,132 @@
         android:orientation="vertical">
 
         <!-- Cabeçalho -->
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/fundo_cabecalho"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:paddingTop="48dp"
-            android:paddingBottom="32dp">
+            android:background="@drawable/fundo_cabecalho">
 
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:contentDescription="@string/app_name"
-                android:src="@drawable/ic_haltere"
+            <ImageButton
+                android:id="@+id/btnTema"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_gravity="top|end"
+                android:layout_margin="12dp"
+                android:background="@drawable/fundo_circulo_claro"
+                android:contentDescription="@string/tema_alternar"
+                android:padding="10dp"
+                android:src="@drawable/ic_tema_escuro"
                 app:tint="@color/branco" />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/espaco_pequeno"
-                android:text="@string/app_name"
-                android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
-                android:textColor="@color/branco"
-                android:textStyle="bold" />
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingTop="48dp"
+                android:paddingBottom="32dp">
 
-            <TextView
-                android:id="@+id/txtSaudacao"
-                android:layout_width="wrap_content"
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/ic_haltere"
+                    app:tint="@color/branco" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/espaco_pequeno"
+                    android:text="@string/app_name"
+                    android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+                    android:textColor="@color/branco"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtSaudacao"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margem_tela"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center"
+                    android:text="@string/slogan"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                    android:textColor="@color/branco" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- Resumo do dia (só aparece com perfil criado) -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardResumo"
+            style="@style/Cartao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/espaco_medio"
+            android:layout_marginTop="@dimen/espaco_medio"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margem_tela"
-                android:layout_marginTop="4dp"
-                android:gravity="center"
-                android:text="@string/slogan"
-                android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-                android:textColor="@color/branco" />
-        </LinearLayout>
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/home_hoje"
+                    android:textAppearance="@style/Texto.Secao" />
+
+                <TextView
+                    android:id="@+id/txtKcalHoje"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/espaco_pequeno"
+                    android:drawablePadding="6dp"
+                    android:textAppearance="@style/Texto.Corpo"
+                    android:textStyle="bold"
+                    app:drawableStartCompat="@drawable/ic_fogo"
+                    app:drawableTint="@color/laranja" />
+
+                <ProgressBar
+                    android:id="@+id/barraKcalHoje"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:layout_marginTop="6dp" />
+
+                <TextView
+                    android:id="@+id/txtUltimoPeso"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/espaco_pequeno"
+                    android:drawablePadding="6dp"
+                    android:textAppearance="@style/Texto.Secundario"
+                    app:drawableStartCompat="@drawable/ic_balanca"
+                    app:drawableTint="@color/verde_primario" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
         <!-- Menu -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/espaco_medio">
+            android:paddingHorizontal="@dimen/espaco_medio"
+            android:paddingBottom="@dimen/espaco_medio">
 
             <include
                 android:id="@+id/menuNovaAvaliacao"
+                layout="@layout/item_menu_home" />
+
+            <include
+                android:id="@+id/menuDiario"
+                layout="@layout/item_menu_home" />
+
+            <include
+                android:id="@+id/menuPeso"
                 layout="@layout/item_menu_home" />
 
             <include

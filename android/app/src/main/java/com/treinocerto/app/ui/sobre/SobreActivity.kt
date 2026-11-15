@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.treinocerto.app.BuildConfig
 import com.treinocerto.app.R
+import com.treinocerto.app.data.local.PreferenciasTema
+import com.treinocerto.app.data.local.PreferenciasTema.Tema
 import com.treinocerto.app.databinding.ActivitySobreBinding
 import com.treinocerto.app.util.IntentsExternas
 
@@ -20,6 +22,7 @@ class SobreActivity : AppCompatActivity() {
         title = getString(R.string.menu_sobre)
 
         binding.txtVersao.text = getString(R.string.sobre_versao, BuildConfig.VERSION_NAME)
+        configurarTema()
 
         binding.btnSwagger.setOnClickListener {
             IntentsExternas.abrirUrl(this, BuildConfig.API_BASE_URL + "docs")
@@ -32,6 +35,21 @@ class SobreActivity : AppCompatActivity() {
         }
         binding.btnCompartilharApp.setOnClickListener {
             IntentsExternas.compartilharTexto(this, getString(R.string.app_name), getString(R.string.sobre_texto_compartilhar))
+        }
+    }
+
+    /** RadioGroup de aparência: sistema, claro ou escuro (salvo em SharedPreferences). */
+    private fun configurarTema() {
+        val preferencias = PreferenciasTema(this)
+        val radios = mapOf(
+            Tema.SISTEMA to binding.rbTemaSistema,
+            Tema.CLARO to binding.rbTemaClaro,
+            Tema.ESCURO to binding.rbTemaEscuro,
+        )
+        radios[preferencias.tema]?.isChecked = true
+        binding.grupoTema.setOnCheckedChangeListener { _, idMarcado ->
+            val escolhido = radios.entries.first { it.value.id == idMarcado }.key
+            if (escolhido != preferencias.tema) preferencias.tema = escolhido
         }
     }
 

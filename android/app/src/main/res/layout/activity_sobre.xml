@@ -60,6 +60,48 @@
                 android:textAppearance="@style/Texto.Secundario" />
         </androidx.cardview.widget.CardView>
 
+        <androidx.cardview.widget.CardView
+            style="@style/Cartao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tema_titulo"
+                    android:textAppearance="@style/Texto.Secao" />
+
+                <RadioGroup
+                    android:id="@+id/grupoTema"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <RadioButton
+                        android:id="@+id/rbTemaSistema"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tema_sistema" />
+
+                    <RadioButton
+                        android:id="@+id/rbTemaClaro"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tema_claro" />
+
+                    <RadioButton
+                        android:id="@+id/rbTemaEscuro"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tema_escuro" />
+                </RadioGroup>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
         <Button
             android:id="@+id/btnSwagger"
             style="@style/Botao.Secundario"
