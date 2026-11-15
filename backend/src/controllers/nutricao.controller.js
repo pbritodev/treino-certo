@@ -1,5 +1,6 @@
 const { HttpError } = require('../middlewares/erros');
 const { montarDiario } = require('../services/diario.service');
+const { dataLocal } = require('../utils/datas');
 const {
   validarRegistroAlimentar, validarAtualizacaoRegistro, dataValida,
 } = require('../validators/nutricao.validator');
@@ -17,7 +18,7 @@ function criarNutricaoController({ alimentos, registros, usuarios, avaliacoes })
     diario(req, res) {
       const usuarioId = Number(req.params.id);
       if (!usuarios.buscarPorId(usuarioId)) throw new HttpError(404, 'Usuário não encontrado');
-      const data = req.query.data ?? new Date().toISOString().slice(0, 10);
+      const data = req.query.data ?? dataLocal();
       if (!dataValida(data)) throw new HttpError(400, 'data deve estar no formato AAAA-MM-DD');
 
       res.json(montarDiario({
