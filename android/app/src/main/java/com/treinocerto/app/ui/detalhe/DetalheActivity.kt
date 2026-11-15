@@ -1,18 +1,18 @@
 package com.treinocerto.app.ui.detalhe
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.treinocerto.app.R
 import com.treinocerto.app.data.model.Avaliacao
-import com.treinocerto.app.data.model.AvaliacaoUpdate
+import com.treinocerto.app.data.model.AvaliacaoAlteracao
 import com.treinocerto.app.data.repository.Resultado
 import com.treinocerto.app.data.repository.TreinoRepository
 import com.treinocerto.app.databinding.ActivityDetalheBinding
 import com.treinocerto.app.ui.common.ExibidorPlano
 import com.treinocerto.app.ui.common.Extras
-import com.treinocerto.app.ui.common.registrarTreinoConcluido
+import com.treinocerto.app.ui.common.TelaBase
 import com.treinocerto.app.ui.common.confirmarExclusao
+import com.treinocerto.app.ui.common.registrarTreinoConcluido
 import com.treinocerto.app.util.Formatos
 import com.treinocerto.app.util.IntentsExternas
 import com.treinocerto.app.util.mostrarErro
@@ -21,7 +21,7 @@ import com.treinocerto.app.util.visivel
 import kotlinx.coroutines.launch
 
 /** Detalhe de uma avaliação do histórico: consulta (GET), edição (PATCH) e exclusão (DELETE). */
-class DetalheActivity : AppCompatActivity() {
+class DetalheActivity : TelaBase() {
 
     private lateinit var binding: ActivityDetalheBinding
     private val repositorio = TreinoRepository()
@@ -31,7 +31,6 @@ class DetalheActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDetalheBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = getString(R.string.detalhe_titulo)
 
         avaliacaoId = intent.getLongExtra(Extras.AVALIACAO_ID, -1)
@@ -40,11 +39,6 @@ class DetalheActivity : AppCompatActivity() {
         binding.btnSalvar.setOnClickListener { salvarAnotacoes() }
         binding.btnExcluir.setOnClickListener { confirmarRemocao() }
         carregar()
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        finish()
-        return true
     }
 
     private fun carregar() {
@@ -72,13 +66,13 @@ class DetalheActivity : AppCompatActivity() {
     }
 
     private fun salvarAnotacoes() {
-        val update = AvaliacaoUpdate(
+        val alteracao = AvaliacaoAlteracao(
             observacao = binding.edtObservacao.text.toString().trim(),
             favorita = binding.swFavorita.isChecked,
         )
         binding.btnSalvar.isEnabled = false
         lifecycleScope.launch {
-            when (val resultado = repositorio.atualizarAvaliacao(avaliacaoId, update)) {
+            when (val resultado = repositorio.atualizarAvaliacao(avaliacaoId, alteracao)) {
                 is Resultado.Sucesso -> toast(getString(R.string.detalhe_salvo))
                 is Resultado.Erro -> mostrarErro(resultado.mensagem) { salvarAnotacoes() }
             }

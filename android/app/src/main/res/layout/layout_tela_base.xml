@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Estrutura comum a todas as telas (usada pela TelaBase):
+  faixa da barra de status + barra superior (Toolbar) + conteúdo da Activity.
+  Os espaçamentos das barras do sistema são aplicados no código (WindowInsets).
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/raizTela"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/areaSuperior"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/cabecalho_inicio"
+        android:orientation="vertical">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/barraSuperior"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/barra_superior"
+            android:theme="@style/ThemeOverlay.Material3.Dark.ActionBar"
+            app:titleTextAppearance="@style/TextAppearance.TreinoCerto.TituloBarra"
+            app:titleTextColor="@color/branco" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/conteudoTela"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+</LinearLayout>

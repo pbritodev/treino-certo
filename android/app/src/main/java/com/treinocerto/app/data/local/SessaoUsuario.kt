@@ -6,23 +6,23 @@ import androidx.core.content.edit
 /** Guarda localmente (SharedPreferences) qual usuário está usando o app. */
 class SessaoUsuario(context: Context) {
 
-    private val prefs = context.getSharedPreferences("sessao_treino_certo", Context.MODE_PRIVATE)
+    private val preferencias = context.getSharedPreferences("sessao_treino_certo", Context.MODE_PRIVATE)
 
     val usuarioId: Long?
-        get() = prefs.getLong(CHAVE_ID, -1L).takeIf { it > 0 }
+        get() = preferencias.getLong(CHAVE_ID, -1L).takeIf { it > 0 }
 
     val nome: String?
-        get() = prefs.getString(CHAVE_NOME, null)
+        get() = preferencias.getString(CHAVE_NOME, null)
 
     val estaLogado: Boolean
         get() = usuarioId != null
 
-    fun salvar(id: Long, nome: String) = prefs.edit {
+    fun salvar(id: Long, nome: String) = preferencias.edit {
         putLong(CHAVE_ID, id)
         putString(CHAVE_NOME, nome)
     }
 
-    fun limpar() = prefs.edit { clear() }
+    fun limpar() = preferencias.edit { clear() }
 
     private companion object {
         const val CHAVE_ID = "usuario_id"

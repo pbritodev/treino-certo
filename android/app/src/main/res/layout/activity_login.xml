@@ -10,41 +10,58 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Cabeçalho com a marca -->
-        <LinearLayout
+        <!-- Cabeçalho com a marca e o botão de tema -->
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/fundo_cabecalho"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:paddingTop="56dp"
-            android:paddingBottom="48dp">
+            android:background="@drawable/fundo_cabecalho">
 
-            <ImageView
-                android:layout_width="88dp"
-                android:layout_height="88dp"
-                android:contentDescription="@string/app_name"
-                android:src="@drawable/ic_haltere"
+            <ImageButton
+                android:id="@+id/btnTema"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_gravity="top|end"
+                android:layout_margin="12dp"
+                android:background="@drawable/fundo_circulo_claro"
+                android:contentDescription="@string/tema_alternar"
+                android:padding="10dp"
+                android:src="@drawable/ic_tema_escuro"
                 app:tint="@color/branco" />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/espaco_pequeno"
-                android:text="@string/app_name"
-                android:textAppearance="@style/TextAppearance.Material3.HeadlineLarge"
-                android:textColor="@color/branco"
-                android:textStyle="bold" />
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingTop="56dp"
+                android:paddingBottom="48dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margem_tela"
-                android:gravity="center"
-                android:text="@string/slogan"
-                android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-                android:textColor="@color/branco" />
-        </LinearLayout>
+                <ImageView
+                    android:layout_width="88dp"
+                    android:layout_height="88dp"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/ic_haltere"
+                    app:tint="@color/branco" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/espaco_pequeno"
+                    android:text="@string/app_name"
+                    android:textAppearance="@style/TextAppearance.Material3.HeadlineLarge"
+                    android:textColor="@color/branco"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margem_tela"
+                    android:gravity="center"
+                    android:text="@string/slogan"
+                    android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                    android:textColor="@color/branco" />
+            </LinearLayout>
+        </FrameLayout>
 
         <!-- Formulário de login -->
         <androidx.cardview.widget.CardView

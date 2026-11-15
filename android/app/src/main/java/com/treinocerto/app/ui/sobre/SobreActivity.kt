@@ -1,16 +1,16 @@
 package com.treinocerto.app.ui.sobre
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.treinocerto.app.BuildConfig
 import com.treinocerto.app.R
 import com.treinocerto.app.data.local.PreferenciasTema
 import com.treinocerto.app.data.local.PreferenciasTema.Tema
 import com.treinocerto.app.databinding.ActivitySobreBinding
+import com.treinocerto.app.ui.common.TelaBase
 import com.treinocerto.app.util.IntentsExternas
 
 /** Informações do app e atalhos que usam Intents implícitas (web, e-mail, compartilhar). */
-class SobreActivity : AppCompatActivity() {
+class SobreActivity : TelaBase() {
 
     private lateinit var binding: ActivitySobreBinding
 
@@ -18,7 +18,6 @@ class SobreActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySobreBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = getString(R.string.menu_sobre)
 
         binding.txtVersao.text = getString(R.string.sobre_versao, BuildConfig.VERSION_NAME)
@@ -51,10 +50,5 @@ class SobreActivity : AppCompatActivity() {
             val escolhido = radios.entries.first { it.value.id == idMarcado }.key
             if (escolhido != preferencias.tema) preferencias.tema = escolhido
         }
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        finish()
-        return true
     }
 }

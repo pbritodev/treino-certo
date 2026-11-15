@@ -4,15 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.treinocerto.app.R
-import com.treinocerto.app.data.local.PreferenciasTema
 import com.treinocerto.app.data.local.SessaoUsuario
 import com.treinocerto.app.data.repository.Resultado
 import com.treinocerto.app.data.repository.TreinoRepository
 import com.treinocerto.app.databinding.ActivityMainBinding
 import com.treinocerto.app.databinding.ItemMenuGradeBinding
+import com.treinocerto.app.ui.common.TelaBase
 import com.treinocerto.app.ui.common.sair
 import com.treinocerto.app.ui.diario.DiarioActivity
 import com.treinocerto.app.ui.historico.HistoricoActivity
@@ -23,17 +22,18 @@ import com.treinocerto.app.ui.questionario.QuestionarioActivity
 import com.treinocerto.app.ui.sobre.SobreActivity
 import com.treinocerto.app.util.Formatos
 import com.treinocerto.app.util.visivel
+import kotlin.math.roundToInt
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
 
 /** Home: saudação, resumo do dia, menu em grade e botão de tema. Exige usuário logado. */
-class MainActivity : AppCompatActivity() {
+class MainActivity : TelaBase() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var sessao: SessaoUsuario
-    private lateinit var tema: PreferenciasTema
     private val repositorio = TreinoRepository()
+
+    override val mostrarBarraSuperior = false // a Home tem cabeçalho próprio
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,11 +42,9 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.hide()
-        tema = PreferenciasTema(this)
 
-        binding.btnTema.setImageResource(if (tema.estaEscuro()) R.drawable.ic_tema_claro else R.drawable.ic_tema_escuro)
-        binding.btnTema.setOnClickListener { tema.alternar() } // a Activity é recriada com o novo tema
+        binding.btnTema.setImageResource(iconeDoTema())
+        binding.btnTema.setOnClickListener { alternarTema() }
 
         configurarMenu(binding.menuNovaAvaliacao, R.drawable.ic_haltere, R.string.menu_nova_avaliacao,
             R.string.menu_nova_avaliacao_desc, QuestionarioActivity::class.java)
@@ -98,15 +96,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun configurarMenu(
-        item: ItemMenuGradeBinding,
+        atalho: ItemMenuGradeBinding,
         @DrawableRes icone: Int,
         @StringRes titulo: Int,
         @StringRes descricao: Int,
         destino: Class<*>,
     ) {
-        item.imgIcone.setImageResource(icone)
-        item.txtTitulo.setText(titulo)
-        item.txtDescricao.setText(descricao)
-        item.root.setOnClickListener { startActivity(Intent(this, destino)) }
+        atalho.imgIcone.setImageResource(icone)
+        atalho.txtTitulo.setText(titulo)
+        atalho.txtDescricao.setText(descricao)
+        atalho.root.setOnClickListener { startActivity(Intent(this, destino)) }
     }
 }

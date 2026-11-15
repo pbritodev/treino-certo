@@ -3,12 +3,11 @@ package com.treinocerto.app.ui.questionario
 import android.content.Intent
 import android.os.Bundle
 import android.widget.SeekBar
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.treinocerto.app.R
 import com.treinocerto.app.data.local.SessaoUsuario
 import com.treinocerto.app.data.model.AtividadeDiaria
-import com.treinocerto.app.data.model.AvaliacaoRequest
+import com.treinocerto.app.data.model.AvaliacaoEntrada
 import com.treinocerto.app.data.model.Local
 import com.treinocerto.app.data.model.Nivel
 import com.treinocerto.app.data.model.Objetivo
@@ -17,6 +16,7 @@ import com.treinocerto.app.data.repository.Resultado
 import com.treinocerto.app.data.repository.TreinoRepository
 import com.treinocerto.app.databinding.ActivityQuestionarioBinding
 import com.treinocerto.app.ui.common.Extras
+import com.treinocerto.app.ui.common.TelaBase
 import com.treinocerto.app.ui.common.configurarOpcoes
 import com.treinocerto.app.ui.common.opcaoSelecionada
 import com.treinocerto.app.ui.resultado.ResultadoActivity
@@ -27,7 +27,7 @@ import com.treinocerto.app.util.visivel
 import kotlinx.coroutines.launch
 
 /** Formulário de avaliação: coleta as respostas e envia para a API gerar o plano. */
-class QuestionarioActivity : AppCompatActivity() {
+class QuestionarioActivity : TelaBase() {
 
     private lateinit var binding: ActivityQuestionarioBinding
     private lateinit var sessao: SessaoUsuario
@@ -51,17 +51,11 @@ class QuestionarioActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityQuestionarioBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = getString(R.string.q_titulo)
         sessao = SessaoUsuario(this)
 
         configurarCampos()
         binding.btnGerarPlano.setOnClickListener { enviar() }
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        finish()
-        return true
     }
 
     private fun configurarCampos() {
@@ -82,7 +76,7 @@ class QuestionarioActivity : AppCompatActivity() {
         binding.grupoLocal.setOnCheckedChangeListener { _, id -> binding.swEquipamento.visivel(id == binding.rbCasa.id) }
     }
 
-    /** Registra o listener e já dispara uma vez para exibir o valor inicial. */
+    /** Reage às mudanças da SeekBar e já mostra o valor inicial. */
     private fun aoMudarSeekBar(seekBar: SeekBar, aoMudar: () -> Unit) {
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(s: SeekBar?, progresso: Int, doUsuario: Boolean) = aoMudar()
@@ -97,11 +91,11 @@ class QuestionarioActivity : AppCompatActivity() {
 
     private fun enviar() {
         val usuarioId = sessao.usuarioId ?: return finish()
-        val request = lerFormulario(usuarioId) ?: return
+        val entrada = lerFormulario(usuarioId) ?: return
 
         carregando(true)
         lifecycleScope.launch {
-            val resultado = repositorio.criarAvaliacao(request)
+            val resultado = repositorio.criarAvaliacao(entrada)
             carregando(false)
             when (resultado) {
                 is Resultado.Sucesso -> {
@@ -116,7 +110,7 @@ class QuestionarioActivity : AppCompatActivity() {
         }
     }
 
-    private fun lerFormulario(usuarioId: Long): AvaliacaoRequest? {
+    private fun lerFormulario(usuarioId: Long): AvaliacaoEntrada? {
         val peso = Formatos.lerDecimal(binding.edtPeso.text.toString())
         val alturaCm = binding.edtAltura.text.toString().toIntOrNull()
         val textoPesoMeta = binding.edtPesoMeta.text.toString()
@@ -133,7 +127,7 @@ class QuestionarioActivity : AppCompatActivity() {
         }
 
         val local = radiosLocal.entries.first { it.key.isChecked }.value
-        return AvaliacaoRequest(
+        return AvaliacaoEntrada(
             usuarioId = usuarioId,
             objetivo = binding.spnObjetivo.opcaoSelecionada<Objetivo>().api,
             nivel = radiosNivel.entries.first { it.key.isChecked }.value.api,

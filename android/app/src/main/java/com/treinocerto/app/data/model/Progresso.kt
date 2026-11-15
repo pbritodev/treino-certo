@@ -1,6 +1,6 @@
 package com.treinocerto.app.data.model
 
-data class TreinoRealizadoRequest(
+data class TreinoRealizadoEntrada(
     val usuarioId: Long,
     val avaliacaoId: Long?,
     val dia: String,

@@ -10,12 +10,12 @@ import java.util.concurrent.TimeUnit
 /** Cria uma única instância do Retrofit para todo o app (singleton). */
 object RetrofitClient {
 
-    private val httpClient: OkHttpClient by lazy {
-        val logging = HttpLoggingInterceptor().apply {
+    private val clienteHttp: OkHttpClient by lazy {
+        val registroDeLog = HttpLoggingInterceptor().apply {
             level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
         }
         OkHttpClient.Builder()
-            .addInterceptor(logging)
+            .addInterceptor(registroDeLog)
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .build()
@@ -24,7 +24,7 @@ object RetrofitClient {
     val api: TreinoApi by lazy {
         Retrofit.Builder()
             .baseUrl(BuildConfig.API_BASE_URL)
-            .client(httpClient)
+            .client(clienteHttp)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(TreinoApi::class.java)

@@ -14,12 +14,12 @@ class PreferenciasTema(private val context: Context) {
         ESCURO(AppCompatDelegate.MODE_NIGHT_YES),
     }
 
-    private val prefs = context.getSharedPreferences("preferencias_tema", Context.MODE_PRIVATE)
+    private val preferencias = context.getSharedPreferences("preferencias_tema", Context.MODE_PRIVATE)
 
     var tema: Tema
-        get() = Tema.valueOf(prefs.getString(CHAVE, Tema.SISTEMA.name) ?: Tema.SISTEMA.name)
+        get() = Tema.valueOf(preferencias.getString(CHAVE, Tema.SISTEMA.name) ?: Tema.SISTEMA.name)
         set(valor) {
-            prefs.edit { putString(CHAVE, valor.name) }
+            preferencias.edit { putString(CHAVE, valor.name) }
             aplicar()
         }
 

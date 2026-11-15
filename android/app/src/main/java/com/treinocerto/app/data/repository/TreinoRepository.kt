@@ -2,22 +2,22 @@ package com.treinocerto.app.data.repository
 
 import com.google.gson.Gson
 import com.treinocerto.app.data.model.Avaliacao
-import com.treinocerto.app.data.model.AvaliacaoRequest
-import com.treinocerto.app.data.model.AvaliacaoUpdate
+import com.treinocerto.app.data.model.AvaliacaoEntrada
+import com.treinocerto.app.data.model.AvaliacaoAlteracao
 import com.treinocerto.app.data.model.ErroApi
-import com.treinocerto.app.data.model.LoginRequest
-import com.treinocerto.app.data.model.TreinoRealizadoRequest
-import com.treinocerto.app.data.model.TrocaSenhaRequest
-import com.treinocerto.app.data.model.PesagemRequest
-import com.treinocerto.app.data.model.RegistroAlimentarRequest
-import com.treinocerto.app.data.model.RegistroAlimentarUpdate
+import com.treinocerto.app.data.model.LoginEntrada
+import com.treinocerto.app.data.model.PesagemEntrada
+import com.treinocerto.app.data.model.RegistroAlimentarEntrada
+import com.treinocerto.app.data.model.RegistroAlimentarAlteracao
+import com.treinocerto.app.data.model.TreinoRealizadoEntrada
+import com.treinocerto.app.data.model.TrocaSenhaEntrada
 import com.treinocerto.app.data.model.Usuario
 import com.treinocerto.app.data.remote.RetrofitClient
 import com.treinocerto.app.data.remote.TreinoApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import retrofit2.Response
 import java.io.IOException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 /**
  * Único ponto de acesso aos dados remotos. As Activities não conhecem Retrofit:
@@ -25,10 +25,10 @@ import java.io.IOException
  */
 class TreinoRepository(private val api: TreinoApi = RetrofitClient.api) {
 
-    suspend fun login(email: String, senha: String) = executar { api.login(LoginRequest(email, senha)) }
+    suspend fun login(email: String, senha: String) = executar { api.login(LoginEntrada(email, senha)) }
 
     suspend fun trocarSenha(id: Long, senhaAtual: String, novaSenha: String): Resultado<Unit> =
-        executar { api.trocarSenha(id, TrocaSenhaRequest(senhaAtual, novaSenha)) }
+        executar { api.trocarSenha(id, TrocaSenhaEntrada(senhaAtual, novaSenha)) }
 
     suspend fun criarUsuario(usuario: Usuario) = executar { api.criarUsuario(usuario) }
 
@@ -38,12 +38,12 @@ class TreinoRepository(private val api: TreinoApi = RetrofitClient.api) {
 
     suspend fun listarAvaliacoes(usuarioId: Long) = executar { api.listarAvaliacoes(usuarioId) }
 
-    suspend fun criarAvaliacao(request: AvaliacaoRequest) = executar { api.criarAvaliacao(request) }
+    suspend fun criarAvaliacao(entrada: AvaliacaoEntrada) = executar { api.criarAvaliacao(entrada) }
 
     suspend fun buscarAvaliacao(id: Long) = executar { api.buscarAvaliacao(id) }
 
-    suspend fun atualizarAvaliacao(id: Long, update: AvaliacaoUpdate): Resultado<Avaliacao> =
-        executar { api.atualizarAvaliacao(id, update) }
+    suspend fun atualizarAvaliacao(id: Long, alteracao: AvaliacaoAlteracao): Resultado<Avaliacao> =
+        executar { api.atualizarAvaliacao(id, alteracao) }
 
     suspend fun removerAvaliacao(id: Long): Resultado<Unit> = executar { api.removerAvaliacao(id) }
 
@@ -52,20 +52,20 @@ class TreinoRepository(private val api: TreinoApi = RetrofitClient.api) {
 
     suspend fun buscarDiario(usuarioId: Long, data: String) = executar { api.buscarDiario(usuarioId, data) }
 
-    suspend fun adicionarAoDiario(request: RegistroAlimentarRequest) = executar { api.criarRegistro(request) }
+    suspend fun adicionarAoDiario(entrada: RegistroAlimentarEntrada) = executar { api.criarRegistro(entrada) }
 
-    suspend fun atualizarRegistro(id: Long, update: RegistroAlimentarUpdate) =
-        executar { api.atualizarRegistro(id, update) }
+    suspend fun atualizarRegistro(id: Long, alteracao: RegistroAlimentarAlteracao) =
+        executar { api.atualizarRegistro(id, alteracao) }
 
     suspend fun removerRegistro(id: Long): Resultado<Unit> = executar { api.removerRegistro(id) }
 
     suspend fun listarPesagens(usuarioId: Long) = executar { api.listarPesagens(usuarioId) }
 
-    suspend fun registrarPesagem(request: PesagemRequest) = executar { api.criarPesagem(request) }
+    suspend fun registrarPesagem(entrada: PesagemEntrada) = executar { api.criarPesagem(entrada) }
 
     suspend fun removerPesagem(id: Long): Resultado<Unit> = executar { api.removerPesagem(id) }
 
-    suspend fun registrarTreino(request: TreinoRealizadoRequest) = executar { api.registrarTreino(request) }
+    suspend fun registrarTreino(entrada: TreinoRealizadoEntrada) = executar { api.registrarTreino(entrada) }
 
     suspend fun removerTreino(id: Long): Resultado<Unit> = executar { api.removerTreino(id) }
 

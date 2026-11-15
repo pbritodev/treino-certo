@@ -18,17 +18,17 @@ function criarAlimentoRepository(db) {
   return {
     listar({ busca, categoria } = {}) {
       const filtros = [];
-      const params = [];
+      const parametros = [];
       if (busca) {
         filtros.push('nome LIKE ?');
-        params.push(`%${busca}%`);
+        parametros.push(`%${busca}%`);
       }
       if (categoria) {
         filtros.push('categoria = ?');
-        params.push(categoria);
+        parametros.push(categoria);
       }
-      const where = filtros.length ? `WHERE ${filtros.join(' AND ')}` : '';
-      return db.prepare(`SELECT * FROM alimentos ${where} ORDER BY nome`).all(...params).map(mapear);
+      const condicao = filtros.length ? `WHERE ${filtros.join(' AND ')}` : '';
+      return db.prepare(`SELECT * FROM alimentos ${condicao} ORDER BY nome`).all(...parametros).map(mapear);
     },
     buscarPorId(id) {
       return mapear(db.prepare('SELECT * FROM alimentos WHERE id = ?').get(id));

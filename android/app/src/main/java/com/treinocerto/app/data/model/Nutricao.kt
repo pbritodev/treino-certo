@@ -19,7 +19,7 @@ data class Alimento(
     fun gorduraPara(quantidade: Double) = gordura * quantidade / 100
 }
 
-data class RegistroAlimentarRequest(
+data class RegistroAlimentarEntrada(
     val usuarioId: Long,
     val alimentoId: Long,
     val data: String,
@@ -27,7 +27,7 @@ data class RegistroAlimentarRequest(
     val quantidade: Double,
 )
 
-data class RegistroAlimentarUpdate(
+data class RegistroAlimentarAlteracao(
     val quantidade: Double,
     val refeicao: String,
 )
@@ -71,7 +71,7 @@ data class Diario(
     val refeicoes: List<RefeicaoDiario>,
 )
 
-data class PesagemRequest(
+data class PesagemEntrada(
     val usuarioId: Long,
     val peso: Double,
     val data: String,

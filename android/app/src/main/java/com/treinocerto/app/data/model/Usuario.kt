@@ -11,6 +11,6 @@ data class Usuario(
     val senha: String? = null,
 )
 
-data class LoginRequest(val email: String, val senha: String)
+data class LoginEntrada(val email: String, val senha: String)
 
-data class TrocaSenhaRequest(val senhaAtual: String, val novaSenha: String)
+data class TrocaSenhaEntrada(val senhaAtual: String, val novaSenha: String)

@@ -2,7 +2,6 @@ package com.treinocerto.app.ui.historico
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.treinocerto.app.R
@@ -12,6 +11,7 @@ import com.treinocerto.app.data.repository.Resultado
 import com.treinocerto.app.data.repository.TreinoRepository
 import com.treinocerto.app.databinding.ActivityHistoricoBinding
 import com.treinocerto.app.ui.common.Extras
+import com.treinocerto.app.ui.common.TelaBase
 import com.treinocerto.app.ui.common.confirmarExclusao
 import com.treinocerto.app.ui.common.habilitarDeslizarParaExcluir
 import com.treinocerto.app.ui.detalhe.DetalheActivity
@@ -22,7 +22,7 @@ import com.treinocerto.app.util.visivel
 import kotlinx.coroutines.launch
 
 /** Lista (RecyclerView) de todas as avaliações do usuário, com filtro e exclusão. */
-class HistoricoActivity : AppCompatActivity() {
+class HistoricoActivity : TelaBase() {
 
     private lateinit var binding: ActivityHistoricoBinding
     private lateinit var sessao: SessaoUsuario
@@ -37,7 +37,6 @@ class HistoricoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityHistoricoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = getString(R.string.historico_titulo)
         sessao = SessaoUsuario(this)
 
@@ -56,11 +55,6 @@ class HistoricoActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         carregar() // recarrega ao voltar do Detalhe (pode ter sido editado/excluído)
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        finish()
-        return true
     }
 
     private fun carregar() {

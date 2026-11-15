@@ -2,7 +2,6 @@ package com.treinocerto.app.ui.alimento
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,25 +12,26 @@ import com.treinocerto.app.data.local.SessaoUsuario
 import com.treinocerto.app.data.model.Alimento
 import com.treinocerto.app.data.model.CategoriaAlimento
 import com.treinocerto.app.data.model.Refeicao
-import com.treinocerto.app.data.model.RegistroAlimentarRequest
+import com.treinocerto.app.data.model.RegistroAlimentarEntrada
 import com.treinocerto.app.data.repository.Resultado
 import com.treinocerto.app.data.repository.TreinoRepository
 import com.treinocerto.app.databinding.ActivityAdicionarAlimentoBinding
 import com.treinocerto.app.databinding.BottomSheetQuantidadeBinding
 import com.treinocerto.app.ui.common.Extras
+import com.treinocerto.app.ui.common.TelaBase
 import com.treinocerto.app.ui.common.configurarOpcoes
 import com.treinocerto.app.ui.common.opcaoSelecionada
 import com.treinocerto.app.util.Formatos
 import com.treinocerto.app.util.mostrarErro
 import com.treinocerto.app.util.toast
 import com.treinocerto.app.util.visivel
+import kotlin.math.roundToInt
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
 
 /** Busca de alimentos e cálculo das calorias pela quantidade consumida. */
-class AdicionarAlimentoActivity : AppCompatActivity() {
+class AdicionarAlimentoActivity : TelaBase() {
 
     private lateinit var binding: ActivityAdicionarAlimentoBinding
     private lateinit var sessao: SessaoUsuario
@@ -47,7 +47,6 @@ class AdicionarAlimentoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAdicionarAlimentoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         sessao = SessaoUsuario(this)
 
         data = intent.getStringExtra(Extras.DATA) ?: Formatos.hojeApi()
@@ -64,11 +63,6 @@ class AdicionarAlimentoActivity : AppCompatActivity() {
         // Pequeno atraso (debounce) para não chamar a API a cada letra digitada.
         binding.edtBusca.doAfterTextChanged { buscar(atraso = 350) }
         buscar()
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        finish()
-        return true
     }
 
     private fun criarChipsDeCategoria() {
@@ -108,38 +102,38 @@ class AdicionarAlimentoActivity : AppCompatActivity() {
     /** BottomSheet onde o usuário informa a quantidade e vê as calorias calculadas em tempo real. */
     private fun abrirQuantidade(alimento: Alimento) {
         val folha = BottomSheetDialog(this)
-        val sheet = BottomSheetQuantidadeBinding.inflate(LayoutInflater.from(this))
-        folha.setContentView(sheet.root)
+        val painel = BottomSheetQuantidadeBinding.inflate(LayoutInflater.from(this))
+        folha.setContentView(painel.root)
 
-        sheet.txtNome.text = alimento.nome
-        sheet.txtPor100g.text = getString(
+        painel.txtNome.text = alimento.nome
+        painel.txtPor100g.text = getString(
             R.string.alimento_por_100g,
             Formatos.decimal(alimento.kcal), Formatos.decimal(alimento.proteina),
             Formatos.decimal(alimento.carboidrato), Formatos.decimal(alimento.gordura),
         )
-        sheet.spnRefeicao.configurarOpcoes(Refeicao.entries, refeicaoInicial)
+        painel.spnRefeicao.configurarOpcoes(Refeicao.entries, refeicaoInicial)
 
         fun recalcular() {
-            val quantidade = Formatos.lerDecimal(sheet.edtQuantidade.text.toString()) ?: 0.0
-            sheet.txtTotalKcal.text = getString(R.string.alimento_total, alimento.kcalPara(quantidade).roundToInt())
-            sheet.txtMacros.text = getString(
+            val quantidade = Formatos.lerDecimal(painel.edtQuantidade.text.toString()) ?: 0.0
+            painel.txtTotalKcal.text = getString(R.string.alimento_total, alimento.kcalPara(quantidade).roundToInt())
+            painel.txtMacros.text = getString(
                 R.string.alimento_macros,
                 Formatos.decimal(alimento.proteinaPara(quantidade)),
                 Formatos.decimal(alimento.carboidratoPara(quantidade)),
                 Formatos.decimal(alimento.gorduraPara(quantidade)),
             )
-            sheet.btnAdicionar.isEnabled = quantidade in 1.0..5000.0
+            painel.btnAdicionar.isEnabled = quantidade in 1.0..5000.0
         }
 
-        sheet.edtQuantidade.doAfterTextChanged { recalcular() }
-        mapOf(sheet.chipMeia to 0.5, sheet.chipUma to 1.0, sheet.chipDuas to 2.0).forEach { (chip, fator) ->
-            chip.setOnClickListener { sheet.edtQuantidade.setText(Formatos.decimal(alimento.porcaoG * fator)) }
+        painel.edtQuantidade.doAfterTextChanged { recalcular() }
+        mapOf(painel.chipMeia to 0.5, painel.chipUma to 1.0, painel.chipDuas to 2.0).forEach { (chip, fator) ->
+            chip.setOnClickListener { painel.edtQuantidade.setText(Formatos.decimal(alimento.porcaoG * fator)) }
         }
-        sheet.edtQuantidade.setText(Formatos.decimal(alimento.porcaoG))
+        painel.edtQuantidade.setText(Formatos.decimal(alimento.porcaoG))
 
-        sheet.btnAdicionar.setOnClickListener {
-            val quantidade = Formatos.lerDecimal(sheet.edtQuantidade.text.toString()) ?: return@setOnClickListener
-            val refeicao = sheet.spnRefeicao.opcaoSelecionada<Refeicao>()
+        painel.btnAdicionar.setOnClickListener {
+            val quantidade = Formatos.lerDecimal(painel.edtQuantidade.text.toString()) ?: return@setOnClickListener
+            val refeicao = painel.spnRefeicao.opcaoSelecionada<Refeicao>()
             salvar(alimento, quantidade, refeicao, folha)
         }
         folha.show()
@@ -147,9 +141,9 @@ class AdicionarAlimentoActivity : AppCompatActivity() {
 
     private fun salvar(alimento: Alimento, quantidade: Double, refeicao: Refeicao, folha: BottomSheetDialog) {
         val usuarioId = sessao.usuarioId ?: return finish()
-        val request = RegistroAlimentarRequest(usuarioId, alimento.id, data, refeicao.api, quantidade)
+        val entrada = RegistroAlimentarEntrada(usuarioId, alimento.id, data, refeicao.api, quantidade)
         lifecycleScope.launch {
-            when (val resultado = repositorio.adicionarAoDiario(request)) {
+            when (val resultado = repositorio.adicionarAoDiario(entrada)) {
                 is Resultado.Sucesso -> {
                     folha.dismiss()
                     toast(getString(R.string.alimento_adicionado, alimento.nome))

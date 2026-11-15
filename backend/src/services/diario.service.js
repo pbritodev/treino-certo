@@ -5,11 +5,11 @@ const arred = (valor) => Math.round(valor * 10) / 10;
 
 function somar(itens) {
   return itens.reduce(
-    (total, item) => ({
-      kcal: arred(total.kcal + item.kcal),
-      proteina: arred(total.proteina + item.proteina),
-      carboidrato: arred(total.carboidrato + item.carboidrato),
-      gordura: arred(total.gordura + item.gordura),
+    (total, registro) => ({
+      kcal: arred(total.kcal + registro.kcal),
+      proteina: arred(total.proteina + registro.proteina),
+      carboidrato: arred(total.carboidrato + registro.carboidrato),
+      gordura: arred(total.gordura + registro.gordura),
     }),
     { kcal: 0, proteina: 0, carboidrato: 0, gordura: 0 },
   );

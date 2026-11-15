@@ -3,7 +3,6 @@ package com.treinocerto.app.ui.login
 import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.treinocerto.app.R
 import com.treinocerto.app.data.local.SessaoUsuario
@@ -11,17 +10,20 @@ import com.treinocerto.app.data.repository.Resultado
 import com.treinocerto.app.data.repository.TreinoRepository
 import com.treinocerto.app.databinding.ActivityLoginBinding
 import com.treinocerto.app.ui.cadastro.CadastroActivity
+import com.treinocerto.app.ui.common.TelaBase
 import com.treinocerto.app.ui.common.irParaHome
 import com.treinocerto.app.util.mostrarErro
 import com.treinocerto.app.util.visivel
 import kotlinx.coroutines.launch
 
 /** Tela inicial do app: login com e-mail e senha (POST /api/auth/login). */
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : TelaBase() {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var sessao: SessaoUsuario
     private val repositorio = TreinoRepository()
+
+    override val mostrarBarraSuperior = false // o Login tem cabeçalho próprio
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +33,9 @@ class LoginActivity : AppCompatActivity() {
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.hide()
+
+        binding.btnTema.setImageResource(iconeDoTema())
+        binding.btnTema.setOnClickListener { alternarTema() }
 
         binding.btnEntrar.setOnClickListener { entrar() }
         binding.edtSenha.setOnEditorActionListener { _, acao, _ ->

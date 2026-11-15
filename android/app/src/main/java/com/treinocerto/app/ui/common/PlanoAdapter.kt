@@ -36,12 +36,12 @@ class PlanoAdapter(
         val container = holder.binding.containerExercicios
         container.removeAllViews()
         dia.exercicios.forEach { exercicio ->
-            val item = ItemExercicioBinding.inflate(LayoutInflater.from(contexto), container, false)
-            item.txtNomeExercicio.text = exercicio.nome
-            item.txtPrescricao.text =
+            val linha = ItemExercicioBinding.inflate(LayoutInflater.from(contexto), container, false)
+            linha.txtNomeExercicio.text = exercicio.nome
+            linha.txtPrescricao.text =
                 contexto.getString(R.string.exercicio_prescricao, exercicio.series, exercicio.repeticoes)
-            item.root.setOnClickListener { aoClicarExercicio(exercicio) }
-            container.addView(item.root)
+            linha.root.setOnClickListener { aoClicarExercicio(exercicio) }
+            container.addView(linha.root)
         }
     }
 }

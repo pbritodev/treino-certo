@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.Gravity
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +18,7 @@ import com.treinocerto.app.data.repository.TreinoRepository
 import com.treinocerto.app.databinding.ActivityProgressoBinding
 import com.treinocerto.app.databinding.LayoutEstatisticaBinding
 import com.treinocerto.app.ui.common.Extras
+import com.treinocerto.app.ui.common.TelaBase
 import com.treinocerto.app.ui.common.confirmarExclusao
 import com.treinocerto.app.ui.common.habilitarDeslizarParaExcluir
 import com.treinocerto.app.ui.common.iniciais
@@ -30,15 +30,15 @@ import com.treinocerto.app.util.Formatos
 import com.treinocerto.app.util.mostrarErro
 import com.treinocerto.app.util.toast
 import com.treinocerto.app.util.visivel
-import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Locale
+import kotlinx.coroutines.launch
 
 /**
  * "Meu progresso": perfil, plano atual, estatísticas dos treinos feitos
  * (semana, sequência, total, minutos), últimos 7 dias, peso e lista de treinos.
  */
-class ProgressoActivity : AppCompatActivity() {
+class ProgressoActivity : TelaBase() {
 
     private lateinit var binding: ActivityProgressoBinding
     private lateinit var sessao: SessaoUsuario
@@ -50,7 +50,6 @@ class ProgressoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProgressoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = getString(R.string.progresso_titulo)
         sessao = SessaoUsuario(this)
 
@@ -71,11 +70,6 @@ class ProgressoActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         carregar() // atualiza após concluir um treino no plano
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        finish()
-        return true
     }
 
     private fun carregar() {
@@ -124,8 +118,8 @@ class ProgressoActivity : AppCompatActivity() {
         binding.btnVerPlano.setText(if (p.planoAtual == null) R.string.menu_nova_avaliacao else R.string.progresso_ver_plano)
     }
 
-    private fun estatistica(item: LayoutEstatisticaBinding, valor: String) {
-        item.txtValor.text = valor
+    private fun estatistica(campo: LayoutEstatisticaBinding, valor: String) {
+        campo.txtValor.text = valor
     }
 
     /** Um círculo por dia (letra do dia da semana + número), preenchido se houve treino. */

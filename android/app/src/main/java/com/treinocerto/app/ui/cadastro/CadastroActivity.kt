@@ -3,7 +3,6 @@ package com.treinocerto.app.ui.cadastro
 import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.treinocerto.app.R
 import com.treinocerto.app.data.local.SessaoUsuario
@@ -12,20 +11,21 @@ import com.treinocerto.app.data.model.Usuario
 import com.treinocerto.app.data.repository.Resultado
 import com.treinocerto.app.data.repository.TreinoRepository
 import com.treinocerto.app.databinding.ActivityCadastroBinding
+import com.treinocerto.app.ui.common.TelaBase
 import com.treinocerto.app.ui.home.MainActivity
 import com.treinocerto.app.ui.questionario.QuestionarioActivity
 import com.treinocerto.app.util.mostrarErro
 import com.treinocerto.app.util.toast
 import com.treinocerto.app.util.visivel
-import kotlinx.coroutines.launch
 import java.util.Locale
+import kotlinx.coroutines.launch
 
 /**
  * Dois modos na mesma tela:
  * - "Cadastre-se" (sem sessão): cria a conta com senha (POST) e já abre o questionário.
  * - "Editar dados" (com sessão): carrega (GET) e atualiza (PUT) os dados, sem mexer na senha.
  */
-class CadastroActivity : AppCompatActivity() {
+class CadastroActivity : TelaBase() {
 
     private lateinit var binding: ActivityCadastroBinding
     private lateinit var sessao: SessaoUsuario
@@ -44,18 +44,12 @@ class CadastroActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityCadastroBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         sessao = SessaoUsuario(this)
 
         binding.btnSalvar.setOnClickListener { salvar() }
         binding.btnJaTenhoConta.setOnClickListener { finish() } // volta para o Login
 
         if (modoEdicao) configurarEdicao() else title = getString(R.string.login_cadastre_se)
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        finish()
-        return true
     }
 
     private fun configurarEdicao() {
@@ -106,9 +100,9 @@ class CadastroActivity : AppCompatActivity() {
         if (eraCadastro) {
             // Conta nova: Home vira a base da pilha e o questionário abre por cima dela.
             toast(getString(R.string.cadastro_conta_criada))
-            val home = Intent(this, MainActivity::class.java)
+            val inicio = Intent(this, MainActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            startActivities(arrayOf(home, Intent(this, QuestionarioActivity::class.java)))
+            startActivities(arrayOf(inicio, Intent(this, QuestionarioActivity::class.java)))
         } else {
             toast(getString(R.string.cadastro_sucesso))
         }

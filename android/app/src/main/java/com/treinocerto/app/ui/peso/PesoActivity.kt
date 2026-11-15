@@ -2,30 +2,30 @@ package com.treinocerto.app.ui.peso
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.treinocerto.app.R
 import com.treinocerto.app.data.local.SessaoUsuario
 import com.treinocerto.app.data.model.Pesagem
-import com.treinocerto.app.data.model.PesagemRequest
+import com.treinocerto.app.data.model.PesagemEntrada
 import com.treinocerto.app.data.repository.Resultado
 import com.treinocerto.app.data.repository.TreinoRepository
 import com.treinocerto.app.databinding.ActivityPesoBinding
 import com.treinocerto.app.databinding.LayoutEstatisticaBinding
+import com.treinocerto.app.ui.common.TelaBase
 import com.treinocerto.app.ui.common.confirmarExclusao
 import com.treinocerto.app.ui.common.habilitarDeslizarParaExcluir
 import com.treinocerto.app.util.Formatos
 import com.treinocerto.app.util.mostrarErro
 import com.treinocerto.app.util.toast
 import com.treinocerto.app.util.visivel
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import java.util.Calendar
 import kotlin.math.abs
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 /** Registro de pesagens (POST), histórico (GET), exclusão (DELETE) e gráfico de evolução. */
-class PesoActivity : AppCompatActivity() {
+class PesoActivity : TelaBase() {
 
     private lateinit var binding: ActivityPesoBinding
     private lateinit var sessao: SessaoUsuario
@@ -38,7 +38,6 @@ class PesoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPesoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = getString(R.string.peso_titulo)
         sessao = SessaoUsuario(this)
 
@@ -57,11 +56,6 @@ class PesoActivity : AppCompatActivity() {
         binding.btnRegistrar.setOnClickListener { registrar() }
 
         carregar()
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        finish()
-        return true
     }
 
     /** Busca pesagens e a meta (última avaliação) em paralelo. */
@@ -137,7 +131,7 @@ class PesoActivity : AppCompatActivity() {
         binding.campoPeso.error = if (peso == null || peso !in 30.0..300.0) getString(R.string.q_erro_peso) else null
         if (peso == null || binding.campoPeso.error != null) return
 
-        val request = PesagemRequest(
+        val entrada = PesagemEntrada(
             usuarioId = usuarioId,
             peso = peso,
             data = Formatos.paraApi(dataPesagem),
@@ -145,7 +139,7 @@ class PesoActivity : AppCompatActivity() {
         )
         binding.btnRegistrar.isEnabled = false
         lifecycleScope.launch {
-            when (val resultado = repositorio.registrarPesagem(request)) {
+            when (val resultado = repositorio.registrarPesagem(entrada)) {
                 is Resultado.Sucesso -> {
                     toast(getString(R.string.peso_registrado))
                     binding.edtObservacao.text = null

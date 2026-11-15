@@ -1,20 +1,20 @@
 package com.treinocerto.app.ui.perfil
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.treinocerto.app.R
 import com.treinocerto.app.data.local.SessaoUsuario
 import com.treinocerto.app.data.repository.Resultado
 import com.treinocerto.app.data.repository.TreinoRepository
 import com.treinocerto.app.databinding.ActivityTrocarSenhaBinding
+import com.treinocerto.app.ui.common.TelaBase
 import com.treinocerto.app.util.mostrarErro
 import com.treinocerto.app.util.toast
 import com.treinocerto.app.util.visivel
 import kotlinx.coroutines.launch
 
 /** Troca de senha (PUT /api/usuarios/{id}/senha): exige a senha atual. */
-class TrocarSenhaActivity : AppCompatActivity() {
+class TrocarSenhaActivity : TelaBase() {
 
     private lateinit var binding: ActivityTrocarSenhaBinding
     private val repositorio = TreinoRepository()
@@ -23,15 +23,9 @@ class TrocarSenhaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityTrocarSenhaBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = getString(R.string.senha_titulo)
 
         binding.btnSalvar.setOnClickListener { salvar() }
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        finish()
-        return true
     }
 
     private fun salvar() {

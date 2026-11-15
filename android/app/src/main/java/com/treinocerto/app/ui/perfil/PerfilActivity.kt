@@ -2,7 +2,6 @@ package com.treinocerto.app.ui.perfil
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.treinocerto.app.R
@@ -15,6 +14,7 @@ import com.treinocerto.app.data.repository.TreinoRepository
 import com.treinocerto.app.databinding.ActivityPerfilBinding
 import com.treinocerto.app.databinding.ItemMenuHomeBinding
 import com.treinocerto.app.ui.cadastro.CadastroActivity
+import com.treinocerto.app.ui.common.TelaBase
 import com.treinocerto.app.ui.common.iniciais
 import com.treinocerto.app.ui.common.sair
 import com.treinocerto.app.ui.progresso.ProgressoActivity
@@ -24,7 +24,7 @@ import com.treinocerto.app.util.visivel
 import kotlinx.coroutines.launch
 
 /** "Meu perfil": dados da conta e atalhos para editar, trocar senha, progresso e sair. */
-class PerfilActivity : AppCompatActivity() {
+class PerfilActivity : TelaBase() {
 
     private lateinit var binding: ActivityPerfilBinding
     private lateinit var sessao: SessaoUsuario
@@ -34,7 +34,6 @@ class PerfilActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPerfilBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = getString(R.string.perfil_titulo)
         sessao = SessaoUsuario(this)
 
@@ -57,11 +56,6 @@ class PerfilActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         carregar() // atualiza após editar os dados
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        finish()
-        return true
     }
 
     private fun carregar() {
@@ -95,10 +89,10 @@ class PerfilActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun configurarAtalho(item: ItemMenuHomeBinding, icone: Int, titulo: Int, descricao: Int, aoClicar: () -> Unit) {
-        item.imgIcone.setImageResource(icone)
-        item.txtTitulo.setText(titulo)
-        item.txtDescricao.setText(descricao)
-        item.root.setOnClickListener { aoClicar() }
+    private fun configurarAtalho(atalho: ItemMenuHomeBinding, icone: Int, titulo: Int, descricao: Int, aoClicar: () -> Unit) {
+        atalho.imgIcone.setImageResource(icone)
+        atalho.txtTitulo.setText(titulo)
+        atalho.txtDescricao.setText(descricao)
+        atalho.root.setOnClickListener { aoClicar() }
     }
 }

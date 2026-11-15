@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Botão de tema claro/escuro no canto superior direito de todas as telas -->
+    <item
+        android:id="@+id/acaoTema"
+        android:icon="@drawable/ic_tema_escuro"
+        android:title="@string/tema_alternar"
+        app:iconTint="@color/branco"
+        app:showAsAction="always" />
+</menu>

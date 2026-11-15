@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,7 +14,7 @@ import com.treinocerto.app.data.local.SessaoUsuario
 import com.treinocerto.app.data.model.Diario
 import com.treinocerto.app.data.model.Refeicao
 import com.treinocerto.app.data.model.RegistroAlimentar
-import com.treinocerto.app.data.model.RegistroAlimentarUpdate
+import com.treinocerto.app.data.model.RegistroAlimentarAlteracao
 import com.treinocerto.app.data.repository.Resultado
 import com.treinocerto.app.data.repository.TreinoRepository
 import com.treinocerto.app.databinding.ActivityDiarioBinding
@@ -23,23 +22,24 @@ import com.treinocerto.app.databinding.DialogEditarRegistroBinding
 import com.treinocerto.app.databinding.LayoutMacroBinding
 import com.treinocerto.app.ui.alimento.AdicionarAlimentoActivity
 import com.treinocerto.app.ui.common.Extras
+import com.treinocerto.app.ui.common.TelaBase
 import com.treinocerto.app.ui.common.configurarOpcoes
 import com.treinocerto.app.ui.common.opcaoSelecionada
 import com.treinocerto.app.util.Formatos
 import com.treinocerto.app.util.mostrarErro
 import com.treinocerto.app.util.toast
 import com.treinocerto.app.util.visivel
-import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.roundToInt
+import kotlinx.coroutines.launch
 
 /**
  * Diário alimentar no estilo "contador de calorias": mostra a meta do dia,
  * o consumido, o restante e os alimentos de cada refeição.
  */
-class DiarioActivity : AppCompatActivity() {
+class DiarioActivity : TelaBase() {
 
     private lateinit var binding: ActivityDiarioBinding
     private lateinit var sessao: SessaoUsuario
@@ -55,7 +55,6 @@ class DiarioActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDiarioBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = getString(R.string.diario_titulo)
         sessao = SessaoUsuario(this)
 
@@ -75,11 +74,6 @@ class DiarioActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         carregar() // atualiza ao voltar da tela de adicionar alimento
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        finish()
-        return true
     }
 
     private fun mudarDia(dias: Int) {
@@ -183,15 +177,15 @@ class DiarioActivity : AppCompatActivity() {
                 if (quantidade == null || quantidade !in 1.0..5000.0) {
                     toast(getString(R.string.diario_quantidade_invalida))
                 } else {
-                    atualizarRegistro(registro.id, RegistroAlimentarUpdate(quantidade, dialogo.spnRefeicao.opcaoSelecionada<Refeicao>().api))
+                    atualizarRegistro(registro.id, RegistroAlimentarAlteracao(quantidade, dialogo.spnRefeicao.opcaoSelecionada<Refeicao>().api))
                 }
             }
             .show()
     }
 
-    private fun atualizarRegistro(id: Long, update: RegistroAlimentarUpdate) {
+    private fun atualizarRegistro(id: Long, alteracao: RegistroAlimentarAlteracao) {
         lifecycleScope.launch {
-            when (val resultado = repositorio.atualizarRegistro(id, update)) {
+            when (val resultado = repositorio.atualizarRegistro(id, alteracao)) {
                 is Resultado.Sucesso -> carregar()
                 is Resultado.Erro -> mostrarErro(resultado.mensagem)
             }

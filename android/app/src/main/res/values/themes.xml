@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.TreinoCerto" parent="Theme.Material3.DayNight">
+    <!-- Sem ActionBar: cada tela recebe uma Toolbar própria pela TelaBase -->
+    <style name="Theme.TreinoCerto" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/verde_primario</item>
         <item name="colorOnPrimary">@color/sobre_primario</item>
         <item name="colorPrimaryContainer">@color/verde_claro</item>
@@ -9,18 +10,10 @@
         <item name="colorSurface">@color/superficie</item>
         <item name="android:colorBackground">@color/fundo</item>
         <item name="colorError">@color/erro</item>
-        <item name="actionBarStyle">@style/Widget.TreinoCerto.ActionBar</item>
-        <!-- Ícones da barra (seta de voltar) em branco sobre o verde -->
-        <item name="actionBarTheme">@style/ThemeOverlay.Material3.Dark.ActionBar</item>
-        <item name="android:statusBarColor">@color/cabecalho_inicio</item>
     </style>
 
-    <style name="Widget.TreinoCerto.ActionBar" parent="Widget.Material3.ActionBar.Solid">
-        <item name="background">@color/barra_superior</item>
-        <item name="titleTextStyle">@style/TextAppearance.TreinoCerto.ActionBarTitle</item>
-    </style>
-
-    <style name="TextAppearance.TreinoCerto.ActionBarTitle" parent="TextAppearance.Material3.TitleLarge">
+    <!-- Título da barra superior -->
+    <style name="TextAppearance.TreinoCerto.TituloBarra" parent="TextAppearance.Material3.TitleLarge">
         <item name="android:textColor">@color/branco</item>
     </style>
 

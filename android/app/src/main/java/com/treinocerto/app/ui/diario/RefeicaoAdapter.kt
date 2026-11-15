@@ -37,14 +37,14 @@ class RefeicaoAdapter(
 
             containerItens.removeAllViews()
             refeicao.itens.forEach { registro ->
-                val item = ItemRegistroBinding.inflate(LayoutInflater.from(contexto), containerItens, false)
-                item.txtAlimento.text = registro.alimento
-                item.txtDetalhe.text = contexto.getString(
+                val linha = ItemRegistroBinding.inflate(LayoutInflater.from(contexto), containerItens, false)
+                linha.txtAlimento.text = registro.alimento
+                linha.txtDetalhe.text = contexto.getString(
                     R.string.diario_item_detalhe, Formatos.decimal(registro.quantidade), Formatos.decimal(registro.proteina),
                 )
-                item.txtKcal.text = contexto.getString(R.string.diario_kcal, Formatos.decimal(registro.kcal))
-                item.root.setOnClickListener { aoClicarItem(registro) }
-                containerItens.addView(item.root)
+                linha.txtKcal.text = contexto.getString(R.string.diario_kcal, Formatos.decimal(registro.kcal))
+                linha.root.setOnClickListener { aoClicarItem(registro) }
+                containerItens.addView(linha.root)
             }
         }
     }

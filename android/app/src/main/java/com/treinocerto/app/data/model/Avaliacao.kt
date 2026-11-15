@@ -1,7 +1,7 @@
 package com.treinocerto.app.data.model
 
 /** Respostas do questionário enviadas para POST /api/avaliacoes. */
-data class AvaliacaoRequest(
+data class AvaliacaoEntrada(
     val usuarioId: Long,
     val objetivo: String,
     val nivel: String,
@@ -18,7 +18,7 @@ data class AvaliacaoRequest(
 )
 
 /** Corpo do PATCH /api/avaliacoes/{id}: apenas os campos editáveis. */
-data class AvaliacaoUpdate(
+data class AvaliacaoAlteracao(
     val observacao: String? = null,
     val favorita: Boolean? = null,
 )

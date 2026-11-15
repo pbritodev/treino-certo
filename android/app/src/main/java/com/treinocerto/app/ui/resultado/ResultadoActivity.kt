@@ -2,7 +2,6 @@ package com.treinocerto.app.ui.resultado
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.treinocerto.app.R
 import com.treinocerto.app.data.model.Avaliacao
@@ -11,6 +10,7 @@ import com.treinocerto.app.data.repository.TreinoRepository
 import com.treinocerto.app.databinding.ActivityResultadoBinding
 import com.treinocerto.app.ui.common.ExibidorPlano
 import com.treinocerto.app.ui.common.Extras
+import com.treinocerto.app.ui.common.TelaBase
 import com.treinocerto.app.ui.common.registrarTreinoConcluido
 import com.treinocerto.app.ui.diario.DiarioActivity
 import com.treinocerto.app.ui.historico.HistoricoActivity
@@ -21,7 +21,7 @@ import com.treinocerto.app.util.visivel
 import kotlinx.coroutines.launch
 
 /** Exibe o plano recém-gerado, buscando a avaliação na API (GET /api/avaliacoes/{id}). */
-class ResultadoActivity : AppCompatActivity() {
+class ResultadoActivity : TelaBase() {
 
     private lateinit var binding: ActivityResultadoBinding
     private val repositorio = TreinoRepository()

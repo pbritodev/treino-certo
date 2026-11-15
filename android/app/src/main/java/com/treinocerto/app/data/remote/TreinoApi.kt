@@ -1,20 +1,20 @@
 package com.treinocerto.app.data.remote
 
-import com.treinocerto.app.data.model.Avaliacao
-import com.treinocerto.app.data.model.AvaliacaoRequest
-import com.treinocerto.app.data.model.AvaliacaoUpdate
 import com.treinocerto.app.data.model.Alimento
+import com.treinocerto.app.data.model.Avaliacao
+import com.treinocerto.app.data.model.AvaliacaoEntrada
+import com.treinocerto.app.data.model.AvaliacaoAlteracao
 import com.treinocerto.app.data.model.Diario
-import com.treinocerto.app.data.model.LoginRequest
-import com.treinocerto.app.data.model.Progresso
-import com.treinocerto.app.data.model.TreinoRealizado
-import com.treinocerto.app.data.model.TreinoRealizadoRequest
-import com.treinocerto.app.data.model.TrocaSenhaRequest
+import com.treinocerto.app.data.model.LoginEntrada
 import com.treinocerto.app.data.model.Pesagem
-import com.treinocerto.app.data.model.PesagemRequest
+import com.treinocerto.app.data.model.PesagemEntrada
+import com.treinocerto.app.data.model.Progresso
 import com.treinocerto.app.data.model.RegistroAlimentar
-import com.treinocerto.app.data.model.RegistroAlimentarRequest
-import com.treinocerto.app.data.model.RegistroAlimentarUpdate
+import com.treinocerto.app.data.model.RegistroAlimentarEntrada
+import com.treinocerto.app.data.model.RegistroAlimentarAlteracao
+import com.treinocerto.app.data.model.TreinoRealizado
+import com.treinocerto.app.data.model.TreinoRealizadoEntrada
+import com.treinocerto.app.data.model.TrocaSenhaEntrada
 import com.treinocerto.app.data.model.Usuario
 import retrofit2.Response
 import retrofit2.http.Body
@@ -32,10 +32,10 @@ interface TreinoApi {
     // ---------- Autenticação e usuários ----------
 
     @POST("api/auth/login")
-    suspend fun login(@Body request: LoginRequest): Response<Usuario>
+    suspend fun login(@Body entrada: LoginEntrada): Response<Usuario>
 
     @PUT("api/usuarios/{id}/senha")
-    suspend fun trocarSenha(@Path("id") id: Long, @Body request: TrocaSenhaRequest): Response<Unit>
+    suspend fun trocarSenha(@Path("id") id: Long, @Body entrada: TrocaSenhaEntrada): Response<Unit>
 
     @POST("api/usuarios")
     suspend fun criarUsuario(@Body usuario: Usuario): Response<Usuario>
@@ -50,13 +50,13 @@ interface TreinoApi {
     suspend fun listarAvaliacoes(@Path("id") usuarioId: Long): Response<List<Avaliacao>>
 
     @POST("api/avaliacoes")
-    suspend fun criarAvaliacao(@Body request: AvaliacaoRequest): Response<Avaliacao>
+    suspend fun criarAvaliacao(@Body entrada: AvaliacaoEntrada): Response<Avaliacao>
 
     @GET("api/avaliacoes/{id}")
     suspend fun buscarAvaliacao(@Path("id") id: Long): Response<Avaliacao>
 
     @PATCH("api/avaliacoes/{id}")
-    suspend fun atualizarAvaliacao(@Path("id") id: Long, @Body update: AvaliacaoUpdate): Response<Avaliacao>
+    suspend fun atualizarAvaliacao(@Path("id") id: Long, @Body alteracao: AvaliacaoAlteracao): Response<Avaliacao>
 
     @DELETE("api/avaliacoes/{id}")
     suspend fun removerAvaliacao(@Path("id") id: Long): Response<Unit>
@@ -73,10 +73,10 @@ interface TreinoApi {
     suspend fun buscarDiario(@Path("id") usuarioId: Long, @Query("data") data: String): Response<Diario>
 
     @POST("api/registros-alimentares")
-    suspend fun criarRegistro(@Body request: RegistroAlimentarRequest): Response<RegistroAlimentar>
+    suspend fun criarRegistro(@Body entrada: RegistroAlimentarEntrada): Response<RegistroAlimentar>
 
     @PUT("api/registros-alimentares/{id}")
-    suspend fun atualizarRegistro(@Path("id") id: Long, @Body update: RegistroAlimentarUpdate): Response<RegistroAlimentar>
+    suspend fun atualizarRegistro(@Path("id") id: Long, @Body alteracao: RegistroAlimentarAlteracao): Response<RegistroAlimentar>
 
     @DELETE("api/registros-alimentares/{id}")
     suspend fun removerRegistro(@Path("id") id: Long): Response<Unit>
@@ -87,7 +87,7 @@ interface TreinoApi {
     suspend fun listarPesagens(@Path("id") usuarioId: Long): Response<List<Pesagem>>
 
     @POST("api/pesagens")
-    suspend fun criarPesagem(@Body request: PesagemRequest): Response<Pesagem>
+    suspend fun criarPesagem(@Body entrada: PesagemEntrada): Response<Pesagem>
 
     @DELETE("api/pesagens/{id}")
     suspend fun removerPesagem(@Path("id") id: Long): Response<Unit>
@@ -95,7 +95,7 @@ interface TreinoApi {
     // ---------- Treinos realizados e progresso ----------
 
     @POST("api/treinos-realizados")
-    suspend fun registrarTreino(@Body request: TreinoRealizadoRequest): Response<TreinoRealizado>
+    suspend fun registrarTreino(@Body entrada: TreinoRealizadoEntrada): Response<TreinoRealizado>
 
     @DELETE("api/treinos-realizados/{id}")
     suspend fun removerTreino(@Path("id") id: Long): Response<Unit>
