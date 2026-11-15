@@ -7,8 +7,13 @@ const YAML = require('yaml');
 
 const { criarUsuarioRepository } = require('./repositories/usuario.repository');
 const { criarAvaliacaoRepository } = require('./repositories/avaliacao.repository');
+const { criarAlimentoRepository } = require('./repositories/alimento.repository');
+const { criarRegistroRepository } = require('./repositories/registro.repository');
+const { criarPesagemRepository } = require('./repositories/pesagem.repository');
 const { criarUsuarioController } = require('./controllers/usuario.controller');
 const { criarAvaliacaoController } = require('./controllers/avaliacao.controller');
+const { criarNutricaoController } = require('./controllers/nutricao.controller');
+const { criarPesagemController } = require('./controllers/pesagem.controller');
 const { criarRotas } = require('./routes');
 const { rotaNaoEncontrada, tratarErros } = require('./middlewares/erros');
 
@@ -18,6 +23,9 @@ const openapi = YAML.parse(fs.readFileSync(path.join(__dirname, 'docs', 'openapi
 function criarApp(db) {
   const usuarios = criarUsuarioRepository(db);
   const avaliacoes = criarAvaliacaoRepository(db);
+  const alimentos = criarAlimentoRepository(db);
+  const registros = criarRegistroRepository(db);
+  const pesagens = criarPesagemRepository(db);
 
   const app = express();
   app.use(cors());
@@ -30,6 +38,10 @@ function criarApp(db) {
   app.use('/api', criarRotas({
     usuarioController: criarUsuarioController(usuarios, avaliacoes),
     avaliacaoController: criarAvaliacaoController(avaliacoes, usuarios),
+    nutricaoController: criarNutricaoController({
+      alimentos, registros, usuarios, avaliacoes,
+    }),
+    pesagemController: criarPesagemController({ pesagens, usuarios }),
   }));
 
   app.use(rotaNaoEncontrada);

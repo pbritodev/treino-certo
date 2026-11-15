@@ -140,7 +140,30 @@ function montarPlano(respostas) {
   return Array.from({ length: diasSemana }, (_, i) => montarDia(i, divisao[i % divisao.length], respostas, disponiveis));
 }
 
-function gerarDicas({ objetivo, nivel, diasSemana, restricoes }, classificacaoImc) {
+const FATOR_ATIVIDADE = { SEDENTARIO: 1.2, LEVE: 1.375, MODERADO: 1.55, INTENSO: 1.725 };
+const AJUSTE_CALORICO = { EMAGRECIMENTO: -500, HIPERTROFIA: 300, CONDICIONAMENTO: 0, SAUDE: 0 };
+const PROTEINA_POR_KG = { EMAGRECIMENTO: 1.8, HIPERTROFIA: 2.0, CONDICIONAMENTO: 1.6, SAUDE: 1.2 };
+
+/** Taxa metabólica basal pela equação de Mifflin-St Jeor (kcal/dia). */
+function calcularTmb({ peso, altura, idade, sexo }) {
+  const base = 10 * peso + 6.25 * (altura * 100) - 5 * idade;
+  const ajusteSexo = { MASCULINO: 5, FEMININO: -161 }[sexo] ?? -78; // OUTRO: média entre os dois
+  return Math.round(base + ajusteSexo);
+}
+
+/**
+ * Meta diária de calorias e proteínas: gasto total (TMB x fator de atividade)
+ * ajustado ao objetivo. Nunca fica abaixo da TMB, por segurança.
+ */
+function calcularMetasNutricionais(respostas, usuario) {
+  const tmb = calcularTmb({ ...respostas, ...usuario });
+  const gastoTotal = tmb * FATOR_ATIVIDADE[respostas.atividadeDiaria];
+  const metaCalorica = Math.round(Math.max(tmb, gastoTotal + AJUSTE_CALORICO[respostas.objetivo]));
+  const metaProteina = Math.round(respostas.peso * PROTEINA_POR_KG[respostas.objetivo]);
+  return { tmb, metaCalorica, metaProteina };
+}
+
+function gerarDicas({ objetivo, nivel, diasSemana, restricoes, horasSono, peso, pesoMeta }, classificacaoImc) {
   const dicas = [];
   const porObjetivo = {
     EMAGRECIMENTO: 'Combine o treino com déficit calórico moderado e boa ingestão de proteínas.',
@@ -162,6 +185,15 @@ function gerarDicas({ objetivo, nivel, diasSemana, restricoes }, classificacaoIm
   if (restricoes.some((r) => r !== 'CARDIACO')) {
     dicas.push('Exercícios que sobrecarregam suas regiões sensíveis foram removidos do plano.');
   }
+  if (horasSono < 7) {
+    dicas.push(`Você dorme ${horasSono}h por noite: tente chegar a 7-9h, pois a recuperação muscular acontece no sono.`);
+  }
+  if (pesoMeta && Math.abs(pesoMeta - peso) >= 1) {
+    const diferenca = Math.abs(pesoMeta - peso);
+    const semanas = Math.ceil(diferenca / 0.5);
+    const verbo = pesoMeta < peso ? 'perder' : 'ganhar';
+    dicas.push(`Para ${verbo} ${diferenca.toFixed(1)} kg com segurança (~0,5 kg/semana), conte com cerca de ${semanas} semanas.`);
+  }
   dicas.push('Hidrate-se e faça 5 minutos de aquecimento antes de cada sessão.');
   return dicas;
 }
@@ -170,8 +202,10 @@ function gerarDicas({ objetivo, nivel, diasSemana, restricoes }, classificacaoIm
  * Ponto de entrada do motor: recebe as respostas do questionário e
  * devolve o resultado completo da avaliação.
  */
-function gerarRecomendacao(entrada) {
-  const respostas = { possuiEquipamento: false, restricoes: [], ...entrada };
+function gerarRecomendacao(entrada, usuario = { idade: 30, sexo: 'OUTRO' }) {
+  const respostas = {
+    possuiEquipamento: false, restricoes: [], atividadeDiaria: 'LEVE', horasSono: 7, pesoMeta: null, ...entrada,
+  };
   const imc = calcularImc(respostas.peso, respostas.altura);
   const classificacaoImc = classificarImc(imc);
   const intensidade = calcularIntensidade({ ...respostas, imc });
@@ -182,9 +216,12 @@ function gerarRecomendacao(entrada) {
     intensidade,
     classificacao: classificarIntensidade(intensidade),
     perfil: `${NOME_PERFIL[respostas.objetivo]} · ${NOME_NIVEL[respostas.nivel]}`,
+    ...calcularMetasNutricionais(respostas, usuario),
     plano: montarPlano(respostas),
     dicas: gerarDicas(respostas, classificacaoImc),
   };
 }
 
-module.exports = { gerarRecomendacao, calcularImc, classificarImc, calcularIntensidade };
+module.exports = {
+  gerarRecomendacao, calcularImc, classificarImc, calcularIntensidade, calcularTmb, calcularMetasNutricionais,
+};

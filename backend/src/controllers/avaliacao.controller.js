@@ -7,10 +7,11 @@ function criarAvaliacaoController(avaliacoes, usuarios) {
     criar(req, res) {
       const erros = validarAvaliacao(req.body);
       if (erros.length) throw new HttpError(400, 'Dados inválidos', erros);
-      if (!usuarios.buscarPorId(req.body.usuarioId)) throw new HttpError(404, 'Usuário não encontrado');
+      const usuario = usuarios.buscarPorId(req.body.usuarioId);
+      if (!usuario) throw new HttpError(404, 'Usuário não encontrado');
 
-      const respostas = { possuiEquipamento: false, restricoes: [], ...req.body };
-      const resultado = gerarRecomendacao(respostas);
+      const respostas = { possuiEquipamento: false, restricoes: [], pesoMeta: null, ...req.body };
+      const resultado = gerarRecomendacao(respostas, usuario);
       res.status(201).json(avaliacoes.criar({ ...respostas, ...resultado }));
     },
     buscar(req, res) {

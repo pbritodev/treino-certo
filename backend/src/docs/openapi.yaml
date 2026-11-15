@@ -5,13 +5,16 @@ info:
   description: |
     API REST do aplicativo **TreinoCerto**. Cadastra usuários, recebe as respostas
     do questionário de treino, gera um plano personalizado (motor de recomendação)
-    e persiste tudo em um banco relacional SQLite.
+    com meta calórica, mantém um diário alimentar com contagem de calorias e o
+    histórico de pesagens. Tudo é persistido em um banco relacional SQLite.
 servers:
   - url: /
     description: Servidor atual
 tags:
   - name: Usuários
   - name: Avaliações
+  - name: Alimentação
+  - name: Pesagens
   - name: Sistema
 paths:
   /api/health:
@@ -167,6 +170,141 @@ paths:
       responses:
         '204': { description: Avaliação removida }
         '404': { $ref: '#/components/responses/NaoEncontrado' }
+  /api/alimentos:
+    get:
+      tags: [Alimentação]
+      summary: Lista alimentos (valores por 100 g/ml)
+      parameters:
+        - { name: busca, in: query, schema: { type: string }, description: Parte do nome, example: arroz }
+        - name: categoria
+          in: query
+          schema: { type: string, enum: [CEREAIS, PROTEINAS, LEGUMINOSAS, FRUTAS, LATICINIOS, VEGETAIS, GORDURAS, BEBIDAS, OUTROS] }
+      responses:
+        '200':
+          description: Lista de alimentos
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Alimento' }
+  /api/alimentos/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Alimentação]
+      summary: Busca um alimento pelo id
+      responses:
+        '200':
+          description: Alimento encontrado
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Alimento' }
+        '404': { $ref: '#/components/responses/NaoEncontrado' }
+  /api/usuarios/{id}/diario:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+      - { name: data, in: query, schema: { type: string, format: date }, description: 'AAAA-MM-DD (padrão: hoje)', example: '2026-11-16' }
+    get:
+      tags: [Alimentação]
+      summary: Diário alimentar do dia com totais e meta calórica
+      description: A meta vem da avaliação mais recente do usuário (ou 2000 kcal se não houver).
+      responses:
+        '200':
+          description: Diário do dia
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Diario' }
+        '400': { $ref: '#/components/responses/Invalido' }
+        '404': { $ref: '#/components/responses/NaoEncontrado' }
+  /api/registros-alimentares:
+    post:
+      tags: [Alimentação]
+      summary: Adiciona um alimento consumido ao diário
+      description: As calorias e macronutrientes são calculados pela quantidade ingerida (valor por 100 g × quantidade / 100).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/RegistroAlimentarEntrada' }
+      responses:
+        '201':
+          description: Registro criado
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/RegistroAlimentar' }
+        '400': { $ref: '#/components/responses/Invalido' }
+        '404': { $ref: '#/components/responses/NaoEncontrado' }
+  /api/registros-alimentares/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    put:
+      tags: [Alimentação]
+      summary: Altera a quantidade e/ou a refeição de um item do diário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [quantidade, refeicao]
+              properties:
+                quantidade: { type: number, example: 200 }
+                refeicao: { type: string, enum: [CAFE_DA_MANHA, ALMOCO, LANCHE, JANTAR] }
+      responses:
+        '200':
+          description: Registro atualizado
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/RegistroAlimentar' }
+        '400': { $ref: '#/components/responses/Invalido' }
+        '404': { $ref: '#/components/responses/NaoEncontrado' }
+    delete:
+      tags: [Alimentação]
+      summary: Remove um item do diário
+      responses:
+        '204': { description: Registro removido }
+        '404': { $ref: '#/components/responses/NaoEncontrado' }
+  /api/usuarios/{id}/pesagens:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Pesagens]
+      summary: Histórico de peso do usuário (ordem cronológica)
+      responses:
+        '200':
+          description: Lista de pesagens
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Pesagem' }
+        '404': { $ref: '#/components/responses/NaoEncontrado' }
+  /api/pesagens:
+    post:
+      tags: [Pesagens]
+      summary: Registra uma pesagem
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PesagemEntrada' }
+      responses:
+        '201':
+          description: Pesagem registrada
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Pesagem' }
+        '400': { $ref: '#/components/responses/Invalido' }
+        '404': { $ref: '#/components/responses/NaoEncontrado' }
+  /api/pesagens/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    delete:
+      tags: [Pesagens]
+      summary: Remove uma pesagem
+      responses:
+        '204': { description: Pesagem removida }
+        '404': { $ref: '#/components/responses/NaoEncontrado' }
 components:
   parameters:
     Id:
@@ -211,7 +349,7 @@ components:
         - $ref: '#/components/schemas/UsuarioEntrada'
     AvaliacaoEntrada:
       type: object
-      required: [usuarioId, objetivo, nivel, diasSemana, minutosSessao, local, peso, altura]
+      required: [usuarioId, objetivo, nivel, diasSemana, minutosSessao, local, peso, altura, atividadeDiaria, horasSono]
       properties:
         usuarioId: { type: integer, example: 1 }
         objetivo: { type: string, enum: [EMAGRECIMENTO, HIPERTROFIA, CONDICIONAMENTO, SAUDE], example: HIPERTROFIA }
@@ -226,6 +364,13 @@ components:
           example: [JOELHO]
         peso: { type: number, minimum: 30, maximum: 300, example: 70.5 }
         altura: { type: number, minimum: 1.0, maximum: 2.5, example: 1.72 }
+        pesoMeta: { type: number, nullable: true, minimum: 30, maximum: 300, example: 68 }
+        atividadeDiaria:
+          type: string
+          enum: [SEDENTARIO, LEVE, MODERADO, INTENSO]
+          description: Nível de atividade fora dos treinos (usado no gasto calórico)
+          example: LEVE
+        horasSono: { type: integer, minimum: 3, maximum: 12, example: 7 }
     Exercicio:
       type: object
       properties:
@@ -257,6 +402,9 @@ components:
             intensidade: { type: integer, minimum: 10, maximum: 100, example: 46 }
             classificacao: { type: string, enum: [Leve, Moderada, Intensa], example: Moderada }
             perfil: { type: string, example: Construtor Muscular · Iniciante }
+            tmb: { type: integer, description: Taxa metabólica basal (Mifflin-St Jeor), example: 1650 }
+            metaCalorica: { type: integer, description: Meta diária de calorias, example: 2569 }
+            metaProteina: { type: integer, description: Meta diária de proteínas (g), example: 141 }
             plano:
               type: array
               items: { $ref: '#/components/schemas/DiaTreino' }
@@ -266,3 +414,77 @@ components:
             observacao: { type: string, example: '' }
             favorita: { type: boolean, example: false }
             criadoEm: { type: string, example: '2026-11-16 19:35:00' }
+    Alimento:
+      type: object
+      properties:
+        id: { type: integer, example: 1 }
+        nome: { type: string, example: Arroz branco cozido }
+        categoria: { type: string, example: CEREAIS }
+        kcal: { type: number, description: kcal por 100 g/ml, example: 128 }
+        proteina: { type: number, example: 2.5 }
+        carboidrato: { type: number, example: 28.1 }
+        gordura: { type: number, example: 0.2 }
+        porcaoG: { type: number, description: Porção sugerida em g/ml, example: 100 }
+        porcaoDescricao: { type: string, example: 4 colheres de sopa }
+    RegistroAlimentarEntrada:
+      type: object
+      required: [usuarioId, alimentoId, data, refeicao, quantidade]
+      properties:
+        usuarioId: { type: integer, example: 1 }
+        alimentoId: { type: integer, example: 1 }
+        data: { type: string, format: date, example: '2026-11-16' }
+        refeicao: { type: string, enum: [CAFE_DA_MANHA, ALMOCO, LANCHE, JANTAR], example: ALMOCO }
+        quantidade: { type: number, description: Gramas ou ml consumidos, example: 150 }
+    RegistroAlimentar:
+      allOf:
+        - $ref: '#/components/schemas/RegistroAlimentarEntrada'
+        - type: object
+          properties:
+            id: { type: integer, example: 10 }
+            alimento: { type: string, example: Arroz branco cozido }
+            porcaoDescricao: { type: string, example: 4 colheres de sopa }
+            porcaoG: { type: number, example: 100 }
+            kcal: { type: number, example: 192 }
+            proteina: { type: number, example: 3.8 }
+            carboidrato: { type: number, example: 42.2 }
+            gordura: { type: number, example: 0.3 }
+    Nutrientes:
+      type: object
+      properties:
+        kcal: { type: number, example: 382.8 }
+        proteina: { type: number, example: 42.2 }
+        carboidrato: { type: number, example: 42.2 }
+        gordura: { type: number, example: 3.3 }
+    Diario:
+      type: object
+      properties:
+        data: { type: string, example: '2026-11-16' }
+        metaCalorica: { type: integer, example: 2200 }
+        metaProteina: { type: integer, nullable: true, example: 140 }
+        metaDefinidaPorAvaliacao: { type: boolean, example: true }
+        totais: { $ref: '#/components/schemas/Nutrientes' }
+        restante: { type: integer, description: Calorias restantes (negativo = acima da meta), example: 1817 }
+        refeicoes:
+          type: array
+          items:
+            type: object
+            properties:
+              refeicao: { type: string, example: ALMOCO }
+              kcal: { type: number, example: 382.8 }
+              itens:
+                type: array
+                items: { $ref: '#/components/schemas/RegistroAlimentar' }
+    PesagemEntrada:
+      type: object
+      required: [usuarioId, peso, data]
+      properties:
+        usuarioId: { type: integer, example: 1 }
+        peso: { type: number, example: 81.9 }
+        data: { type: string, format: date, example: '2026-11-16' }
+        observacao: { type: string, maxLength: 200, example: Em jejum }
+    Pesagem:
+      allOf:
+        - type: object
+          properties:
+            id: { type: integer, example: 3 }
+        - $ref: '#/components/schemas/PesagemEntrada'

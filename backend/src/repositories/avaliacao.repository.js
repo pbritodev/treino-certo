@@ -13,11 +13,17 @@ function mapear(linha) {
     restricoes: JSON.parse(linha.restricoes),
     peso: linha.peso,
     altura: linha.altura,
+    pesoMeta: linha.peso_meta,
+    atividadeDiaria: linha.atividade_diaria,
+    horasSono: linha.horas_sono,
     imc: linha.imc,
     classificacaoImc: linha.classificacao_imc,
     intensidade: linha.intensidade,
     classificacao: linha.classificacao,
     perfil: linha.perfil,
+    tmb: linha.tmb,
+    metaCalorica: linha.meta_calorica,
+    metaProteina: linha.meta_proteina,
     plano: JSON.parse(linha.plano),
     dicas: JSON.parse(linha.dicas),
     observacao: linha.observacao,
@@ -34,6 +40,9 @@ function criarAvaliacaoRepository(db) {
         .all(usuarioId)
         .map(mapear);
     },
+    buscarUltimaDoUsuario(usuarioId) {
+      return mapear(db.prepare('SELECT * FROM avaliacoes WHERE usuario_id = ? ORDER BY id DESC LIMIT 1').get(usuarioId));
+    },
     buscarPorId(id) {
       return mapear(db.prepare('SELECT * FROM avaliacoes WHERE id = ?').get(id));
     },
@@ -41,13 +50,15 @@ function criarAvaliacaoRepository(db) {
       const { lastInsertRowid } = db.prepare(`
         INSERT INTO avaliacoes (
           usuario_id, objetivo, nivel, dias_semana, minutos_sessao, local, possui_equipamento,
-          restricoes, peso, altura, imc, classificacao_imc, intensidade, classificacao,
-          perfil, plano, dicas
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          restricoes, peso, altura, peso_meta, atividade_diaria, horas_sono, imc,
+          classificacao_imc, intensidade, classificacao, perfil, tmb, meta_calorica,
+          meta_proteina, plano, dicas
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `).run(
         a.usuarioId, a.objetivo, a.nivel, a.diasSemana, a.minutosSessao, a.local,
         a.possuiEquipamento ? 1 : 0, JSON.stringify(a.restricoes), a.peso, a.altura,
-        a.imc, a.classificacaoImc, a.intensidade, a.classificacao, a.perfil,
+        a.pesoMeta ?? null, a.atividadeDiaria, a.horasSono, a.imc, a.classificacaoImc,
+        a.intensidade, a.classificacao, a.perfil, a.tmb, a.metaCalorica, a.metaProteina,
         JSON.stringify(a.plano), JSON.stringify(a.dicas),
       );
       return this.buscarPorId(Number(lastInsertRowid));

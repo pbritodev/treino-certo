@@ -1,10 +1,13 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
-const { gerarRecomendacao, calcularImc, classificarImc } = require('../src/services/recomendacao.service');
+const {
+  gerarRecomendacao, calcularImc, classificarImc, calcularTmb, calcularMetasNutricionais,
+} = require('../src/services/recomendacao.service');
 
 const base = {
   objetivo: 'HIPERTROFIA', nivel: 'INICIANTE', diasSemana: 3, minutosSessao: 60,
   local: 'ACADEMIA', possuiEquipamento: false, restricoes: [], peso: 70, altura: 1.75,
+  atividadeDiaria: 'LEVE', horasSono: 8,
 };
 
 test('calcula e classifica o IMC', () => {
@@ -48,4 +51,27 @@ test('restrição cardíaca limita a intensidade e gera dica médica', () => {
 test('emagrecimento inclui cardio em todos os dias', () => {
   const r = gerarRecomendacao({ ...base, objetivo: 'EMAGRECIMENTO' });
   assert.ok(r.plano.every((d) => d.exercicios.some((e) => e.grupo === 'CARDIO')));
+});
+
+test('calcula a TMB pela fórmula de Mifflin-St Jeor', () => {
+  // 10*70 + 6.25*175 - 5*30 + 5 = 1648.75
+  assert.equal(calcularTmb({ peso: 70, altura: 1.75, idade: 30, sexo: 'MASCULINO' }), 1649);
+  assert.equal(calcularTmb({ peso: 70, altura: 1.75, idade: 30, sexo: 'FEMININO' }), 1483);
+});
+
+test('meta calórica considera atividade e objetivo', () => {
+  const usuario = { idade: 30, sexo: 'MASCULINO' };
+  const manter = calcularMetasNutricionais({ ...base, objetivo: 'SAUDE' }, usuario);
+  const emagrecer = calcularMetasNutricionais({ ...base, objetivo: 'EMAGRECIMENTO' }, usuario);
+  const ganhar = calcularMetasNutricionais({ ...base, objetivo: 'HIPERTROFIA' }, usuario);
+  assert.equal(manter.metaCalorica, Math.round(1649 * 1.375));
+  assert.ok(emagrecer.metaCalorica < manter.metaCalorica);
+  assert.ok(ganhar.metaCalorica > manter.metaCalorica);
+  assert.equal(ganhar.metaProteina, 140);
+});
+
+test('dicas de sono e de peso meta', () => {
+  const r = gerarRecomendacao({ ...base, horasSono: 5, pesoMeta: 65 });
+  assert.ok(r.dicas.some((d) => d.includes('5h')));
+  assert.ok(r.dicas.some((d) => d.includes('perder 5.0 kg')));
 });

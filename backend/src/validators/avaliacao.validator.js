@@ -1,4 +1,6 @@
-const { OBJETIVOS, NIVEIS, LOCAIS, RESTRICOES, MINUTOS } = require('./dominio');
+const {
+  OBJETIVOS, NIVEIS, LOCAIS, RESTRICOES, MINUTOS, ATIVIDADES,
+} = require('./dominio');
 
 /** Valida as respostas do questionário enviadas pelo app. */
 function validarAvaliacao(body = {}) {
@@ -6,6 +8,7 @@ function validarAvaliacao(body = {}) {
   const {
     usuarioId, objetivo, nivel, diasSemana, minutosSessao,
     local, possuiEquipamento, restricoes, peso, altura,
+    atividadeDiaria, horasSono, pesoMeta,
   } = body;
 
   if (!Number.isInteger(usuarioId)) erros.push('usuarioId é obrigatório');
@@ -25,6 +28,14 @@ function validarAvaliacao(body = {}) {
   }
   if (typeof peso !== 'number' || peso < 30 || peso > 300) erros.push('peso deve estar entre 30 e 300 kg');
   if (typeof altura !== 'number' || altura < 1.0 || altura > 2.5) erros.push('altura deve estar entre 1.00 e 2.50 m');
+  if (!ATIVIDADES.includes(atividadeDiaria)) erros.push(`atividadeDiaria deve ser um de: ${ATIVIDADES.join(', ')}`);
+  if (!Number.isInteger(horasSono) || horasSono < 3 || horasSono > 12) {
+    erros.push('horasSono deve ser um inteiro entre 3 e 12');
+  }
+  if (pesoMeta !== undefined && pesoMeta !== null
+      && (typeof pesoMeta !== 'number' || pesoMeta < 30 || pesoMeta > 300)) {
+    erros.push('pesoMeta deve estar entre 30 e 300 kg');
+  }
   return erros;
 }
 

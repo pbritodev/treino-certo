@@ -13,6 +13,7 @@ const usuario = { nome: 'Maria Silva', email: 'maria@email.com', idade: 25, sexo
 const respostas = {
   objetivo: 'HIPERTROFIA', nivel: 'INTERMEDIARIO', diasSemana: 4, minutosSessao: 60,
   local: 'ACADEMIA', restricoes: ['OMBRO'], peso: 62, altura: 1.65,
+  atividadeDiaria: 'MODERADO', horasSono: 6, pesoMeta: 58,
 };
 
 test('CRUD de usuário', async () => {
@@ -41,6 +42,8 @@ test('fluxo de avaliação: criar, listar, atualizar e remover', async () => {
   assert.equal(a.plano.length, 4);
   assert.deepEqual(a.restricoes, ['OMBRO']);
   assert.equal(a.favorita, false);
+  assert.ok(a.metaCalorica > a.tmb);
+  assert.equal(a.pesoMeta, 58);
 
   const lista = await request(app).get(`/api/usuarios/${u.id}/avaliacoes`).expect(200);
   assert.equal(lista.body.length, 1);
