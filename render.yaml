@@ -1,0 +1,14 @@
+# Deploy da API no Render (https://render.com) — plano gratuito.
+# No painel do Render: New > Blueprint > selecione este repositório.
+services:
+  - type: web
+    name: treino-certo-api
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install --omit=dev && npm run seed
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 22.13.0
