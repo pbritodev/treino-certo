@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="@dimen/margem_tela">
+
+        <ImageView
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_marginTop="@dimen/espaco_medio"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_haltere"
+            app:tint="@color/verde_primario" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espaco_pequeno"
+            android:text="@string/app_name"
+            android:textAppearance="@style/Texto.Titulo" />
+
+        <TextView
+            android:id="@+id/txtVersao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/Texto.Secundario" />
+
+        <androidx.cardview.widget.CardView
+            style="@style/Cartao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espaco_grande">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="4dp"
+                android:text="@string/sobre_descricao"
+                android:textAppearance="@style/Texto.Corpo" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            style="@style/Cartao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="4dp"
+                android:text="@string/sobre_aviso"
+                android:textAppearance="@style/Texto.Secundario" />
+        </androidx.cardview.widget.CardView>
+
+        <Button
+            android:id="@+id/btnSwagger"
+            style="@style/Botao.Secundario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espaco_medio"
+            android:text="@string/sobre_swagger"
+            app:icon="@drawable/ic_web" />
+
+        <Button
+            android:id="@+id/btnOms"
+            style="@style/Botao.Secundario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espaco_pequeno"
+            android:text="@string/sobre_oms"
+            app:icon="@drawable/ic_info" />
+
+        <Button
+            android:id="@+id/btnContato"
+            style="@style/Botao.Secundario"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espaco_pequeno"
+            android:text="@string/sobre_contato"
+            app:icon="@drawable/ic_email" />
+
+        <Button
+            android:id="@+id/btnCompartilharApp"
+            style="@style/Botao.Principal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espaco_pequeno"
+            android:text="@string/sobre_compartilhar"
+            app:icon="@drawable/ic_compartilhar" />
+    </LinearLayout>
+</ScrollView>

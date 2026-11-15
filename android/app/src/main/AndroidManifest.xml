@@ -11,5 +11,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TreinoCerto"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".ui.home.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.cadastro.CadastroActivity"
+            android:parentActivityName=".ui.home.MainActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.sobre.SobreActivity"
+            android:parentActivityName=".ui.home.MainActivity" />
     </application>
 </manifest>

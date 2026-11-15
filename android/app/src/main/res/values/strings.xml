@@ -9,4 +9,46 @@
     <string name="cancelar">Cancelar</string>
     <string name="excluir">Excluir</string>
     <string name="campo_obrigatorio">Campo obrigatório</string>
+
+    <!-- Home -->
+    <string name="home_ola">Olá, %1$s! Pronto para treinar?</string>
+    <string name="menu_nova_avaliacao">Nova avaliação</string>
+    <string name="menu_nova_avaliacao_desc">Responda o questionário e gere seu plano</string>
+    <string name="menu_historico">Meu histórico</string>
+    <string name="menu_historico_desc">Planos gerados, favoritos e anotações</string>
+    <string name="menu_perfil">Meu perfil</string>
+    <string name="menu_perfil_desc_novo">Crie seu perfil para começar</string>
+    <string name="menu_perfil_desc">Ver e editar seus dados</string>
+    <string name="menu_sobre">Sobre o app</string>
+    <string name="menu_sobre_desc">Informações, contato e API</string>
+
+    <!-- Cadastro -->
+    <string name="cadastro_titulo">Seu perfil</string>
+    <string name="cadastro_subtitulo">Usamos esses dados para salvar suas avaliações.</string>
+    <string name="cadastro_nome">Nome completo</string>
+    <string name="cadastro_email">E-mail</string>
+    <string name="cadastro_idade">Idade</string>
+    <string name="cadastro_sexo">Sexo</string>
+    <string name="sexo_masculino">Masculino</string>
+    <string name="sexo_feminino">Feminino</string>
+    <string name="sexo_outro">Outro</string>
+    <string name="cadastro_salvar">Salvar perfil</string>
+    <string name="cadastro_trocar_usuario">Usar outro perfil</string>
+    <string name="cadastro_sucesso">Perfil salvo com sucesso!</string>
+    <string name="cadastro_erro_nome">Informe pelo menos 2 letras</string>
+    <string name="cadastro_erro_email">E-mail inválido</string>
+    <string name="cadastro_erro_idade">Idade entre 12 e 100 anos</string>
+    <string name="cadastro_erro_sexo">Selecione uma opção de sexo</string>
+
+    <!-- Sobre -->
+    <string name="sobre_versao">Versão %1$s</string>
+    <string name="sobre_descricao">O TreinoCerto analisa seu objetivo, nível, disponibilidade, local de treino e limitações físicas para recomendar um plano semanal de exercícios. Todas as avaliações ficam salvas em um banco de dados por meio de uma API REST.</string>
+    <string name="sobre_aviso">⚠️ As recomendações são educativas e não substituem a orientação de um profissional de Educação Física ou de um médico.</string>
+    <string name="sobre_swagger">Documentação da API (Swagger)</string>
+    <string name="sobre_oms">Recomendações da OMS sobre atividade física</string>
+    <string name="sobre_contato">Fale conosco por e-mail</string>
+    <string name="sobre_compartilhar">Indicar o app para um amigo</string>
+    <string name="sobre_texto_compartilhar">Estou usando o TreinoCerto para montar meu plano de treino personalizado! 💪</string>
+    <string name="email_contato">contato@treinocerto.app</string>
+    <string name="url_oms">https://www.who.int/news-room/fact-sheets/detail/physical-activity</string>
 </resources>
