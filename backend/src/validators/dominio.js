@@ -1,0 +1,9 @@
+/** Valores aceitos pela API (enums do domínio). */
+module.exports = {
+  SEXOS: ['MASCULINO', 'FEMININO', 'OUTRO'],
+  OBJETIVOS: ['EMAGRECIMENTO', 'HIPERTROFIA', 'CONDICIONAMENTO', 'SAUDE'],
+  NIVEIS: ['INICIANTE', 'INTERMEDIARIO', 'AVANCADO'],
+  LOCAIS: ['CASA', 'ACADEMIA', 'AR_LIVRE'],
+  RESTRICOES: ['JOELHO', 'COLUNA', 'OMBRO', 'CARDIACO'],
+  MINUTOS: [30, 45, 60, 90],
+};

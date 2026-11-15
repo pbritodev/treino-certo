@@ -1,0 +1,24 @@
+{
+  "name": "treino-certo-api",
+  "version": "1.0.0",
+  "description": "API REST do TreinoCerto: cadastro de usuários e geração de planos de treino personalizados",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node --disable-warning=ExperimentalWarning src/server.js",
+    "dev": "node --disable-warning=ExperimentalWarning --watch src/server.js",
+    "test": "node --disable-warning=ExperimentalWarning --test"
+  },
+  "engines": {
+    "node": ">=22.13"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^4.22.3",
+    "swagger-ui-express": "^5.0.1",
+    "yaml": "^2.9.1"
+  },
+  "devDependencies": {
+    "supertest": "^7.3.2"
+  }
+}

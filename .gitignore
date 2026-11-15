@@ -1,0 +1,18 @@
+# Node
+node_modules/
+*.db
+*.db-journal
+.env
+
+# Android
+*.iml
+.gradle/
+local.properties
+.idea/
+.DS_Store
+build/
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
