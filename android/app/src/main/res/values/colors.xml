@@ -17,5 +17,11 @@
     <color name="intensidade_moderada">#F9A825</color>
     <color name="intensidade_intensa">#E53935</color>
 
+    <!-- Barra superior, cabeçalho e texto sobre a cor primária -->
+    <color name="barra_superior">#2E7D32</color>
+    <color name="cabecalho_inicio">#1B5E20</color>
+    <color name="cabecalho_fim">#388E3C</color>
+    <color name="sobre_primario">#FFFFFF</color>
+
     <color name="launcher_fundo">#2E7D32</color>
 </resources>

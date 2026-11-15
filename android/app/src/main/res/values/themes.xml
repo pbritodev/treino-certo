@@ -2,7 +2,7 @@
 <resources>
     <style name="Theme.TreinoCerto" parent="Theme.Material3.DayNight">
         <item name="colorPrimary">@color/verde_primario</item>
-        <item name="colorOnPrimary">@color/branco</item>
+        <item name="colorOnPrimary">@color/sobre_primario</item>
         <item name="colorPrimaryContainer">@color/verde_claro</item>
         <item name="colorSecondary">@color/laranja</item>
         <item name="colorSecondaryContainer">@color/laranja_claro</item>
@@ -10,11 +10,13 @@
         <item name="android:colorBackground">@color/fundo</item>
         <item name="colorError">@color/erro</item>
         <item name="actionBarStyle">@style/Widget.TreinoCerto.ActionBar</item>
-        <item name="android:statusBarColor">@color/verde_escuro</item>
+        <!-- Ícones da barra (seta de voltar) em branco sobre o verde -->
+        <item name="actionBarTheme">@style/ThemeOverlay.Material3.Dark.ActionBar</item>
+        <item name="android:statusBarColor">@color/cabecalho_inicio</item>
     </style>
 
     <style name="Widget.TreinoCerto.ActionBar" parent="Widget.Material3.ActionBar.Solid">
-        <item name="background">@color/verde_primario</item>
+        <item name="background">@color/barra_superior</item>
         <item name="titleTextStyle">@style/TextAppearance.TreinoCerto.ActionBarTitle</item>
     </style>
 
