@@ -48,9 +48,23 @@ class GraficoPesoView @JvmOverloads constructor(
         style = Paint.Style.STROKE
         pathEffect = DashPathEffect(floatArrayOf(8 * densidade, 6 * densidade), 0f)
     }
+    // Objetos reutilizados a cada desenho (evita alocar memória dentro do onDraw)
+    private val linha = Path()
+    private val area = Path()
+
     private val pincelTexto = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = corTexto
         textSize = 11 * densidade
+    }
+
+    /** O degradê depende da altura da View, então é recriado só quando o tamanho muda. */
+    override fun onSizeChanged(largura: Int, altura: Int, larguraAntiga: Int, alturaAntiga: Int) {
+        super.onSizeChanged(largura, altura, larguraAntiga, alturaAntiga)
+        pincelArea.shader = LinearGradient(
+            0f, 0f, 0f, altura.toFloat(),
+            ColorUtils.setAlphaComponent(corLinha, 90), ColorUtils.setAlphaComponent(corLinha, 0),
+            Shader.TileMode.CLAMP,
+        )
     }
 
     fun definirDados(novosPontos: List<Ponto>, pesoMeta: Double?) {
@@ -84,22 +98,16 @@ class GraficoPesoView @JvmOverloads constructor(
             canvas.drawLine(margemEsq, y(it), margemEsq + largura, y(it), pincelMeta)
         }
 
-        val linha = Path()
+        linha.reset()
         pontos.forEachIndexed { i, ponto ->
             if (i == 0) linha.moveTo(x(i), y(ponto.valor)) else linha.lineTo(x(i), y(ponto.valor))
         }
 
         // Área preenchida com degradê abaixo da linha
-        val area = Path(linha).apply {
-            lineTo(x(pontos.lastIndex), margemTopo + altura)
-            lineTo(x(0), margemTopo + altura)
-            close()
-        }
-        pincelArea.shader = LinearGradient(
-            0f, margemTopo, 0f, margemTopo + altura,
-            ColorUtils.setAlphaComponent(corLinha, 90), ColorUtils.setAlphaComponent(corLinha, 0),
-            Shader.TileMode.CLAMP,
-        )
+        area.set(linha)
+        area.lineTo(x(pontos.lastIndex), margemTopo + altura)
+        area.lineTo(x(0), margemTopo + altura)
+        area.close()
         canvas.drawPath(area, pincelArea)
         canvas.drawPath(linha, pincelLinha)
 

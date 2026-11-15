@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.core.net.toUri
 
 /**
  * Intents IMPLÍCITAS: o app descreve a ação (ver, enviar, compartilhar) e o
@@ -23,13 +24,13 @@ object IntentsExternas {
 
     /** Abre uma página no navegador. */
     fun abrirUrl(context: Context, url: String) {
-        iniciar(context, Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+        iniciar(context, Intent(Intent.ACTION_VIEW, url.toUri()))
     }
 
     /** Abre o app de e-mail já com destinatário e assunto preenchidos. */
     fun enviarEmail(context: Context, destinatario: String, assunto: String) {
         val intent = Intent(Intent.ACTION_SENDTO).apply {
-            data = Uri.parse("mailto:")
+            data = "mailto:".toUri()
             putExtra(Intent.EXTRA_EMAIL, arrayOf(destinatario))
             putExtra(Intent.EXTRA_SUBJECT, assunto)
         }
@@ -38,7 +39,7 @@ object IntentsExternas {
 
     /** Abre o app de mapas pesquisando o termo próximo à localização do usuário. */
     fun buscarNoMapa(context: Context, termo: String) {
-        iniciar(context, Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=${Uri.encode(termo)}")))
+        iniciar(context, Intent(Intent.ACTION_VIEW, "geo:0,0?q=${Uri.encode(termo)}".toUri()))
     }
 
     /** Busca vídeos de execução do exercício no YouTube (app ou navegador). */

@@ -4,11 +4,9 @@
     <string name="slogan">Seu plano de treino personalizado em poucos toques</string>
 
     <!-- Geral -->
-    <string name="carregando">Carregando…</string>
     <string name="tentar_novamente">Tentar novamente</string>
     <string name="cancelar">Cancelar</string>
     <string name="excluir">Excluir</string>
-    <string name="campo_obrigatorio">Campo obrigatório</string>
 
     <!-- Home -->
     <string name="home_ola">Olá, %1$s! Pronto para treinar?</string>
@@ -143,7 +141,7 @@
     <string name="diario_kcal">%1$s kcal</string>
     <string name="diario_adicionar">Adicionar alimento</string>
     <string name="diario_refeicao_vazia">Nada registrado</string>
-    <string name="diario_item_detalhe">%1$s g · %2$s</string>
+    <string name="diario_item_detalhe">%1$s g · %2$s g de proteína</string>
     <string name="diario_editar_titulo">Editar %1$s</string>
     <string name="diario_quantidade">Quantidade (g ou ml)</string>
     <string name="diario_salvar">Salvar</string>
@@ -172,6 +170,7 @@
     <string name="peso_variacao">Variação</string>
     <string name="peso_meta">Meta</string>
     <string name="peso_kg">%1$s kg</string>
+    <string name="peso_variacao_valor">%1$s%2$s kg</string>
     <string name="peso_sem_meta">—</string>
     <string name="peso_evolucao">Evolução</string>
     <string name="peso_grafico_vazio">Registre pelo menos 2 pesagens para ver o gráfico</string>

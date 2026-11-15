@@ -31,6 +31,7 @@ import com.treinocerto.app.util.toast
 import com.treinocerto.app.util.visivel
 import kotlinx.coroutines.launch
 import java.util.Calendar
+import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
@@ -119,7 +120,7 @@ class DiarioActivity : AppCompatActivity() {
         val excedeu = diario.restante < 0
         val cor = ContextCompat.getColor(this, if (excedeu) R.color.intensidade_intensa else R.color.verde_primario)
 
-        binding.txtRestante.text = abs(diario.restante).toString()
+        binding.txtRestante.text = String.format(Locale.getDefault(), "%d", abs(diario.restante))
         binding.txtRestante.setTextColor(cor)
         binding.txtRotuloRestante.setText(if (excedeu) R.string.diario_excedido else R.string.diario_restante)
         binding.barraCalorias.max = diario.metaCalorica
@@ -135,7 +136,7 @@ class DiarioActivity : AppCompatActivity() {
         exibirMacro(binding.macroCarboidrato, diario.totais.carboidrato, null, percentual = diario.totais.carboidrato * 4 / diario.metaCalorica)
         exibirMacro(binding.macroGordura, diario.totais.gordura, null, percentual = diario.totais.gordura * 9 / diario.metaCalorica)
 
-        adapter.atualizar(diario.refeicoes)
+        adapter.submitList(diario.refeicoes)
     }
 
     private fun exibirMacro(macro: LayoutMacroBinding, gramas: Double, meta: Int?, percentual: Double = 0.0) {

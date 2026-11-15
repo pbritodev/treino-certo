@@ -11,6 +11,7 @@ import com.treinocerto.app.data.model.Pesagem
 import com.treinocerto.app.databinding.ItemPesagemBinding
 import com.treinocerto.app.util.Formatos
 import com.treinocerto.app.util.visivel
+import kotlin.math.abs
 
 /** Item da lista de pesagens; mostra a diferença em relação à pesagem anterior. */
 data class PesagemComVariacao(val pesagem: Pesagem, val variacao: Double?)
@@ -34,7 +35,7 @@ class PesagemAdapter : ListAdapter<PesagemComVariacao, PesagemAdapter.ViewHolder
             txtVariacao.visivel(variacao != null && variacao != 0.0)
             if (variacao != null) {
                 val sinal = if (variacao > 0) "+" else "−"
-                txtVariacao.text = "$sinal${Formatos.decimal(kotlin.math.abs(variacao))} kg"
+                txtVariacao.text = contexto.getString(R.string.peso_variacao_valor, sinal, Formatos.decimal(abs(variacao)))
                 val cor = if (variacao > 0) R.color.laranja else R.color.verde_primario
                 txtVariacao.setTextColor(ContextCompat.getColor(contexto, cor))
             }

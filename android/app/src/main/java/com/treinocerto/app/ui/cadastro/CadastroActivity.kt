@@ -18,6 +18,7 @@ import com.treinocerto.app.util.mostrarErro
 import com.treinocerto.app.util.toast
 import com.treinocerto.app.util.visivel
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 /**
  * Cadastro (POST) e edição (PUT) do perfil do usuário.
@@ -71,7 +72,7 @@ class CadastroActivity : AppCompatActivity() {
     private fun preencher(usuario: Usuario) {
         binding.edtNome.setText(usuario.nome)
         binding.edtEmail.setText(usuario.email)
-        binding.edtIdade.setText(usuario.idade.toString())
+        binding.edtIdade.setText(String.format(Locale.ROOT, "%d", usuario.idade))
         Sexo.entries.firstOrNull { it.api == usuario.sexo }?.let { radiosPorSexo[it]?.isChecked = true }
     }
 
