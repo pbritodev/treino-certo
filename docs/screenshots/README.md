@@ -14,5 +14,10 @@ Salve aqui as capturas do aplicativo com estes nomes (eles já estão referencia
 | `08_adicionar_alimento.png` | Adicionar alimento (com a folha de quantidade aberta) |
 | `09_peso.png` | Meu peso (gráfico) |
 | `10_sobre.png` | Sobre / aparência |
+| `11_login.png` | Login |
+| `12_cadastro.png` | Cadastre-se |
+| `13_perfil.png` | Meu perfil |
+| `14_progresso.png` | Meu progresso |
+| `15_trocar_senha.png` | Trocar senha |
 
 Dica: no emulador do Android Studio, use o botão de câmera da barra lateral; no celular, Power + Volume baixo.

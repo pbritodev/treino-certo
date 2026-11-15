@@ -12,7 +12,7 @@ import com.treinocerto.app.data.model.Usuario
 import com.treinocerto.app.data.repository.Resultado
 import com.treinocerto.app.data.repository.TreinoRepository
 import com.treinocerto.app.databinding.ActivityCadastroBinding
-import com.treinocerto.app.ui.common.Extras
+import com.treinocerto.app.ui.home.MainActivity
 import com.treinocerto.app.ui.questionario.QuestionarioActivity
 import com.treinocerto.app.util.mostrarErro
 import com.treinocerto.app.util.toast
@@ -21,14 +21,16 @@ import kotlinx.coroutines.launch
 import java.util.Locale
 
 /**
- * Cadastro (POST) e edição (PUT) do perfil do usuário.
- * Se já existe um usuário na sessão, os dados são carregados da API (GET).
+ * Dois modos na mesma tela:
+ * - "Cadastre-se" (sem sessão): cria a conta com senha (POST) e já abre o questionário.
+ * - "Editar dados" (com sessão): carrega (GET) e atualiza (PUT) os dados, sem mexer na senha.
  */
 class CadastroActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCadastroBinding
     private lateinit var sessao: SessaoUsuario
     private val repositorio = TreinoRepository()
+    private val modoEdicao get() = sessao.estaLogado
 
     private val radiosPorSexo by lazy {
         mapOf(
@@ -43,13 +45,12 @@ class CadastroActivity : AppCompatActivity() {
         binding = ActivityCadastroBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title = getString(R.string.menu_perfil)
         sessao = SessaoUsuario(this)
 
         binding.btnSalvar.setOnClickListener { salvar() }
-        binding.btnTrocarUsuario.setOnClickListener { trocarUsuario() }
+        binding.btnJaTenhoConta.setOnClickListener { finish() } // volta para o Login
 
-        sessao.usuarioId?.let { carregarUsuario(it) }
+        if (modoEdicao) configurarEdicao() else title = getString(R.string.login_cadastre_se)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -57,8 +58,17 @@ class CadastroActivity : AppCompatActivity() {
         return true
     }
 
+    private fun configurarEdicao() {
+        title = getString(R.string.cadastro_editar_titulo)
+        binding.txtTitulo.setText(R.string.cadastro_editar_titulo)
+        binding.txtSubtitulo.setText(R.string.cadastro_subtitulo)
+        binding.btnSalvar.setText(R.string.cadastro_salvar)
+        binding.grupoSenha.visivel(false)
+        binding.btnJaTenhoConta.visivel(false)
+        sessao.usuarioId?.let { carregarUsuario(it) }
+    }
+
     private fun carregarUsuario(id: Long) {
-        binding.btnTrocarUsuario.visivel(true)
         carregando(true)
         lifecycleScope.launch {
             when (val resultado = repositorio.buscarUsuario(id)) {
@@ -91,10 +101,16 @@ class CadastroActivity : AppCompatActivity() {
     }
 
     private fun aoSalvar(usuario: Usuario) {
+        val eraCadastro = !modoEdicao
         sessao.salvar(requireNotNull(usuario.id), usuario.nome)
-        toast(getString(R.string.cadastro_sucesso))
-        if (intent.getBooleanExtra(Extras.ABRIR_QUESTIONARIO_APOS_CADASTRO, false)) {
-            startActivity(Intent(this, QuestionarioActivity::class.java))
+        if (eraCadastro) {
+            // Conta nova: Home vira a base da pilha e o questionário abre por cima dela.
+            toast(getString(R.string.cadastro_conta_criada))
+            val home = Intent(this, MainActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            startActivities(arrayOf(home, Intent(this, QuestionarioActivity::class.java)))
+        } else {
+            toast(getString(R.string.cadastro_sucesso))
         }
         finish()
     }
@@ -105,23 +121,30 @@ class CadastroActivity : AppCompatActivity() {
         val email = binding.edtEmail.text.toString().trim()
         val idade = binding.edtIdade.text.toString().toIntOrNull()
         val sexo = radiosPorSexo.entries.firstOrNull { it.value.isChecked }?.key
+        val senha = binding.edtSenha.text.toString()
+        val confirmacao = binding.edtConfirmarSenha.text.toString()
 
         binding.campoNome.error = if (nome.length < 2) getString(R.string.cadastro_erro_nome) else null
         binding.campoEmail.error =
             if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) getString(R.string.cadastro_erro_email) else null
         binding.campoIdade.error = if (idade == null || idade !in 12..100) getString(R.string.cadastro_erro_idade) else null
+        if (!modoEdicao) {
+            binding.campoSenha.error = if (senha.length < 6) getString(R.string.cadastro_erro_senha) else null
+            binding.campoConfirmarSenha.error =
+                if (confirmacao != senha) getString(R.string.cadastro_erro_confirmacao) else null
+        }
         if (sexo == null) toast(getString(R.string.cadastro_erro_sexo))
 
-        val valido = binding.campoNome.error == null && binding.campoEmail.error == null &&
-            binding.campoIdade.error == null && sexo != null
-        if (!valido) return null
-        return Usuario(nome = nome, email = email, idade = idade!!, sexo = sexo!!.api)
-    }
+        val campos = listOf(binding.campoNome, binding.campoEmail, binding.campoIdade, binding.campoSenha, binding.campoConfirmarSenha)
+        if (campos.any { it.error != null } || sexo == null) return null
 
-    private fun trocarUsuario() {
-        sessao.limpar()
-        toast(getString(R.string.menu_perfil_desc_novo))
-        finish()
+        return Usuario(
+            nome = nome,
+            email = email,
+            idade = idade!!,
+            sexo = sexo.api,
+            senha = if (modoEdicao) null else senha,
+        )
     }
 
     private fun carregando(ativo: Boolean) {

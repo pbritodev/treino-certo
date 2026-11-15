@@ -5,6 +5,9 @@ import com.treinocerto.app.data.model.Avaliacao
 import com.treinocerto.app.data.model.AvaliacaoRequest
 import com.treinocerto.app.data.model.AvaliacaoUpdate
 import com.treinocerto.app.data.model.ErroApi
+import com.treinocerto.app.data.model.LoginRequest
+import com.treinocerto.app.data.model.TreinoRealizadoRequest
+import com.treinocerto.app.data.model.TrocaSenhaRequest
 import com.treinocerto.app.data.model.PesagemRequest
 import com.treinocerto.app.data.model.RegistroAlimentarRequest
 import com.treinocerto.app.data.model.RegistroAlimentarUpdate
@@ -21,6 +24,11 @@ import java.io.IOException
  * recebem sempre um [Resultado] já tratado.
  */
 class TreinoRepository(private val api: TreinoApi = RetrofitClient.api) {
+
+    suspend fun login(email: String, senha: String) = executar { api.login(LoginRequest(email, senha)) }
+
+    suspend fun trocarSenha(id: Long, senhaAtual: String, novaSenha: String): Resultado<Unit> =
+        executar { api.trocarSenha(id, TrocaSenhaRequest(senhaAtual, novaSenha)) }
 
     suspend fun criarUsuario(usuario: Usuario) = executar { api.criarUsuario(usuario) }
 
@@ -56,6 +64,12 @@ class TreinoRepository(private val api: TreinoApi = RetrofitClient.api) {
     suspend fun registrarPesagem(request: PesagemRequest) = executar { api.criarPesagem(request) }
 
     suspend fun removerPesagem(id: Long): Resultado<Unit> = executar { api.removerPesagem(id) }
+
+    suspend fun registrarTreino(request: TreinoRealizadoRequest) = executar { api.registrarTreino(request) }
+
+    suspend fun removerTreino(id: Long): Resultado<Unit> = executar { api.removerTreino(id) }
+
+    suspend fun buscarProgresso(usuarioId: Long) = executar { api.buscarProgresso(usuarioId) }
 
     /** Executa a chamada em background e converte resposta/exceção em [Resultado]. */
     private suspend fun <T> executar(chamada: suspend () -> Response<T>): Resultado<T> =

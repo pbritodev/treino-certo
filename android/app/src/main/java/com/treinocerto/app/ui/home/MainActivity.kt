@@ -12,12 +12,13 @@ import com.treinocerto.app.data.local.SessaoUsuario
 import com.treinocerto.app.data.repository.Resultado
 import com.treinocerto.app.data.repository.TreinoRepository
 import com.treinocerto.app.databinding.ActivityMainBinding
-import com.treinocerto.app.databinding.ItemMenuHomeBinding
-import com.treinocerto.app.ui.cadastro.CadastroActivity
-import com.treinocerto.app.ui.common.Extras
+import com.treinocerto.app.databinding.ItemMenuGradeBinding
+import com.treinocerto.app.ui.common.sair
 import com.treinocerto.app.ui.diario.DiarioActivity
 import com.treinocerto.app.ui.historico.HistoricoActivity
+import com.treinocerto.app.ui.perfil.PerfilActivity
 import com.treinocerto.app.ui.peso.PesoActivity
+import com.treinocerto.app.ui.progresso.ProgressoActivity
 import com.treinocerto.app.ui.questionario.QuestionarioActivity
 import com.treinocerto.app.ui.sobre.SobreActivity
 import com.treinocerto.app.util.Formatos
@@ -26,7 +27,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
-/** Tela inicial: saudação, resumo do dia, menu de navegação e botão de tema. */
+/** Home: saudação, resumo do dia, menu em grade e botão de tema. Exige usuário logado. */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -36,54 +37,51 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        sessao = SessaoUsuario(this)
+        if (!sessao.estaLogado) return sair() // sem sessão: volta para o login
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
-        sessao = SessaoUsuario(this)
         tema = PreferenciasTema(this)
 
         binding.btnTema.setImageResource(if (tema.estaEscuro()) R.drawable.ic_tema_claro else R.drawable.ic_tema_escuro)
         binding.btnTema.setOnClickListener { tema.alternar() } // a Activity é recriada com o novo tema
 
         configurarMenu(binding.menuNovaAvaliacao, R.drawable.ic_haltere, R.string.menu_nova_avaliacao,
-            R.string.menu_nova_avaliacao_desc) { abrirExigindoPerfil(QuestionarioActivity::class.java) }
+            R.string.menu_nova_avaliacao_desc, QuestionarioActivity::class.java)
+        configurarMenu(binding.menuProgresso, R.drawable.ic_grafico, R.string.menu_progresso,
+            R.string.menu_progresso_desc, ProgressoActivity::class.java)
         configurarMenu(binding.menuDiario, R.drawable.ic_restaurante, R.string.menu_diario,
-            R.string.menu_diario_desc) { abrirExigindoPerfil(DiarioActivity::class.java) }
+            R.string.menu_diario_desc, DiarioActivity::class.java)
         configurarMenu(binding.menuPeso, R.drawable.ic_balanca, R.string.menu_peso,
-            R.string.menu_peso_desc) { abrirExigindoPerfil(PesoActivity::class.java) }
+            R.string.menu_peso_desc, PesoActivity::class.java)
         configurarMenu(binding.menuHistorico, R.drawable.ic_historico, R.string.menu_historico,
-            R.string.menu_historico_desc) { abrirExigindoPerfil(HistoricoActivity::class.java) }
+            R.string.menu_historico_desc, HistoricoActivity::class.java)
+        configurarMenu(binding.menuPerfil, R.drawable.ic_pessoa, R.string.menu_perfil,
+            R.string.menu_perfil_desc, PerfilActivity::class.java)
         configurarMenu(binding.menuSobre, R.drawable.ic_info, R.string.menu_sobre,
-            R.string.menu_sobre_desc) { startActivity(Intent(this, SobreActivity::class.java)) }
+            R.string.menu_sobre_desc, SobreActivity::class.java)
         binding.cardResumo.setOnClickListener { startActivity(Intent(this, DiarioActivity::class.java)) }
     }
 
     override fun onResume() {
         super.onResume()
-        // Atualiza saudação e resumo sempre que o usuário volta para a Home.
-        binding.txtSaudacao.text = sessao.nome
-            ?.let { getString(R.string.home_ola, it.substringBefore(" ")) }
-            ?: getString(R.string.slogan)
-
-        val descricaoPerfil = if (sessao.estaLogado) R.string.menu_perfil_desc else R.string.menu_perfil_desc_novo
-        configurarMenu(binding.menuPerfil, R.drawable.ic_pessoa, R.string.menu_perfil, descricaoPerfil) {
-            startActivity(Intent(this, CadastroActivity::class.java))
-        }
+        if (!::binding.isInitialized) return
+        binding.txtSaudacao.text = getString(R.string.home_ola, sessao.nome.orEmpty().substringBefore(" "))
         carregarResumo()
     }
 
     /** Busca, em paralelo, o diário de hoje e as pesagens para montar o card de resumo. */
     private fun carregarResumo() {
-        val usuarioId = sessao.usuarioId
-        binding.cardResumo.visivel(usuarioId != null)
-        if (usuarioId == null) return
-
+        val usuarioId = sessao.usuarioId ?: return
         lifecycleScope.launch {
             val diario = async { repositorio.buscarDiario(usuarioId, Formatos.hojeApi()) }
             val pesagens = async { repositorio.listarPesagens(usuarioId) }
 
             when (val resultado = diario.await()) {
                 is Resultado.Sucesso -> with(resultado.dado) {
+                    binding.cardResumo.visivel(true)
                     val consumido = totais.kcal.roundToInt()
                     binding.txtKcalHoje.text = getString(R.string.home_kcal_hoje, consumido, metaCalorica)
                     binding.barraKcalHoje.max = metaCalorica
@@ -99,27 +97,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /** Telas que dependem de um usuário: sem perfil, abre o cadastro primeiro. */
-    private fun abrirExigindoPerfil(destino: Class<*>) {
-        if (sessao.estaLogado) {
-            startActivity(Intent(this, destino))
-            return
-        }
-        val intent = Intent(this, CadastroActivity::class.java)
-            .putExtra(Extras.ABRIR_QUESTIONARIO_APOS_CADASTRO, destino == QuestionarioActivity::class.java)
-        startActivity(intent)
-    }
-
     private fun configurarMenu(
-        item: ItemMenuHomeBinding,
+        item: ItemMenuGradeBinding,
         @DrawableRes icone: Int,
         @StringRes titulo: Int,
         @StringRes descricao: Int,
-        aoClicar: () -> Unit,
+        destino: Class<*>,
     ) {
         item.imgIcone.setImageResource(icone)
         item.txtTitulo.setText(titulo)
         item.txtDescricao.setText(descricao)
-        item.root.setOnClickListener { aoClicar() }
+        item.root.setOnClickListener { startActivity(Intent(this, destino)) }
     }
 }

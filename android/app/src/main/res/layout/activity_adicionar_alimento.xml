@@ -5,49 +5,81 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/CampoTexto"
+    <!-- Busca + categorias ficam fixas; só a lista abaixo rola na vertical -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/espaco_medio"
-        android:hint="@string/alimento_buscar"
-        app:endIconMode="clear_text"
-        app:startIconDrawable="@drawable/ic_busca">
+        android:background="@color/superficie"
+        android:elevation="2dp"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/espaco_pequeno">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edtBusca"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:imeOptions="actionSearch"
-            android:inputType="text" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginHorizontal="@dimen/espaco_medio"
+            android:hint="@string/alimento_buscar"
+            app:endIconMode="clear_text"
+            app:startIconDrawable="@drawable/ic_busca">
 
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/espaco_pequeno"
-        android:scrollbars="none">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtBusca"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionSearch"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/grupoCategorias"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="@dimen/espaco_medio"
-            app:selectionRequired="true"
-            app:singleLine="true"
-            app:singleSelection="true" />
-    </HorizontalScrollView>
+            android:layout_marginHorizontal="@dimen/espaco_medio"
+            android:layout_marginTop="@dimen/espaco_medio"
+            android:text="@string/alimento_categorias"
+            android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+            android:textColor="@color/texto_secundario" />
+
+        <!-- Barra de categorias com rolagem horizontal e barra de rolagem sempre visível -->
+        <HorizontalScrollView
+            android:id="@+id/rolagemCategorias"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fadeScrollbars="false"
+            android:paddingBottom="10dp"
+            android:scrollbarSize="4dp"
+            android:scrollbarStyle="outsideInset"
+            android:scrollbarThumbHorizontal="@drawable/barra_rolagem"
+            android:scrollbars="horizontal">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/grupoCategorias"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/espaco_medio"
+                android:paddingVertical="4dp"
+                app:chipSpacingHorizontal="8dp"
+                app:selectionRequired="true"
+                app:singleLine="true"
+                app:singleSelection="true" />
+        </HorizontalScrollView>
+    </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvAlimentos"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:padding="@dimen/espaco_pequeno" />
+            android:fadeScrollbars="false"
+            android:padding="@dimen/espaco_pequeno"
+            android:scrollbarStyle="outsideOverlay"
+            android:scrollbarThumbVertical="@drawable/barra_rolagem"
+            android:scrollbars="vertical" />
 
         <ProgressBar
             android:id="@+id/progresso"

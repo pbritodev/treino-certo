@@ -8,7 +8,7 @@ Aplicativo Android que monta um **plano de treino personalizado** a partir de um
 
 ## 📌 Proposta
 
-1. O usuário cria um perfil (nome, e-mail, idade e sexo).
+1. O usuário **cria uma conta (Cadastre-se)** com nome, e-mail, idade, sexo e senha, e depois **entra com login e senha**.
 2. Responde um questionário com 7 blocos: objetivo, nível, disponibilidade, local de treino, rotina (atividade diária e sono), medidas (peso, altura e peso desejado) e limitações físicas.
 3. A API processa as respostas e devolve um **resultado personalizado**:
    - perfil (ex.: *Queimador de Calorias · Intermediário*);
@@ -19,12 +19,15 @@ Aplicativo Android que monta um **plano de treino personalizado** a partir de um
    - dicas personalizadas (sono, tempo estimado até o peso desejado, cuidados cardíacos etc.).
 4. No **diário alimentar** (no estilo MyFitnessPal), o usuário registra o que comeu em cada refeição. As calorias e os macronutrientes são calculados pela quantidade ingerida e comparados à meta do dia.
 5. Em **Meu peso**, registra as pesagens e acompanha a evolução em um gráfico.
+6. Em cada dia do plano, toca em **"Concluí este treino"**. A tela **Meu progresso** mostra o perfil, os treinos feitos, a meta da semana, a sequência de dias e os últimos 7 dias.
 
 ## ✨ Funcionalidades
 
 | Área | O que faz |
 |---|---|
-| Perfil | Cadastro (POST), consulta (GET) e edição (PUT) do usuário |
+| Conta | **Login**, **Cadastre-se**, **trocar senha** (senha guardada com hash scrypt + salt) e sair |
+| Meu perfil | Avatar com iniciais, dados da conta, edição (PUT), atalhos para progresso e troca de senha |
+| Meu progresso | Perfil e plano atual, treinos na semana × meta, dias seguidos, total de treinos e minutos, últimos 7 dias, peso e lista de treinos realizados |
 | Avaliação | Questionário completo, geração do plano e da meta calórica |
 | Histórico | Lista de planos, filtro de favoritos, anotações e favorito (PATCH), exclusão (DELETE) com deslize |
 | Diário alimentar | Meta × consumido × restante, macros, navegação por dias, busca de alimentos por nome e categoria, cálculo em tempo real pela quantidade, edição e exclusão de itens |
@@ -36,20 +39,24 @@ Aplicativo Android que monta um **plano de treino personalizado** a partir de um
 
 ## ✅ Requisitos da AP2 atendidos
 
-### 10 Activities
+### 14 Activities
 
 | # | Activity | Função |
 |---|---|---|
-| 1 | `MainActivity` | Home: saudação, resumo do dia, menu e botão de tema |
-| 2 | `CadastroActivity` | Cadastro e edição do perfil |
-| 3 | `QuestionarioActivity` | Formulário da avaliação |
-| 4 | `ResultadoActivity` | Plano gerado |
-| 5 | `HistoricoActivity` | Lista de planos salvos |
-| 6 | `DetalheActivity` | Detalhes, anotações, favorito e exclusão de um plano |
-| 7 | `DiarioActivity` | Diário alimentar do dia |
-| 8 | `AdicionarAlimentoActivity` | Busca de alimentos e quantidade consumida |
-| 9 | `PesoActivity` | Pesagens e gráfico de evolução |
-| 10 | `SobreActivity` | Informações, tema e links |
+| 1 | `LoginActivity` | Login (tela de entrada) |
+| 2 | `CadastroActivity` | Cadastre-se e edição dos dados |
+| 3 | `TrocarSenhaActivity` | Troca de senha |
+| 4 | `PerfilActivity` | Meu perfil |
+| 5 | `ProgressoActivity` | Meu progresso (treinos realizados) |
+| 6 | `MainActivity` | Home: saudação, resumo do dia, menu em grade e botão de tema |
+| 7 | `QuestionarioActivity` | Formulário da avaliação |
+| 8 | `ResultadoActivity` | Plano gerado |
+| 9 | `HistoricoActivity` | Lista de planos salvos |
+| 10 | `DetalheActivity` | Detalhes, anotações, favorito e exclusão de um plano |
+| 11 | `DiarioActivity` | Diário alimentar do dia |
+| 12 | `AdicionarAlimentoActivity` | Busca de alimentos e quantidade consumida |
+| 13 | `PesoActivity` | Pesagens e gráfico de evolução |
+| 14 | `SobreActivity` | Informações, tema e links |
 
 ### Intents
 
@@ -87,7 +94,8 @@ Aplicativo Android que monta um **plano de treino personalizado** a partir de um
 - Node.js 22+ e Express
 - SQLite pelo módulo nativo `node:sqlite` (sem dependências nativas para compilar)
 - Swagger UI (`swagger-ui-express`) com especificação OpenAPI 3
-- Testes automatizados com `node:test` + `supertest` (21 testes)
+- Senhas com hash `scrypt` + salt (módulo nativo `node:crypto`)
+- Testes automatizados com `node:test` + `supertest` (30 testes)
 
 ---
 
@@ -136,7 +144,7 @@ Pré-requisito: **Node.js 22.13 ou superior** (`node --version`).
 ```bash
 cd backend
 npm install
-npm run seed     # (opcional) cria dados de exemplo: usuária "Maria Silva", planos, pesagens e diário
+npm run seed     # (opcional) dados de exemplo — login: maria@email.com / senha: 123456
 npm start
 ```
 
@@ -178,8 +186,10 @@ Todos os dados trafegam em **JSON**. A documentação interativa completa (com e
 | Método | Endpoint | Descrição |
 |---|---|---|
 | GET | `/api/health` | Verifica se a API está no ar |
+| POST | `/api/auth/login` | Login (e-mail e senha) |
+| PUT | `/api/usuarios/{id}/senha` | Troca a senha (exige a atual) |
 | GET | `/api/usuarios` | Lista usuários |
-| POST | `/api/usuarios` | Cadastra usuário |
+| POST | `/api/usuarios` | Cadastre-se (com senha) |
 | GET | `/api/usuarios/{id}` | Busca usuário |
 | PUT | `/api/usuarios/{id}` | Atualiza usuário |
 | DELETE | `/api/usuarios/{id}` | Remove usuário e seus dados (cascade) |
@@ -197,6 +207,10 @@ Todos os dados trafegam em **JSON**. A documentação interativa completa (com e
 | GET | `/api/usuarios/{id}/pesagens` | Histórico de peso |
 | POST | `/api/pesagens` | Registra pesagem |
 | DELETE | `/api/pesagens/{id}` | Remove pesagem |
+| POST | `/api/treinos-realizados` | Registra treino concluído |
+| GET | `/api/usuarios/{id}/treinos-realizados` | Lista treinos concluídos |
+| DELETE | `/api/treinos-realizados/{id}` | Remove treino registrado |
+| GET | `/api/usuarios/{id}/progresso` | Resumo de progresso (perfil, semana, sequência, últimos 7 dias) |
 
 Exemplo, criando uma avaliação:
 
@@ -221,13 +235,16 @@ erDiagram
     usuarios ||--o{ avaliacoes : possui
     usuarios ||--o{ registros_alimentares : registra
     usuarios ||--o{ pesagens : registra
+    usuarios ||--o{ treinos_realizados : conclui
+    avaliacoes ||--o{ treinos_realizados : origem
     alimentos ||--o{ registros_alimentares : compoe
 
     usuarios { int id PK
                text nome
                text email UK
                int idade
-               text sexo }
+               text sexo
+               text senha_hash }
     avaliacoes { int id PK
                  int usuario_id FK
                  text objetivo
@@ -251,6 +268,12 @@ erDiagram
                int usuario_id FK
                real peso
                text data }
+    treinos_realizados { int id PK
+                         int usuario_id FK
+                         int avaliacao_id FK
+                         text dia
+                         int duracao_min
+                         text data }
 ```
 
 A tabela `alimentos` é preenchida automaticamente com 44 alimentos comuns. Os valores são aproximados, com base na Tabela Brasileira de Composição de Alimentos (TACO). As calorias de cada registro são calculadas por `kcal_por_100g × quantidade ÷ 100`.
@@ -266,6 +289,10 @@ A tabela `alimentos` é preenchida automaticamente com 44 alimentos comuns. Os v
 | Detalhe | Diário alimentar | Adicionar alimento | Meu peso | Sobre |
 |---|---|---|---|---|
 | ![](docs/screenshots/06_detalhe.png) | ![](docs/screenshots/07_diario.png) | ![](docs/screenshots/08_adicionar_alimento.png) | ![](docs/screenshots/09_peso.png) | ![](docs/screenshots/10_sobre.png) |
+
+| Login | Cadastre-se | Meu perfil | Meu progresso | Trocar senha |
+|---|---|---|---|---|
+| ![](docs/screenshots/11_login.png) | ![](docs/screenshots/12_cadastro.png) | ![](docs/screenshots/13_perfil.png) | ![](docs/screenshots/14_progresso.png) | ![](docs/screenshots/15_trocar_senha.png) |
 
 ---
 

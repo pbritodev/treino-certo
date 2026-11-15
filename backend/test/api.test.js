@@ -9,7 +9,9 @@ beforeEach(() => {
   app = criarApp(abrirBanco(':memory:'));
 });
 
-const usuario = { nome: 'Maria Silva', email: 'maria@email.com', idade: 25, sexo: 'FEMININO' };
+const usuario = {
+  nome: 'Maria Silva', email: 'maria@email.com', idade: 25, sexo: 'FEMININO', senha: 'segredo123',
+};
 const respostas = {
   objetivo: 'HIPERTROFIA', nivel: 'INTERMEDIARIO', diasSemana: 4, minutosSessao: 60,
   local: 'ACADEMIA', restricoes: ['OMBRO'], peso: 62, altura: 1.65,
@@ -32,7 +34,7 @@ test('CRUD de usuário', async () => {
 
 test('valida dados do usuário', async () => {
   const res = await request(app).post('/api/usuarios').send({ nome: 'A', email: 'x', idade: 5 }).expect(400);
-  assert.equal(res.body.detalhes.length, 4);
+  assert.equal(res.body.detalhes.length, 5);
 });
 
 test('fluxo de avaliação: criar, listar, atualizar e remover', async () => {

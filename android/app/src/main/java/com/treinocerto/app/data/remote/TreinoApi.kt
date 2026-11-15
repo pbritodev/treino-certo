@@ -5,6 +5,11 @@ import com.treinocerto.app.data.model.AvaliacaoRequest
 import com.treinocerto.app.data.model.AvaliacaoUpdate
 import com.treinocerto.app.data.model.Alimento
 import com.treinocerto.app.data.model.Diario
+import com.treinocerto.app.data.model.LoginRequest
+import com.treinocerto.app.data.model.Progresso
+import com.treinocerto.app.data.model.TreinoRealizado
+import com.treinocerto.app.data.model.TreinoRealizadoRequest
+import com.treinocerto.app.data.model.TrocaSenhaRequest
 import com.treinocerto.app.data.model.Pesagem
 import com.treinocerto.app.data.model.PesagemRequest
 import com.treinocerto.app.data.model.RegistroAlimentar
@@ -23,6 +28,14 @@ import retrofit2.http.Query
 
 /** Endpoints da TreinoCerto API (documentados no Swagger em /docs). */
 interface TreinoApi {
+
+    // ---------- Autenticação e usuários ----------
+
+    @POST("api/auth/login")
+    suspend fun login(@Body request: LoginRequest): Response<Usuario>
+
+    @PUT("api/usuarios/{id}/senha")
+    suspend fun trocarSenha(@Path("id") id: Long, @Body request: TrocaSenhaRequest): Response<Unit>
 
     @POST("api/usuarios")
     suspend fun criarUsuario(@Body usuario: Usuario): Response<Usuario>
@@ -78,4 +91,15 @@ interface TreinoApi {
 
     @DELETE("api/pesagens/{id}")
     suspend fun removerPesagem(@Path("id") id: Long): Response<Unit>
+
+    // ---------- Treinos realizados e progresso ----------
+
+    @POST("api/treinos-realizados")
+    suspend fun registrarTreino(@Body request: TreinoRealizadoRequest): Response<TreinoRealizado>
+
+    @DELETE("api/treinos-realizados/{id}")
+    suspend fun removerTreino(@Path("id") id: Long): Response<Unit>
+
+    @GET("api/usuarios/{id}/progresso")
+    suspend fun buscarProgresso(@Path("id") usuarioId: Long): Response<Progresso>
 }

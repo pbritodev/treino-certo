@@ -7,4 +7,10 @@ data class Usuario(
     val idade: Int,
     val sexo: String,
     val criadoEm: String? = null,
+    /** Enviada apenas no cadastro; a API nunca devolve a senha. */
+    val senha: String? = null,
 )
+
+data class LoginRequest(val email: String, val senha: String)
+
+data class TrocaSenhaRequest(val senhaAtual: String, val novaSenha: String)

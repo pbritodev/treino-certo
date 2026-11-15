@@ -11,6 +11,7 @@ import com.treinocerto.app.data.repository.TreinoRepository
 import com.treinocerto.app.databinding.ActivityResultadoBinding
 import com.treinocerto.app.ui.common.ExibidorPlano
 import com.treinocerto.app.ui.common.Extras
+import com.treinocerto.app.ui.common.registrarTreinoConcluido
 import com.treinocerto.app.ui.diario.DiarioActivity
 import com.treinocerto.app.ui.historico.HistoricoActivity
 import com.treinocerto.app.ui.home.MainActivity
@@ -58,7 +59,9 @@ class ResultadoActivity : AppCompatActivity() {
 
     private fun exibir(avaliacao: Avaliacao) {
         binding.conteudo.visivel(true)
-        ExibidorPlano.exibir(binding.plano, avaliacao)
+        ExibidorPlano.exibir(binding.plano, avaliacao) { dia ->
+            registrarTreinoConcluido(avaliacao.id, dia, avaliacao.minutosSessao)
+        }
 
         binding.btnCompartilhar.setOnClickListener {
             IntentsExternas.compartilharTexto(this, getString(R.string.app_name), ExibidorPlano.textoParaCompartilhar(avaliacao))

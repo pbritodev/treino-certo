@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,16 +11,18 @@
         android:padding="@dimen/margem_tela">
 
         <TextView
+            android:id="@+id/txtTitulo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/cadastro_titulo"
+            android:text="@string/cadastro_criar_titulo"
             android:textAppearance="@style/Texto.Titulo" />
 
         <TextView
+            android:id="@+id/txtSubtitulo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="@string/cadastro_subtitulo"
+            android:text="@string/cadastro_criar_subtitulo"
             android:textAppearance="@style/Texto.Secundario" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -101,6 +104,49 @@
                 android:text="@string/sexo_outro" />
         </RadioGroup>
 
+        <!-- Senha: só aparece no cadastro (na edição, use "Trocar senha") -->
+        <LinearLayout
+            android:id="@+id/grupoSenha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/campoSenha"
+                style="@style/CampoTexto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/login_senha"
+                app:endIconMode="password_toggle"
+                app:helperText="@string/cadastro_erro_senha"
+                app:startIconDrawable="@drawable/ic_cadeado">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtSenha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="newPassword"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/campoConfirmarSenha"
+                style="@style/CampoTexto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/cadastro_confirmar_senha"
+                app:endIconMode="password_toggle"
+                app:startIconDrawable="@drawable/ic_cadeado">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtConfirmarSenha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="newPassword"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
         <ProgressBar
             android:id="@+id/progresso"
             android:layout_width="wrap_content"
@@ -115,15 +161,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/espaco_grande"
-            android:text="@string/cadastro_salvar" />
+            android:text="@string/cadastro_criar_conta" />
 
         <Button
-            android:id="@+id/btnTrocarUsuario"
+            android:id="@+id/btnJaTenhoConta"
             style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/espaco_pequeno"
-            android:text="@string/cadastro_trocar_usuario"
-            android:visibility="gone" />
+            android:text="@string/cadastro_ja_tenho_conta" />
     </LinearLayout>
 </ScrollView>

@@ -5,6 +5,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.treinocerto.app.R
 import com.treinocerto.app.data.model.Avaliacao
+import com.treinocerto.app.data.model.DiaTreino
 import com.treinocerto.app.data.model.Local
 import com.treinocerto.app.data.model.rotuloDe
 import com.treinocerto.app.databinding.LayoutPlanoCompletoBinding
@@ -16,7 +17,11 @@ import com.treinocerto.app.util.IntentsExternas
  */
 object ExibidorPlano {
 
-    fun exibir(binding: LayoutPlanoCompletoBinding, avaliacao: Avaliacao) {
+    fun exibir(
+        binding: LayoutPlanoCompletoBinding,
+        avaliacao: Avaliacao,
+        aoConcluirDia: ((DiaTreino) -> Unit)? = null,
+    ) {
         val contexto = binding.root.context
 
         binding.imgObjetivo.setImageResource(iconeDoObjetivo(avaliacao.objetivo))
@@ -41,9 +46,11 @@ object ExibidorPlano {
         )
 
         binding.rvPlano.layoutManager = LinearLayoutManager(contexto)
-        binding.rvPlano.adapter = PlanoAdapter(avaliacao.plano) { exercicio ->
-            IntentsExternas.buscarVideo(contexto, exercicio.nome)
-        }
+        binding.rvPlano.adapter = PlanoAdapter(
+            dias = avaliacao.plano,
+            aoClicarExercicio = { exercicio -> IntentsExternas.buscarVideo(contexto, exercicio.nome) },
+            aoConcluirDia = aoConcluirDia,
+        )
 
         binding.txtDicas.text = avaliacao.dicas.joinToString("\n") { "• $it" }
     }

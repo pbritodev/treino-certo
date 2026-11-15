@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/Cartao"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -42,5 +43,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/espaco_pequeno"
             android:orientation="vertical" />
+
+        <Button
+            android:id="@+id/btnConcluir"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="4dp"
+            android:text="@string/treino_concluir"
+            android:visibility="gone"
+            app:icon="@drawable/ic_check" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

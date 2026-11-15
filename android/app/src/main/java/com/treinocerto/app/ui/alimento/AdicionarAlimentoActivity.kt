@@ -74,12 +74,13 @@ class AdicionarAlimentoActivity : AppCompatActivity() {
     private fun criarChipsDeCategoria() {
         val opcoes = listOf<CategoriaAlimento?>(null) + CategoriaAlimento.entries
         opcoes.forEach { categoria ->
-            val chip = Chip(this).apply {
+            val chip = (layoutInflater.inflate(R.layout.item_chip_categoria, binding.grupoCategorias, false) as Chip).apply {
                 text = categoria?.rotulo ?: getString(R.string.alimento_todas)
-                isCheckable = true
                 isChecked = categoria == null
                 setOnClickListener {
                     categoriaSelecionada = categoria
+                    // Rola a barra para deixar a categoria escolhida visível.
+                    binding.rolagemCategorias.smoothScrollTo((left - width / 2).coerceAtLeast(0), 0)
                     buscar()
                 }
             }

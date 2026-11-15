@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Cabeçalho com avatar (iniciais do nome) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/fundo_cabecalho"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/espaco_grande"
+            android:paddingBottom="@dimen/espaco_grande">
+
+            <TextView
+                android:id="@+id/txtAvatar"
+                android:layout_width="88dp"
+                android:layout_height="88dp"
+                android:background="@drawable/fundo_avatar"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+                android:textColor="@color/branco"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtNome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espaco_pequeno"
+                android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
+                android:textColor="@color/branco"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                android:textColor="@color/branco" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progresso"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/espaco_medio" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/espaco_medio">
+
+            <androidx.cardview.widget.CardView
+                style="@style/Cartao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <include
+                        android:id="@+id/linhaIdade"
+                        layout="@layout/layout_linha_info" />
+
+                    <include
+                        android:id="@+id/linhaSexo"
+                        layout="@layout/layout_linha_info" />
+
+                    <include
+                        android:id="@+id/linhaMembroDesde"
+                        layout="@layout/layout_linha_info" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <include
+                android:id="@+id/menuProgresso"
+                layout="@layout/item_menu_home" />
+
+            <include
+                android:id="@+id/menuEditar"
+                layout="@layout/item_menu_home" />
+
+            <include
+                android:id="@+id/menuTrocarSenha"
+                layout="@layout/item_menu_home" />
+
+            <Button
+                android:id="@+id/btnSair"
+                style="@style/Botao.Secundario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espaco_medio"
+                android:text="@string/perfil_sair"
+                android:textColor="@color/erro"
+                app:icon="@drawable/ic_sair"
+                app:iconTint="@color/erro"
+                app:strokeColor="@color/erro" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

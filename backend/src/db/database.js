@@ -9,6 +9,7 @@ const SCHEMA = `
     email      TEXT    NOT NULL UNIQUE,
     idade      INTEGER NOT NULL,
     sexo       TEXT    NOT NULL CHECK (sexo IN ('MASCULINO', 'FEMININO', 'OUTRO')),
+    senha_hash TEXT,
     criado_em  TEXT    NOT NULL DEFAULT (datetime('now', 'localtime'))
   );
 
@@ -78,7 +79,26 @@ const SCHEMA = `
   );
 
   CREATE INDEX IF NOT EXISTS idx_pesagens_usuario ON pesagens(usuario_id, data);
+
+  CREATE TABLE IF NOT EXISTS treinos_realizados (
+    id            INTEGER PRIMARY KEY AUTOINCREMENT,
+    usuario_id    INTEGER NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
+    avaliacao_id  INTEGER REFERENCES avaliacoes(id) ON DELETE SET NULL,
+    dia           TEXT    NOT NULL,  -- ex.: "Dia 2"
+    foco          TEXT    NOT NULL,  -- ex.: "Membros inferiores e core"
+    duracao_min   INTEGER NOT NULL,
+    data          TEXT    NOT NULL,  -- AAAA-MM-DD
+    criado_em     TEXT    NOT NULL DEFAULT (datetime('now', 'localtime'))
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_treinos_usuario_data ON treinos_realizados(usuario_id, data);
 `;
+
+/** Atualiza bancos criados por versões anteriores (adiciona colunas novas). */
+function migrar(db) {
+  const colunas = db.prepare('PRAGMA table_info(usuarios)').all().map((c) => c.name);
+  if (!colunas.includes('senha_hash')) db.exec('ALTER TABLE usuarios ADD COLUMN senha_hash TEXT');
+}
 
 /**
  * Abre (ou cria) o banco SQLite e garante que o schema exista.
@@ -88,6 +108,7 @@ function abrirBanco(caminho = DB_PATH) {
   const db = new DatabaseSync(caminho);
   db.exec('PRAGMA foreign_keys = ON;');
   db.exec(SCHEMA);
+  migrar(db);
   popularAlimentos(db);
   return db;
 }

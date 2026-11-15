@@ -29,18 +29,30 @@
         android:theme="@style/Theme.TreinoCerto"
         android:usesCleartextTraffic="true">
 
+        <!-- Login é a tela de entrada; se já houver sessão, segue direto para a Home -->
         <activity
-            android:name=".ui.home.MainActivity"
-            android:exported="true">
+            android:name=".ui.login.LoginActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.home.MainActivity" />
         <activity
             android:name=".ui.cadastro.CadastroActivity"
-            android:parentActivityName=".ui.home.MainActivity"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.perfil.PerfilActivity"
+            android:parentActivityName=".ui.home.MainActivity" />
+        <activity
+            android:name=".ui.perfil.TrocarSenhaActivity"
+            android:parentActivityName=".ui.perfil.PerfilActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.progresso.ProgressoActivity"
+            android:parentActivityName=".ui.home.MainActivity" />
         <activity
             android:name=".ui.questionario.QuestionarioActivity"
             android:parentActivityName=".ui.home.MainActivity"

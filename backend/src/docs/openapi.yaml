@@ -11,10 +11,12 @@ servers:
   - url: /
     description: Servidor atual
 tags:
+  - name: Autenticação
   - name: Usuários
   - name: Avaliações
   - name: Alimentação
   - name: Pesagens
+  - name: Progresso
   - name: Sistema
 paths:
   /api/health:
@@ -44,12 +46,13 @@ paths:
                 items: { $ref: '#/components/schemas/Usuario' }
     post:
       tags: [Usuários]
-      summary: Cadastra um usuário
+      summary: Cadastra um usuário (cadastre-se)
+      description: A senha é armazenada apenas como hash (scrypt + salt) e nunca é devolvida.
       requestBody:
         required: true
         content:
           application/json:
-            schema: { $ref: '#/components/schemas/UsuarioEntrada' }
+            schema: { $ref: '#/components/schemas/CadastroEntrada' }
       responses:
         '201':
           description: Usuário criado
@@ -305,6 +308,111 @@ paths:
       responses:
         '204': { description: Pesagem removida }
         '404': { $ref: '#/components/responses/NaoEncontrado' }
+  /api/auth/login:
+    post:
+      tags: [Autenticação]
+      summary: Login com e-mail e senha
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, senha]
+              properties:
+                email: { type: string, example: maria@email.com }
+                senha: { type: string, example: '123456' }
+      responses:
+        '200':
+          description: Login realizado; devolve o usuário
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Usuario' }
+        '400': { $ref: '#/components/responses/Invalido' }
+        '401':
+          description: E-mail ou senha incorretos
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Erro' }
+  /api/usuarios/{id}/senha:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    put:
+      tags: [Autenticação]
+      summary: Troca a senha (exige a senha atual)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [senhaAtual, novaSenha]
+              properties:
+                senhaAtual: { type: string, example: '123456' }
+                novaSenha: { type: string, minLength: 6, example: novaSenha1 }
+      responses:
+        '204': { description: Senha alterada }
+        '400': { $ref: '#/components/responses/Invalido' }
+        '401':
+          description: Senha atual incorreta
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Erro' }
+        '404': { $ref: '#/components/responses/NaoEncontrado' }
+  /api/treinos-realizados:
+    post:
+      tags: [Progresso]
+      summary: Registra um treino concluído
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/TreinoRealizadoEntrada' }
+      responses:
+        '201':
+          description: Treino registrado
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TreinoRealizado' }
+        '400': { $ref: '#/components/responses/Invalido' }
+        '404': { $ref: '#/components/responses/NaoEncontrado' }
+  /api/treinos-realizados/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    delete:
+      tags: [Progresso]
+      summary: Remove um treino registrado
+      responses:
+        '204': { description: Treino removido }
+        '404': { $ref: '#/components/responses/NaoEncontrado' }
+  /api/usuarios/{id}/treinos-realizados:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Progresso]
+      summary: Lista os treinos concluídos (mais recentes primeiro)
+      responses:
+        '200':
+          description: Treinos realizados
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/TreinoRealizado' }
+        '404': { $ref: '#/components/responses/NaoEncontrado' }
+  /api/usuarios/{id}/progresso:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Progresso]
+      summary: Resumo do progresso (perfil, plano atual, peso e estatísticas de treino)
+      responses:
+        '200':
+          description: Progresso do usuário
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Progresso' }
+        '404': { $ref: '#/components/responses/NaoEncontrado' }
 components:
   parameters:
     Id:
@@ -488,3 +596,59 @@ components:
           properties:
             id: { type: integer, example: 3 }
         - $ref: '#/components/schemas/PesagemEntrada'
+    CadastroEntrada:
+      allOf:
+        - $ref: '#/components/schemas/UsuarioEntrada'
+        - type: object
+          required: [senha]
+          properties:
+            senha: { type: string, minLength: 6, maxLength: 64, example: '123456' }
+    TreinoRealizadoEntrada:
+      type: object
+      required: [usuarioId, dia, foco, duracaoMin, data]
+      properties:
+        usuarioId: { type: integer, example: 1 }
+        avaliacaoId: { type: integer, nullable: true, example: 2 }
+        dia: { type: string, example: Dia 1 }
+        foco: { type: string, example: Membros superiores }
+        duracaoMin: { type: integer, minimum: 5, maximum: 300, example: 60 }
+        data: { type: string, format: date, example: '2026-11-16' }
+    TreinoRealizado:
+      allOf:
+        - type: object
+          properties:
+            id: { type: integer, example: 7 }
+        - $ref: '#/components/schemas/TreinoRealizadoEntrada'
+    Progresso:
+      type: object
+      properties:
+        usuario: { $ref: '#/components/schemas/Usuario' }
+        planoAtual:
+          type: object
+          nullable: true
+          properties:
+            id: { type: integer }
+            perfil: { type: string, example: Queimador de Calorias · Intermediário }
+            objetivo: { type: string }
+            classificacao: { type: string }
+            diasSemana: { type: integer }
+            metaCalorica: { type: integer }
+            imc: { type: number }
+            pesoMeta: { type: number, nullable: true }
+        pesoInicial: { type: number, nullable: true, example: 74.5 }
+        pesoAtual: { type: number, nullable: true, example: 71.2 }
+        totalTreinos: { type: integer, example: 8 }
+        minutosTotais: { type: integer, example: 480 }
+        treinosSemana: { type: integer, example: 3 }
+        metaSemanal: { type: integer, example: 4 }
+        sequenciaDias: { type: integer, description: Dias seguidos com treino, example: 3 }
+        ultimos7Dias:
+          type: array
+          items:
+            type: object
+            properties:
+              data: { type: string, example: '2026-11-16' }
+              treinos: { type: integer, example: 1 }
+        treinosRecentes:
+          type: array
+          items: { $ref: '#/components/schemas/TreinoRealizado' }

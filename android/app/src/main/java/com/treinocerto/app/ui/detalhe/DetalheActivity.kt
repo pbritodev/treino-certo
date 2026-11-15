@@ -11,6 +11,7 @@ import com.treinocerto.app.data.repository.TreinoRepository
 import com.treinocerto.app.databinding.ActivityDetalheBinding
 import com.treinocerto.app.ui.common.ExibidorPlano
 import com.treinocerto.app.ui.common.Extras
+import com.treinocerto.app.ui.common.registrarTreinoConcluido
 import com.treinocerto.app.ui.common.confirmarExclusao
 import com.treinocerto.app.util.Formatos
 import com.treinocerto.app.util.IntentsExternas
@@ -60,7 +61,9 @@ class DetalheActivity : AppCompatActivity() {
     private fun exibir(avaliacao: Avaliacao) {
         binding.conteudo.visivel(true)
         binding.txtData.text = getString(R.string.detalhe_criado_em, Formatos.dataHora(avaliacao.criadoEm))
-        ExibidorPlano.exibir(binding.plano, avaliacao)
+        ExibidorPlano.exibir(binding.plano, avaliacao) { dia ->
+            registrarTreinoConcluido(avaliacao.id, dia, avaliacao.minutosSessao)
+        }
         binding.edtObservacao.setText(avaliacao.observacao)
         binding.swFavorita.isChecked = avaliacao.favorita
         binding.btnCompartilhar.setOnClickListener {

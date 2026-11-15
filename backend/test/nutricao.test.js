@@ -9,7 +9,9 @@ let usuarioId;
 beforeEach(async () => {
   app = criarApp(abrirBanco(':memory:'));
   const { body } = await request(app).post('/api/usuarios')
-    .send({ nome: 'João', email: 'joao@email.com', idade: 30, sexo: 'MASCULINO' });
+    .send({
+      nome: 'João', email: 'joao@email.com', idade: 30, sexo: 'MASCULINO', senha: '123456',
+    });
   usuarioId = body.id;
 });
 

@@ -3,7 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fadeScrollbars="false"
+    android:fillViewport="true"
+    android:scrollbarThumbVertical="@drawable/barra_rolagem"
+    android:scrollbars="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -119,37 +122,49 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Menu -->
-        <LinearLayout
+        <!-- Menu em grade (2 colunas) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="@dimen/espaco_medio"
+            android:text="@string/home_o_que_fazer"
+            android:textAppearance="@style/Texto.Secao" />
+
+        <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="@dimen/espaco_medio"
-            android:paddingBottom="@dimen/espaco_medio">
+            android:columnCount="2"
+            android:paddingHorizontal="12dp"
+            android:paddingBottom="@dimen/espaco_grande">
 
             <include
                 android:id="@+id/menuNovaAvaliacao"
-                layout="@layout/item_menu_home" />
+                layout="@layout/item_menu_grade" />
+
+            <include
+                android:id="@+id/menuProgresso"
+                layout="@layout/item_menu_grade" />
 
             <include
                 android:id="@+id/menuDiario"
-                layout="@layout/item_menu_home" />
+                layout="@layout/item_menu_grade" />
 
             <include
                 android:id="@+id/menuPeso"
-                layout="@layout/item_menu_home" />
+                layout="@layout/item_menu_grade" />
 
             <include
                 android:id="@+id/menuHistorico"
-                layout="@layout/item_menu_home" />
+                layout="@layout/item_menu_grade" />
 
             <include
                 android:id="@+id/menuPerfil"
-                layout="@layout/item_menu_home" />
+                layout="@layout/item_menu_grade" />
 
             <include
                 android:id="@+id/menuSobre"
-                layout="@layout/item_menu_home" />
-        </LinearLayout>
+                layout="@layout/item_menu_grade" />
+        </GridLayout>
     </LinearLayout>
 </ScrollView>

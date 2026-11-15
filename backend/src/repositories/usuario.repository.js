@@ -22,16 +22,25 @@ function criarUsuarioRepository(db) {
     buscarPorEmail(email) {
       return mapear(db.prepare('SELECT * FROM usuarios WHERE email = ?').get(email));
     },
-    criar({ nome, email, idade, sexo }) {
+    /** Devolve o hash da senha (usado só no login e na troca de senha; nunca vai para a resposta). */
+    buscarHashSenha(id) {
+      return db.prepare('SELECT senha_hash FROM usuarios WHERE id = ?').get(id)?.senha_hash ?? null;
+    },
+    criar({
+      nome, email, idade, sexo, senhaHash,
+    }) {
       const { lastInsertRowid } = db
-        .prepare('INSERT INTO usuarios (nome, email, idade, sexo) VALUES (?, ?, ?, ?)')
-        .run(nome.trim(), email.trim().toLowerCase(), idade, sexo);
+        .prepare('INSERT INTO usuarios (nome, email, idade, sexo, senha_hash) VALUES (?, ?, ?, ?, ?)')
+        .run(nome.trim(), email.trim().toLowerCase(), idade, sexo, senhaHash);
       return this.buscarPorId(Number(lastInsertRowid));
     },
     atualizar(id, { nome, email, idade, sexo }) {
       db.prepare('UPDATE usuarios SET nome = ?, email = ?, idade = ?, sexo = ? WHERE id = ?')
         .run(nome.trim(), email.trim().toLowerCase(), idade, sexo, id);
       return this.buscarPorId(id);
+    },
+    atualizarSenha(id, senhaHash) {
+      db.prepare('UPDATE usuarios SET senha_hash = ? WHERE id = ?').run(senhaHash, id);
     },
     remover(id) {
       return db.prepare('DELETE FROM usuarios WHERE id = ?').run(id).changes > 0;

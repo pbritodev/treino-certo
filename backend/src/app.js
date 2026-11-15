@@ -10,10 +10,13 @@ const { criarAvaliacaoRepository } = require('./repositories/avaliacao.repositor
 const { criarAlimentoRepository } = require('./repositories/alimento.repository');
 const { criarRegistroRepository } = require('./repositories/registro.repository');
 const { criarPesagemRepository } = require('./repositories/pesagem.repository');
+const { criarTreinoRepository } = require('./repositories/treino.repository');
 const { criarUsuarioController } = require('./controllers/usuario.controller');
 const { criarAvaliacaoController } = require('./controllers/avaliacao.controller');
 const { criarNutricaoController } = require('./controllers/nutricao.controller');
 const { criarPesagemController } = require('./controllers/pesagem.controller');
+const { criarAuthController } = require('./controllers/auth.controller');
+const { criarTreinoController } = require('./controllers/treino.controller');
 const { criarRotas } = require('./routes');
 const { rotaNaoEncontrada, tratarErros } = require('./middlewares/erros');
 
@@ -26,6 +29,7 @@ function criarApp(db) {
   const alimentos = criarAlimentoRepository(db);
   const registros = criarRegistroRepository(db);
   const pesagens = criarPesagemRepository(db);
+  const treinos = criarTreinoRepository(db);
 
   const app = express();
   app.use(cors());
@@ -36,12 +40,16 @@ function criarApp(db) {
   app.use('/docs', swaggerUi.serve, swaggerUi.setup(openapi, { customSiteTitle: 'TreinoCerto API' }));
 
   app.use('/api', criarRotas({
+    authController: criarAuthController(usuarios),
     usuarioController: criarUsuarioController(usuarios, avaliacoes),
     avaliacaoController: criarAvaliacaoController(avaliacoes, usuarios),
     nutricaoController: criarNutricaoController({
       alimentos, registros, usuarios, avaliacoes,
     }),
     pesagemController: criarPesagemController({ pesagens, usuarios }),
+    treinoController: criarTreinoController({
+      treinos, usuarios, avaliacoes, pesagens,
+    }),
   }));
 
   app.use(rotaNaoEncontrada);
