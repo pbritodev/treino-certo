@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="verde_primario">#2E7D32</color>
+    <color name="verde_escuro">#1B5E20</color>
+    <color name="verde_claro">#C8E6C9</color>
+    <color name="laranja">#F57C00</color>
+    <color name="laranja_claro">#FFE0B2</color>
+    <color name="fundo">#F6F8F5</color>
+    <color name="superficie">#FFFFFF</color>
+    <color name="texto_primario">#1C1B1F</color>
+    <color name="texto_secundario">#5F6368</color>
+    <color name="erro">#C62828</color>
+    <color name="branco">#FFFFFF</color>
+
+    <!-- Cores da classificação de intensidade -->
+    <color name="intensidade_leve">#43A047</color>
+    <color name="intensidade_moderada">#F9A825</color>
+    <color name="intensidade_intensa">#E53935</color>
+
+    <color name="launcher_fundo">#2E7D32</color>
+</resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TreinoCerto</string>
+    <string name="slogan">Seu plano de treino personalizado em poucos toques</string>
+
+    <!-- Geral -->
+    <string name="carregando">Carregando…</string>
+    <string name="tentar_novamente">Tentar novamente</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="excluir">Excluir</string>
+    <string name="campo_obrigatorio">Campo obrigatório</string>
+</resources>

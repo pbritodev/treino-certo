@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.TreinoCerto" parent="Theme.Material3.DayNight">
+        <item name="colorPrimary">@color/verde_primario</item>
+        <item name="colorOnPrimary">@color/branco</item>
+        <item name="colorPrimaryContainer">@color/verde_claro</item>
+        <item name="colorSecondary">@color/laranja</item>
+        <item name="colorSecondaryContainer">@color/laranja_claro</item>
+        <item name="colorSurface">@color/superficie</item>
+        <item name="android:colorBackground">@color/fundo</item>
+        <item name="colorError">@color/erro</item>
+        <item name="actionBarStyle">@style/Widget.TreinoCerto.ActionBar</item>
+        <item name="android:statusBarColor">@color/verde_escuro</item>
+    </style>
+
+    <style name="Widget.TreinoCerto.ActionBar" parent="Widget.Material3.ActionBar.Solid">
+        <item name="background">@color/verde_primario</item>
+        <item name="titleTextStyle">@style/TextAppearance.TreinoCerto.ActionBarTitle</item>
+    </style>
+
+    <style name="TextAppearance.TreinoCerto.ActionBarTitle" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textColor">@color/branco</item>
+    </style>
+
+    <!-- Textos -->
+    <style name="Texto.Titulo" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="android:textColor">@color/texto_primario</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Texto.Secao" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textColor">@color/verde_primario</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Texto.Corpo" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textColor">@color/texto_primario</item>
+    </style>
+
+    <style name="Texto.Secundario" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">@color/texto_secundario</item>
+    </style>
+
+    <!-- Componentes -->
+    <style name="Cartao" parent="">
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">3dp</item>
+        <item name="cardBackgroundColor">@color/superficie</item>
+        <item name="contentPadding">16dp</item>
+        <item name="cardUseCompatPadding">true</item>
+    </style>
+
+    <style name="Botao.Principal" parent="Widget.Material3.Button">
+        <item name="android:minHeight">56dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Botao.Secundario" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:minHeight">56dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="CampoTexto" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="android:layout_marginTop">12dp</item>
+    </style>
+</resources>
