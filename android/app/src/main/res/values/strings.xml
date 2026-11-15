@@ -51,4 +51,154 @@
     <string name="sobre_texto_compartilhar">Estou usando o TreinoCerto para montar meu plano de treino personalizado! 💪</string>
     <string name="email_contato">contato@treinocerto.app</string>
     <string name="url_oms">https://www.who.int/news-room/fact-sheets/detail/physical-activity</string>
+
+    <!-- Questionário -->
+    <string name="q_titulo">Questionário</string>
+    <string name="q_objetivo">1. Qual é o seu principal objetivo?</string>
+    <string name="q_nivel">2. Qual é o seu nível de experiência?</string>
+    <string name="q_nivel_iniciante">Iniciante (treino há menos de 6 meses)</string>
+    <string name="q_nivel_intermediario">Intermediário (6 meses a 2 anos)</string>
+    <string name="q_nivel_avancado">Avançado (mais de 2 anos)</string>
+    <string name="q_dias">3. Dias por semana: %1$d</string>
+    <string name="q_minutos">Tempo por treino</string>
+    <string name="q_minutos_opcao">%1$d minutos</string>
+    <string name="q_local">4. Onde você vai treinar?</string>
+    <string name="q_local_casa">Em casa</string>
+    <string name="q_local_academia">Academia</string>
+    <string name="q_local_ar_livre">Ao ar livre (parque, praça)</string>
+    <string name="q_equipamento">Tenho halteres em casa</string>
+    <string name="q_rotina">5. Sua rotina</string>
+    <string name="q_atividade">Fora dos treinos, como é o seu dia?</string>
+    <string name="q_sono">Horas de sono por noite: %1$d h</string>
+    <string name="q_medidas">6. Suas medidas</string>
+    <string name="q_peso_meta">Peso desejado (opcional)</string>
+    <string name="q_peso_meta_ajuda">Usado para estimar o tempo até sua meta</string>
+    <string name="q_peso">Peso</string>
+    <string name="q_altura">Altura</string>
+    <string name="q_erro_peso">Entre 30 e 300</string>
+    <string name="q_erro_altura">Entre 100 e 250</string>
+    <string name="q_erro_formulario">Revise os campos destacados</string>
+    <string name="q_restricoes">7. Possui alguma limitação?</string>
+    <string name="q_restricoes_desc">Marque todas que se aplicam</string>
+    <string name="q_restricao_joelho">Dor ou lesão no joelho</string>
+    <string name="q_restricao_coluna">Dor ou problema na coluna</string>
+    <string name="q_restricao_ombro">Dor ou lesão no ombro</string>
+    <string name="q_restricao_cardiaco">Condição cardíaca ou pressão alta</string>
+    <string name="q_gerar">Gerar meu plano</string>
+    <string name="q_gerando">Gerando seu plano…</string>
+
+    <!-- Resultado / Detalhe -->
+    <string name="resultado_titulo">Seu plano</string>
+    <string name="resultado_parabens">Plano criado! 🎉</string>
+    <string name="resultado_intensidade">Intensidade recomendada: %1$s (%2$d/100)</string>
+    <string name="resultado_imc">IMC %1$.1f · %2$s</string>
+    <string name="resultado_meta_calorica">Meta diária: %1$d kcal · %2$d g de proteína</string>
+    <string name="resultado_diario">Abrir diário alimentar</string>
+    <string name="resultado_resumo">%1$d dias/semana · %2$d min · %3$s</string>
+    <string name="resultado_plano_semanal">Plano semanal</string>
+    <string name="resultado_dicas">Dicas para você</string>
+    <string name="resultado_compartilhar">Compartilhar plano</string>
+    <string name="resultado_academias">Academias e parques próximos</string>
+    <string name="resultado_historico">Ver meu histórico</string>
+    <string name="resultado_inicio">Voltar ao início</string>
+    <string name="resultado_dica_video">Toque em um exercício para ver um vídeo de execução</string>
+    <string name="busca_mapa">academia</string>
+    <string name="busca_mapa_ar_livre">parque</string>
+    <string name="exercicio_prescricao">%1$d × %2$s</string>
+
+    <!-- Histórico / Detalhe -->
+    <string name="historico_titulo">Meus planos</string>
+    <string name="historico_somente_favoritas">Mostrar somente favoritos</string>
+    <string name="historico_dica_swipe">Deslize um card para o lado para excluir</string>
+    <string name="historico_vazio">Você ainda não tem planos salvos.\nResponda o questionário para gerar o primeiro!</string>
+    <string name="historico_vazio_favoritas">Nenhum plano marcado como favorito.</string>
+    <string name="historico_meta_kcal">%1$d kcal/dia</string>
+    <string name="historico_excluido">Plano excluído</string>
+    <string name="detalhe_titulo">Detalhes do plano</string>
+    <string name="detalhe_criado_em">Gerado em %1$s</string>
+    <string name="detalhe_anotacoes">Anotações</string>
+    <string name="detalhe_observacao">Como foi o treino? Ajustes, cargas…</string>
+    <string name="detalhe_favorita">Marcar como favorito</string>
+    <string name="detalhe_salvar">Salvar anotações</string>
+    <string name="detalhe_salvo">Anotações salvas!</string>
+    <string name="detalhe_excluir">Excluir plano</string>
+    <string name="detalhe_confirmar_exclusao_titulo">Excluir plano?</string>
+    <string name="detalhe_confirmar_exclusao">Esta ação não pode ser desfeita.</string>
+
+    <!-- Diário alimentar -->
+    <string name="diario_titulo">Diário alimentar</string>
+    <string name="diario_dia_anterior">Dia anterior</string>
+    <string name="diario_proximo_dia">Próximo dia</string>
+    <string name="diario_hoje">Hoje</string>
+    <string name="diario_restante">kcal restantes</string>
+    <string name="diario_excedido">kcal acima da meta</string>
+    <string name="diario_equacao">Meta %1$d − Consumido %2$d = %3$d</string>
+    <string name="diario_meta_avaliacao">🎯 Meta calculada pela sua última avaliação</string>
+    <string name="diario_meta_padrao">🎯 Meta padrão de 2000 kcal. Faça uma avaliação para personalizar.</string>
+    <string name="diario_proteina">Proteína</string>
+    <string name="diario_carboidrato">Carboidrato</string>
+    <string name="diario_gordura">Gordura</string>
+    <string name="diario_gramas">%1$s g</string>
+    <string name="diario_gramas_meta">%1$s / %2$d g</string>
+    <string name="diario_kcal">%1$s kcal</string>
+    <string name="diario_adicionar">Adicionar alimento</string>
+    <string name="diario_refeicao_vazia">Nada registrado</string>
+    <string name="diario_item_detalhe">%1$s g · %2$s</string>
+    <string name="diario_editar_titulo">Editar %1$s</string>
+    <string name="diario_quantidade">Quantidade (g ou ml)</string>
+    <string name="diario_salvar">Salvar</string>
+    <string name="diario_item_removido">Alimento removido do diário</string>
+    <string name="diario_quantidade_invalida">Informe uma quantidade entre 1 e 5000</string>
+
+    <!-- Adicionar alimento -->
+    <string name="alimento_titulo">Adicionar a %1$s</string>
+    <string name="alimento_buscar">Buscar alimento</string>
+    <string name="alimento_todas">Todos</string>
+    <string name="alimento_porcao">%1$s (%2$s g) · %3$d kcal</string>
+    <string name="alimento_nenhum">Nenhum alimento encontrado</string>
+    <string name="alimento_por_100g">Por 100 g: %1$s kcal · P %2$s g · C %3$s g · G %4$s g</string>
+    <string name="alimento_refeicao">Refeição</string>
+    <string name="alimento_meia_porcao">½ porção</string>
+    <string name="alimento_uma_porcao">1 porção</string>
+    <string name="alimento_duas_porcoes">2 porções</string>
+    <string name="alimento_total">%1$d kcal</string>
+    <string name="alimento_macros">Proteína %1$s g · Carboidrato %2$s g · Gordura %3$s g</string>
+    <string name="alimento_adicionar">Adicionar ao diário</string>
+    <string name="alimento_adicionado">%1$s adicionado!</string>
+
+    <!-- Peso -->
+    <string name="peso_titulo">Meu peso</string>
+    <string name="peso_atual">Peso atual</string>
+    <string name="peso_variacao">Variação</string>
+    <string name="peso_meta">Meta</string>
+    <string name="peso_kg">%1$s kg</string>
+    <string name="peso_sem_meta">—</string>
+    <string name="peso_evolucao">Evolução</string>
+    <string name="peso_grafico_vazio">Registre pelo menos 2 pesagens para ver o gráfico</string>
+    <string name="peso_registrar_titulo">Nova pesagem</string>
+    <string name="peso_campo">Peso</string>
+    <string name="peso_data">Data</string>
+    <string name="peso_observacao">Observação (opcional)</string>
+    <string name="peso_registrar">Registrar peso</string>
+    <string name="peso_registrado">Pesagem registrada!</string>
+    <string name="peso_historico">Histórico de pesagens</string>
+    <string name="peso_vazio">Nenhuma pesagem registrada ainda.</string>
+    <string name="peso_removido">Pesagem removida</string>
+    <string name="peso_falta_meta">Faltam %1$s kg para a meta</string>
+    <string name="peso_meta_atingida">Meta atingida! 🎉</string>
+
+    <!-- Home: resumo do dia e tema -->
+    <string name="home_hoje">Resumo de hoje</string>
+    <string name="home_kcal_hoje">%1$d de %2$d kcal</string>
+    <string name="home_ultimo_peso">Último peso: %1$s kg</string>
+    <string name="home_sem_peso">Nenhuma pesagem registrada</string>
+    <string name="menu_diario">Diário alimentar</string>
+    <string name="menu_diario_desc">Registre refeições e conte calorias</string>
+    <string name="menu_peso">Meu peso</string>
+    <string name="menu_peso_desc">Acompanhe sua evolução com gráfico</string>
+    <string name="tema_alternar">Alternar tema claro/escuro</string>
+    <string name="tema_titulo">Aparência</string>
+    <string name="tema_sistema">Seguir o sistema</string>
+    <string name="tema_claro">Claro</string>
+    <string name="tema_escuro">Escuro</string>
 </resources>

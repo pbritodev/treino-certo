@@ -5,6 +5,9 @@ import com.treinocerto.app.data.model.Avaliacao
 import com.treinocerto.app.data.model.AvaliacaoRequest
 import com.treinocerto.app.data.model.AvaliacaoUpdate
 import com.treinocerto.app.data.model.ErroApi
+import com.treinocerto.app.data.model.PesagemRequest
+import com.treinocerto.app.data.model.RegistroAlimentarRequest
+import com.treinocerto.app.data.model.RegistroAlimentarUpdate
 import com.treinocerto.app.data.model.Usuario
 import com.treinocerto.app.data.remote.RetrofitClient
 import com.treinocerto.app.data.remote.TreinoApi
@@ -35,6 +38,24 @@ class TreinoRepository(private val api: TreinoApi = RetrofitClient.api) {
         executar { api.atualizarAvaliacao(id, update) }
 
     suspend fun removerAvaliacao(id: Long): Resultado<Unit> = executar { api.removerAvaliacao(id) }
+
+    suspend fun listarAlimentos(busca: String? = null, categoria: String? = null) =
+        executar { api.listarAlimentos(busca?.takeIf { it.isNotBlank() }, categoria) }
+
+    suspend fun buscarDiario(usuarioId: Long, data: String) = executar { api.buscarDiario(usuarioId, data) }
+
+    suspend fun adicionarAoDiario(request: RegistroAlimentarRequest) = executar { api.criarRegistro(request) }
+
+    suspend fun atualizarRegistro(id: Long, update: RegistroAlimentarUpdate) =
+        executar { api.atualizarRegistro(id, update) }
+
+    suspend fun removerRegistro(id: Long): Resultado<Unit> = executar { api.removerRegistro(id) }
+
+    suspend fun listarPesagens(usuarioId: Long) = executar { api.listarPesagens(usuarioId) }
+
+    suspend fun registrarPesagem(request: PesagemRequest) = executar { api.criarPesagem(request) }
+
+    suspend fun removerPesagem(id: Long): Resultado<Unit> = executar { api.removerPesagem(id) }
 
     /** Executa a chamada em background e converte resposta/exceção em [Resultado]. */
     private suspend fun <T> executar(chamada: suspend () -> Response<T>): Resultado<T> =

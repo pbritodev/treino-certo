@@ -1,5 +1,6 @@
 package com.treinocerto.app.ui.cadastro
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,7 @@ import com.treinocerto.app.data.repository.Resultado
 import com.treinocerto.app.data.repository.TreinoRepository
 import com.treinocerto.app.databinding.ActivityCadastroBinding
 import com.treinocerto.app.ui.common.Extras
+import com.treinocerto.app.ui.questionario.QuestionarioActivity
 import com.treinocerto.app.util.mostrarErro
 import com.treinocerto.app.util.toast
 import com.treinocerto.app.util.visivel
@@ -91,7 +93,7 @@ class CadastroActivity : AppCompatActivity() {
         sessao.salvar(requireNotNull(usuario.id), usuario.nome)
         toast(getString(R.string.cadastro_sucesso))
         if (intent.getBooleanExtra(Extras.ABRIR_QUESTIONARIO_APOS_CADASTRO, false)) {
-            // TODO: abrir o questionário
+            startActivity(Intent(this, QuestionarioActivity::class.java))
         }
         finish()
     }

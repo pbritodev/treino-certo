@@ -3,7 +3,24 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- Android 11+: declara quais apps externos as Intents implícitas podem consultar -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="geo" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.SENDTO" />
+            <data android:scheme="mailto" />
+        </intent>
+    </queries>
+
     <application
+        android:name=".TreinoCertoApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -11,6 +28,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TreinoCerto"
         android:usesCleartextTraffic="true">
+
         <activity
             android:name=".ui.home.MainActivity"
             android:exported="true">
@@ -21,6 +39,31 @@
         </activity>
         <activity
             android:name=".ui.cadastro.CadastroActivity"
+            android:parentActivityName=".ui.home.MainActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.questionario.QuestionarioActivity"
+            android:parentActivityName=".ui.home.MainActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.resultado.ResultadoActivity"
+            android:parentActivityName=".ui.home.MainActivity" />
+        <activity
+            android:name=".ui.historico.HistoricoActivity"
+            android:parentActivityName=".ui.home.MainActivity" />
+        <activity
+            android:name=".ui.detalhe.DetalheActivity"
+            android:parentActivityName=".ui.historico.HistoricoActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.diario.DiarioActivity"
+            android:parentActivityName=".ui.home.MainActivity" />
+        <activity
+            android:name=".ui.alimento.AdicionarAlimentoActivity"
+            android:parentActivityName=".ui.diario.DiarioActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.peso.PesoActivity"
             android:parentActivityName=".ui.home.MainActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity

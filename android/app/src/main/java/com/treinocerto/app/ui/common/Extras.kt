@@ -4,4 +4,6 @@ package com.treinocerto.app.ui.common
 object Extras {
     const val AVALIACAO_ID = "extra_avaliacao_id"
     const val ABRIR_QUESTIONARIO_APOS_CADASTRO = "extra_abrir_questionario"
+    const val DATA = "extra_data"
+    const val REFEICAO = "extra_refeicao"
 }

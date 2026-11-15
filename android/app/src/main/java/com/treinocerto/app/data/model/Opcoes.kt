@@ -41,6 +41,32 @@ enum class Restricao(override val api: String, override val rotulo: String) : Op
     CARDIACO("CARDIACO", "Cardíaca"),
 }
 
+enum class AtividadeDiaria(override val api: String, override val rotulo: String) : OpcaoApi {
+    SEDENTARIO("SEDENTARIO", "Sedentário (trabalho sentado, pouco movimento)"),
+    LEVE("LEVE", "Levemente ativo (caminho um pouco no dia)"),
+    MODERADO("MODERADO", "Moderadamente ativo (em pé boa parte do dia)"),
+    INTENSO("INTENSO", "Muito ativo (trabalho físico pesado)"),
+}
+
+enum class Refeicao(override val api: String, override val rotulo: String) : OpcaoApi {
+    CAFE_DA_MANHA("CAFE_DA_MANHA", "Café da manhã"),
+    ALMOCO("ALMOCO", "Almoço"),
+    LANCHE("LANCHE", "Lanche"),
+    JANTAR("JANTAR", "Jantar"),
+}
+
+enum class CategoriaAlimento(override val api: String, override val rotulo: String) : OpcaoApi {
+    CEREAIS("CEREAIS", "Cereais e tubérculos"),
+    PROTEINAS("PROTEINAS", "Carnes, ovos e proteínas"),
+    LEGUMINOSAS("LEGUMINOSAS", "Leguminosas"),
+    FRUTAS("FRUTAS", "Frutas"),
+    LATICINIOS("LATICINIOS", "Leite e derivados"),
+    VEGETAIS("VEGETAIS", "Verduras e legumes"),
+    GORDURAS("GORDURAS", "Gorduras e oleaginosas"),
+    BEBIDAS("BEBIDAS", "Bebidas"),
+    OUTROS("OUTROS", "Outros"),
+}
+
 /** Converte o valor vindo da API no rótulo amigável (ou devolve o próprio valor). */
 inline fun <reified T> rotuloDe(valorApi: String): String
     where T : Enum<T>, T : OpcaoApi =

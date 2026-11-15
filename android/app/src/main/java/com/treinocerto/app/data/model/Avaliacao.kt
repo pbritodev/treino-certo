@@ -12,6 +12,9 @@ data class AvaliacaoRequest(
     val restricoes: List<String>,
     val peso: Double,
     val altura: Double,
+    val pesoMeta: Double?,
+    val atividadeDiaria: String,
+    val horasSono: Int,
 )
 
 /** Corpo do PATCH /api/avaliacoes/{id}: apenas os campos editáveis. */
@@ -33,11 +36,17 @@ data class Avaliacao(
     val restricoes: List<String>,
     val peso: Double,
     val altura: Double,
+    val pesoMeta: Double?,
+    val atividadeDiaria: String,
+    val horasSono: Int,
     val imc: Double,
     val classificacaoImc: String,
     val intensidade: Int,
     val classificacao: String,
     val perfil: String,
+    val tmb: Int,
+    val metaCalorica: Int,
+    val metaProteina: Int,
     val plano: List<DiaTreino>,
     val dicas: List<String>,
     val observacao: String,
