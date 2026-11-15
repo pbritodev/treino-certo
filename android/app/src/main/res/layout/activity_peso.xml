@@ -115,6 +115,7 @@
                         android:layout_marginEnd="@dimen/espaco_pequeno"
                         android:layout_weight="1"
                         android:hint="@string/peso_campo"
+                        app:helperText="@string/peso_ajuda"
                         app:suffixText="kg">
 
                         <com.google.android.material.textfield.TextInputEditText

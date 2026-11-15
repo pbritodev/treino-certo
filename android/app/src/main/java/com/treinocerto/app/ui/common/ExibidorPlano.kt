@@ -21,7 +21,7 @@ object ExibidorPlano {
         binding: LayoutPlanoCompletoBinding,
         avaliacao: Avaliacao,
         aoConcluirDia: ((DiaTreino) -> Unit)? = null,
-    ) {
+    ): PlanoAdapter {
         val contexto = binding.root.context
 
         binding.imgObjetivo.setImageResource(iconeDoObjetivo(avaliacao.objetivo))
@@ -46,13 +46,15 @@ object ExibidorPlano {
         )
 
         binding.rvPlano.layoutManager = LinearLayoutManager(contexto)
-        binding.rvPlano.adapter = PlanoAdapter(
+        val adapter = PlanoAdapter(
             dias = avaliacao.plano,
             aoClicarExercicio = { exercicio -> IntentsExternas.buscarVideo(contexto, exercicio.nome) },
             aoConcluirDia = aoConcluirDia,
         )
+        binding.rvPlano.adapter = adapter
 
         binding.txtDicas.text = avaliacao.dicas.joinToString("\n") { "• $it" }
+        return adapter
     }
 
     /** Texto usado no compartilhamento (Intent implícita ACTION_SEND). */

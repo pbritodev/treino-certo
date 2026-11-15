@@ -18,6 +18,22 @@ class PlanoAdapter(
     private val aoConcluirDia: ((DiaTreino) -> Unit)? = null,
 ) : RecyclerView.Adapter<PlanoAdapter.DiaViewHolder>() {
 
+    /** Dias do plano já concluídos hoje (ex.: "Dia 1"): mostram um ✓ em vez do botão. */
+    private val concluidosHoje = mutableSetOf<String>()
+
+    fun definirConcluidos(dias: Collection<String>) {
+        concluidosHoje.clear()
+        concluidosHoje.addAll(dias)
+        notifyItemRangeChanged(0, itemCount)
+    }
+
+    fun marcarConcluido(dia: String) {
+        concluidosHoje.add(dia)
+        notifyItemChanged(dias.indexOfFirst { it.dia == dia })
+    }
+
+    fun estaConcluido(dia: String) = dia in concluidosHoje
+
     class DiaViewHolder(val binding: ItemDiaTreinoBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -30,8 +46,13 @@ class PlanoAdapter(
         val contexto = holder.itemView.context
         holder.binding.txtDia.text = dia.dia
         holder.binding.txtFoco.text = dia.foco
-        holder.binding.btnConcluir.visivel(aoConcluirDia != null)
-        holder.binding.btnConcluir.setOnClickListener { aoConcluirDia?.invoke(dia) }
+        val concluido = estaConcluido(dia.dia)
+        with(holder.binding.btnConcluir) {
+            visivel(aoConcluirDia != null)
+            isEnabled = !concluido // evita registrar o mesmo treino duas vezes sem querer
+            setText(if (concluido) R.string.treino_concluido_hoje else R.string.treino_concluir)
+            setOnClickListener { aoConcluirDia?.invoke(dia) }
+        }
 
         val container = holder.binding.containerExercicios
         container.removeAllViews()

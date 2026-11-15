@@ -2,13 +2,22 @@ const { HttpError } = require('../middlewares/erros');
 const { montarDiario } = require('../services/diario.service');
 const { dataLocal } = require('../utils/datas');
 const {
-  validarRegistroAlimentar, validarAtualizacaoRegistro, dataValida,
+  validarRegistroAlimentar, validarAtualizacaoRegistro, validarAlimento, dataValida,
 } = require('../validators/nutricao.validator');
 
 function criarNutricaoController({ alimentos, registros, usuarios, avaliacoes }) {
   return {
     listarAlimentos(req, res) {
-      res.json(alimentos.listar({ busca: req.query.busca, categoria: req.query.categoria }));
+      const usuarioId = req.query.usuarioId ? Number(req.query.usuarioId) : undefined;
+      res.json(alimentos.listar({ busca: req.query.busca, categoria: req.query.categoria, usuarioId }));
+    },
+    /** Cria um alimento personalizado (fica visível apenas para quem o criou). */
+    criarAlimento(req, res) {
+      const erros = validarAlimento(req.body);
+      if (erros.length) throw new HttpError(400, 'Dados inválidos', erros);
+      if (!usuarios.buscarPorId(req.body.usuarioId)) throw new HttpError(404, 'Usuário não encontrado');
+      if (alimentos.buscarPorNome(req.body.nome)) throw new HttpError(409, 'Já existe um alimento com esse nome');
+      res.status(201).json(alimentos.criar(req.body));
     },
     buscarAlimento(req, res) {
       const alimento = alimentos.buscarPorId(Number(req.params.id));

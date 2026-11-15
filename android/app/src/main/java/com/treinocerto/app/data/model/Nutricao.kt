@@ -11,6 +11,8 @@ data class Alimento(
     val gordura: Double,
     val porcaoG: Double,
     val porcaoDescricao: String,
+    /** Verdadeiro para alimentos criados pelo próprio usuário. */
+    val personalizado: Boolean = false,
 ) {
     /** Calorias para a quantidade informada (regra de três sobre os 100 g). */
     fun kcalPara(quantidade: Double) = kcal * quantidade / 100
@@ -18,6 +20,19 @@ data class Alimento(
     fun carboidratoPara(quantidade: Double) = carboidrato * quantidade / 100
     fun gorduraPara(quantidade: Double) = gordura * quantidade / 100
 }
+
+/** Alimento criado pelo usuário: valores por 100 g (ou 100 ml), como na tabela do app. */
+data class AlimentoEntrada(
+    val usuarioId: Long,
+    val nome: String,
+    val categoria: String,
+    val kcal: Double,
+    val proteina: Double,
+    val carboidrato: Double,
+    val gordura: Double,
+    val porcaoG: Double,
+    val porcaoDescricao: String,
+)
 
 data class RegistroAlimentarEntrada(
     val usuarioId: Long,

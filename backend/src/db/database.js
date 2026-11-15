@@ -54,7 +54,8 @@ const SCHEMA = `
     carboidrato       REAL    NOT NULL,
     gordura           REAL    NOT NULL,
     porcao_g          REAL    NOT NULL,
-    porcao_descricao  TEXT    NOT NULL
+    porcao_descricao  TEXT    NOT NULL,
+    criado_por        INTEGER REFERENCES usuarios(id) ON DELETE CASCADE  -- NULL = alimento padrão do app
   );
 
   CREATE TABLE IF NOT EXISTS registros_alimentares (
@@ -98,6 +99,11 @@ const SCHEMA = `
 function migrar(db) {
   const colunas = db.prepare('PRAGMA table_info(usuarios)').all().map((c) => c.name);
   if (!colunas.includes('senha_hash')) db.exec('ALTER TABLE usuarios ADD COLUMN senha_hash TEXT');
+
+  const colunasAlimentos = db.prepare('PRAGMA table_info(alimentos)').all().map((c) => c.name);
+  if (colunasAlimentos.length && !colunasAlimentos.includes('criado_por')) {
+    db.exec('ALTER TABLE alimentos ADD COLUMN criado_por INTEGER REFERENCES usuarios(id) ON DELETE CASCADE');
+  }
 }
 
 /**

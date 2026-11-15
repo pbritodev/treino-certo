@@ -42,7 +42,7 @@ function criarApp(db) {
   app.use('/api', criarRotas({
     authController: criarAuthController(usuarios),
     usuarioController: criarUsuarioController(usuarios, avaliacoes),
-    avaliacaoController: criarAvaliacaoController(avaliacoes, usuarios),
+    avaliacaoController: criarAvaliacaoController(avaliacoes, usuarios, pesagens),
     nutricaoController: criarNutricaoController({
       alimentos, registros, usuarios, avaliacoes,
     }),

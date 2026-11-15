@@ -12,7 +12,8 @@ function criarPesagemController({ pesagens, usuarios }) {
       const erros = validarPesagem(req.body);
       if (erros.length) throw new HttpError(400, 'Dados inválidos', erros);
       if (!usuarios.buscarPorId(req.body.usuarioId)) throw new HttpError(404, 'Usuário não encontrado');
-      res.status(201).json(pesagens.criar(req.body));
+      const { pesagem, criada } = pesagens.salvarDoDia(req.body);
+      res.status(criada ? 201 : 200).json(pesagem);
     },
     remover(req, res) {
       if (!pesagens.remover(Number(req.params.id))) throw new HttpError(404, 'Pesagem não encontrada');

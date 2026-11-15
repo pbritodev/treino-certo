@@ -33,6 +33,7 @@ class PesoActivity : TelaBase() {
     private val adapter = PesagemAdapter()
     private val dataPesagem: Calendar = Calendar.getInstance()
     private var pesoMeta: Double? = null
+    private var pesoDaAvaliacao: Double? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +67,10 @@ class PesoActivity : TelaBase() {
             val pesagens = async { repositorio.listarPesagens(usuarioId) }
             val avaliacoes = async { repositorio.listarAvaliacoes(usuarioId) }
 
-            (avaliacoes.await() as? Resultado.Sucesso)?.let { pesoMeta = it.dado.firstOrNull()?.pesoMeta }
+            (avaliacoes.await() as? Resultado.Sucesso)?.dado?.firstOrNull()?.let { ultima ->
+                pesoMeta = ultima.pesoMeta
+                pesoDaAvaliacao = ultima.peso
+            }
             when (val resultado = pesagens.await()) {
                 is Resultado.Sucesso -> exibir(resultado.dado)
                 is Resultado.Erro -> mostrarErro(resultado.mensagem) { carregar() }
@@ -76,8 +80,9 @@ class PesoActivity : TelaBase() {
     }
 
     private fun exibir(pesagens: List<Pesagem>) {
-        val atual = pesagens.lastOrNull()?.peso
-        val inicial = pesagens.firstOrNull()?.peso
+        // Peso atual = última pesagem; sem pesagens, usa o peso informado no questionário.
+        val atual = pesagens.lastOrNull()?.peso ?: pesoDaAvaliacao
+        val inicial = pesagens.firstOrNull()?.peso ?: pesoDaAvaliacao
 
         exibirEstatistica(binding.estatAtual, atual)
         exibirEstatistica(binding.estatMeta, pesoMeta)

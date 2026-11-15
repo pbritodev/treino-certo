@@ -32,6 +32,7 @@ function criarRotas({
 
   // Alimentos e diário alimentar
   router.get('/alimentos', nutricaoController.listarAlimentos);
+  router.post('/alimentos', nutricaoController.criarAlimento);
   router.get('/alimentos/:id', nutricaoController.buscarAlimento);
   router.post('/registros-alimentares', nutricaoController.criarRegistro);
   router.put('/registros-alimentares/:id', nutricaoController.atualizarRegistro);

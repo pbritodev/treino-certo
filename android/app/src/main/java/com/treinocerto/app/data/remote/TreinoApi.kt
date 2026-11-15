@@ -1,17 +1,18 @@
 package com.treinocerto.app.data.remote
 
 import com.treinocerto.app.data.model.Alimento
+import com.treinocerto.app.data.model.AlimentoEntrada
 import com.treinocerto.app.data.model.Avaliacao
-import com.treinocerto.app.data.model.AvaliacaoEntrada
 import com.treinocerto.app.data.model.AvaliacaoAlteracao
+import com.treinocerto.app.data.model.AvaliacaoEntrada
 import com.treinocerto.app.data.model.Diario
 import com.treinocerto.app.data.model.LoginEntrada
 import com.treinocerto.app.data.model.Pesagem
 import com.treinocerto.app.data.model.PesagemEntrada
 import com.treinocerto.app.data.model.Progresso
 import com.treinocerto.app.data.model.RegistroAlimentar
-import com.treinocerto.app.data.model.RegistroAlimentarEntrada
 import com.treinocerto.app.data.model.RegistroAlimentarAlteracao
+import com.treinocerto.app.data.model.RegistroAlimentarEntrada
 import com.treinocerto.app.data.model.TreinoRealizado
 import com.treinocerto.app.data.model.TreinoRealizadoEntrada
 import com.treinocerto.app.data.model.TrocaSenhaEntrada
@@ -67,7 +68,11 @@ interface TreinoApi {
     suspend fun listarAlimentos(
         @Query("busca") busca: String?,
         @Query("categoria") categoria: String?,
+        @Query("usuarioId") usuarioId: Long?,
     ): Response<List<Alimento>>
+
+    @POST("api/alimentos")
+    suspend fun criarAlimento(@Body entrada: AlimentoEntrada): Response<Alimento>
 
     @GET("api/usuarios/{id}/diario")
     suspend fun buscarDiario(@Path("id") usuarioId: Long, @Query("data") data: String): Response<Diario>
@@ -96,6 +101,12 @@ interface TreinoApi {
 
     @POST("api/treinos-realizados")
     suspend fun registrarTreino(@Body entrada: TreinoRealizadoEntrada): Response<TreinoRealizado>
+
+    @GET("api/usuarios/{id}/treinos-realizados")
+    suspend fun listarTreinosRealizados(
+        @Path("id") usuarioId: Long,
+        @Query("data") data: String?,
+    ): Response<List<TreinoRealizado>>
 
     @DELETE("api/treinos-realizados/{id}")
     suspend fun removerTreino(@Path("id") id: Long): Response<Unit>

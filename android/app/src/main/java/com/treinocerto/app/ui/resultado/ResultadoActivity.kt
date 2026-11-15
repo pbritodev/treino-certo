@@ -11,7 +11,7 @@ import com.treinocerto.app.databinding.ActivityResultadoBinding
 import com.treinocerto.app.ui.common.ExibidorPlano
 import com.treinocerto.app.ui.common.Extras
 import com.treinocerto.app.ui.common.TelaBase
-import com.treinocerto.app.ui.common.registrarTreinoConcluido
+import com.treinocerto.app.ui.common.exibirPlanoComTreinosDeHoje
 import com.treinocerto.app.ui.diario.DiarioActivity
 import com.treinocerto.app.ui.historico.HistoricoActivity
 import com.treinocerto.app.ui.home.MainActivity
@@ -59,9 +59,7 @@ class ResultadoActivity : TelaBase() {
 
     private fun exibir(avaliacao: Avaliacao) {
         binding.conteudo.visivel(true)
-        ExibidorPlano.exibir(binding.plano, avaliacao) { dia ->
-            registrarTreinoConcluido(avaliacao.id, dia, avaliacao.minutosSessao)
-        }
+        exibirPlanoComTreinosDeHoje(binding.plano, avaliacao)
 
         binding.btnCompartilhar.setOnClickListener {
             IntentsExternas.compartilharTexto(this, getString(R.string.app_name), ExibidorPlano.textoParaCompartilhar(avaliacao))

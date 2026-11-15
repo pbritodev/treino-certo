@@ -1,14 +1,15 @@
 package com.treinocerto.app.data.repository
 
 import com.google.gson.Gson
+import com.treinocerto.app.data.model.AlimentoEntrada
 import com.treinocerto.app.data.model.Avaliacao
-import com.treinocerto.app.data.model.AvaliacaoEntrada
 import com.treinocerto.app.data.model.AvaliacaoAlteracao
+import com.treinocerto.app.data.model.AvaliacaoEntrada
 import com.treinocerto.app.data.model.ErroApi
 import com.treinocerto.app.data.model.LoginEntrada
 import com.treinocerto.app.data.model.PesagemEntrada
-import com.treinocerto.app.data.model.RegistroAlimentarEntrada
 import com.treinocerto.app.data.model.RegistroAlimentarAlteracao
+import com.treinocerto.app.data.model.RegistroAlimentarEntrada
 import com.treinocerto.app.data.model.TreinoRealizadoEntrada
 import com.treinocerto.app.data.model.TrocaSenhaEntrada
 import com.treinocerto.app.data.model.Usuario
@@ -47,8 +48,11 @@ class TreinoRepository(private val api: TreinoApi = RetrofitClient.api) {
 
     suspend fun removerAvaliacao(id: Long): Resultado<Unit> = executar { api.removerAvaliacao(id) }
 
-    suspend fun listarAlimentos(busca: String? = null, categoria: String? = null) =
-        executar { api.listarAlimentos(busca?.takeIf { it.isNotBlank() }, categoria) }
+    /** Alimentos padrão + os criados pelo usuário informado. */
+    suspend fun listarAlimentos(usuarioId: Long?, busca: String? = null, categoria: String? = null) =
+        executar { api.listarAlimentos(busca?.takeIf { it.isNotBlank() }, categoria, usuarioId) }
+
+    suspend fun criarAlimento(entrada: AlimentoEntrada) = executar { api.criarAlimento(entrada) }
 
     suspend fun buscarDiario(usuarioId: Long, data: String) = executar { api.buscarDiario(usuarioId, data) }
 
@@ -67,6 +71,9 @@ class TreinoRepository(private val api: TreinoApi = RetrofitClient.api) {
 
     suspend fun registrarTreino(entrada: TreinoRealizadoEntrada) = executar { api.registrarTreino(entrada) }
 
+    suspend fun listarTreinosRealizados(usuarioId: Long, data: String? = null) =
+        executar { api.listarTreinosRealizados(usuarioId, data) }
+
     suspend fun removerTreino(id: Long): Resultado<Unit> = executar { api.removerTreino(id) }
 
     suspend fun buscarProgresso(usuarioId: Long) = executar { api.buscarProgresso(usuarioId) }
@@ -80,7 +87,7 @@ class TreinoRepository(private val api: TreinoApi = RetrofitClient.api) {
                     @Suppress("UNCHECKED_CAST")
                     Resultado.Sucesso(resposta.body() ?: Unit as T)
                 } else {
-                    Resultado.Erro(mensagemDeErro(resposta))
+                    Resultado.Erro(mensagemDeErro(resposta), resposta.code())
                 }
             } catch (e: IOException) {
                 Resultado.Erro("Não foi possível conectar ao servidor. Verifique se a API está rodando.")

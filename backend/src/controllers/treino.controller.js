@@ -1,6 +1,7 @@
 const { HttpError } = require('../middlewares/erros');
 const { validarTreinoRealizado } = require('../validators/treino.validator');
 const { montarProgresso } = require('../services/progresso.service');
+const { dataValida } = require('../validators/nutricao.validator');
 
 function criarTreinoController({
   treinos, usuarios, avaliacoes, pesagens,
@@ -15,7 +16,8 @@ function criarTreinoController({
     listar(req, res) {
       const usuarioId = Number(req.params.id);
       usuarioOu404(usuarioId);
-      res.json(treinos.listarPorUsuario(usuarioId));
+      if (req.query.data && !dataValida(req.query.data)) throw new HttpError(400, 'data deve estar no formato AAAA-MM-DD');
+      res.json(treinos.listarPorUsuario(usuarioId, req.query.data));
     },
     criar(req, res) {
       const erros = validarTreinoRealizado(req.body);
@@ -24,6 +26,7 @@ function criarTreinoController({
       if (req.body.avaliacaoId && !avaliacoes.buscarPorId(req.body.avaliacaoId)) {
         throw new HttpError(404, 'Avaliação não encontrada');
       }
+      if (treinos.jaRegistrado(req.body)) throw new HttpError(409, 'Este treino já foi registrado nesta data');
       res.status(201).json(treinos.criar(req.body));
     },
     remover(req, res) {

@@ -159,11 +159,24 @@ class ProgressoActivity : TelaBase() {
             when (val resultado = repositorio.buscarAvaliacao(plano.id)) {
                 is Resultado.Sucesso -> {
                     val avaliacao = resultado.dado
-                    val opcoes = avaliacao.plano.map { getString(R.string.progresso_treino_item, it.dia, it.foco) }
+                    val hoje = Formatos.hojeApi()
+                    val feitosHoje = progresso?.treinosRecentes.orEmpty()
+                        .filter { it.data == hoje && it.avaliacaoId == avaliacao.id }
+                        .map { it.dia }
+                    // Dias já feitos hoje aparecem com ✓ e não são registrados de novo.
+                    val opcoes = avaliacao.plano.map { dia ->
+                        val texto = getString(R.string.progresso_treino_item, dia.dia, dia.foco)
+                        if (dia.dia in feitosHoje) getString(R.string.progresso_opcao_feita, texto) else texto
+                    }
                     MaterialAlertDialogBuilder(this@ProgressoActivity)
                         .setTitle(R.string.progresso_escolher_dia)
                         .setItems(opcoes.toTypedArray()) { _, indice ->
-                            registrarTreinoConcluido(avaliacao.id, avaliacao.plano[indice], avaliacao.minutosSessao) { carregar() }
+                            val dia = avaliacao.plano[indice]
+                            if (dia.dia in feitosHoje) {
+                                toast(getString(R.string.treino_ja_feito))
+                            } else {
+                                registrarTreinoConcluido(avaliacao.id, dia, avaliacao.minutosSessao) { carregar() }
+                            }
                         }
                         .setNegativeButton(R.string.cancelar, null)
                         .show()

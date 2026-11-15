@@ -76,7 +76,9 @@
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:fadeScrollbars="false"
-            android:padding="@dimen/espaco_pequeno"
+            android:paddingHorizontal="@dimen/espaco_pequeno"
+            android:paddingTop="@dimen/espaco_pequeno"
+            android:paddingBottom="88dp"
             android:scrollbarStyle="outsideOverlay"
             android:scrollbarThumbVertical="@drawable/barra_rolagem"
             android:scrollbars="vertical" />
@@ -90,5 +92,14 @@
         <include
             android:id="@+id/vazio"
             layout="@layout/layout_estado_vazio" />
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fabCriarAlimento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/espaco_medio"
+            android:text="@string/criar_alimento_titulo"
+            app:icon="@drawable/ic_adicionar" />
     </FrameLayout>
 </LinearLayout>

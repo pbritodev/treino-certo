@@ -14,10 +14,22 @@ function mapear(linha) {
 /** Acesso à tabela `treinos_realizados` (treinos que o usuário marcou como concluídos). */
 function criarTreinoRepository(db) {
   return {
-    listarPorUsuario(usuarioId) {
-      return db.prepare('SELECT * FROM treinos_realizados WHERE usuario_id = ? ORDER BY data DESC, id DESC')
-        .all(usuarioId)
+    /** Treinos do usuário (mais recentes primeiro); com `data`, só os daquele dia. */
+    listarPorUsuario(usuarioId, data) {
+      const filtroData = data ? 'AND data = ?' : '';
+      const parametros = data ? [usuarioId, data] : [usuarioId];
+      return db.prepare(`SELECT * FROM treinos_realizados WHERE usuario_id = ? ${filtroData} ORDER BY data DESC, id DESC`)
+        .all(...parametros)
         .map(mapear);
+    },
+    /** Verdadeiro se o mesmo dia do plano já foi registrado nesta data (evita duplicar sem querer). */
+    jaRegistrado({
+      usuarioId, avaliacaoId = null, dia, data,
+    }) {
+      return Boolean(db.prepare(`
+        SELECT 1 FROM treinos_realizados
+        WHERE usuario_id = ? AND avaliacao_id IS ? AND dia = ? AND data = ?
+      `).get(usuarioId, avaliacaoId, dia.trim(), data));
     },
     buscarPorId(id) {
       return mapear(db.prepare('SELECT * FROM treinos_realizados WHERE id = ?').get(id));

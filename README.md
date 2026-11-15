@@ -30,8 +30,8 @@ Aplicativo Android que monta um **plano de treino personalizado** a partir de um
 | Meu progresso | Perfil e plano atual, treinos na semana × meta, dias seguidos, total de treinos e minutos, últimos 7 dias, peso e lista de treinos realizados |
 | Avaliação | Questionário completo, geração do plano e da meta calórica |
 | Histórico | Lista de planos, filtro de favoritos, anotações e favorito (PATCH), exclusão (DELETE) com deslize |
-| Diário alimentar | Meta × consumido × restante, macros, navegação por dias, busca de alimentos por nome e categoria, cálculo em tempo real pela quantidade, edição e exclusão de itens |
-| Peso | Registro com data e observação, gráfico de evolução com linha da meta, variação entre pesagens |
+| Diário alimentar | Meta × consumido × restante, macros, navegação por dias, busca de alimentos por nome e categoria, **criação de alimentos próprios**, cálculo em tempo real pela quantidade, edição e exclusão de itens |
+| Peso | Registro com data e observação (uma pesagem por dia; o peso do questionário já entra como peso atual), gráfico de evolução com linha da meta, variação entre pesagens |
 | Aparência | Tema **claro e escuro**: botão na Home e opção Sistema/Claro/Escuro em Sobre |
 | Compartilhar | Envio do plano por WhatsApp, e-mail etc. |
 
@@ -39,7 +39,7 @@ Aplicativo Android que monta um **plano de treino personalizado** a partir de um
 
 ## ✅ Requisitos da AP2 atendidos
 
-### 14 Activities
+### 15 Activities
 
 | # | Activity | Função |
 |---|---|---|
@@ -55,8 +55,9 @@ Aplicativo Android que monta um **plano de treino personalizado** a partir de um
 | 10 | `DetalheActivity` | Detalhes, anotações, favorito e exclusão de um plano |
 | 11 | `DiarioActivity` | Diário alimentar do dia |
 | 12 | `AdicionarAlimentoActivity` | Busca de alimentos e quantidade consumida |
-| 13 | `PesoActivity` | Pesagens e gráfico de evolução |
-| 14 | `SobreActivity` | Informações, tema e links |
+| 13 | `CriarAlimentoActivity` | Cadastro de alimento próprio (valores da embalagem) |
+| 14 | `PesoActivity` | Pesagens e gráfico de evolução |
+| 15 | `SobreActivity` | Informações, tema e links |
 
 ### Intents
 
@@ -95,7 +96,7 @@ Aplicativo Android que monta um **plano de treino personalizado** a partir de um
 - SQLite pelo módulo nativo `node:sqlite` (sem dependências nativas para compilar)
 - Swagger UI (`swagger-ui-express`) com especificação OpenAPI 3
 - Senhas com hash `scrypt` + salt (módulo nativo `node:crypto`)
-- Testes automatizados com `node:test` + `supertest` (30 testes)
+- Testes automatizados com `node:test` + `supertest` (35 testes)
 
 ---
 
@@ -198,16 +199,17 @@ Todos os dados trafegam em **JSON**. A documentação interativa completa (com e
 | GET | `/api/avaliacoes/{id}` | Busca avaliação |
 | PATCH | `/api/avaliacoes/{id}` | Atualiza observação e favorito |
 | DELETE | `/api/avaliacoes/{id}` | Remove avaliação |
-| GET | `/api/alimentos?busca=&categoria=` | Lista ou busca alimentos |
+| GET | `/api/alimentos?busca=&categoria=&usuarioId=` | Lista ou busca alimentos (padrão + criados pelo usuário) |
+| POST | `/api/alimentos` | Cria alimento personalizado |
 | GET | `/api/alimentos/{id}` | Busca alimento |
 | GET | `/api/usuarios/{id}/diario?data=AAAA-MM-DD` | Diário do dia com totais e meta |
 | POST | `/api/registros-alimentares` | Adiciona alimento consumido |
 | PUT | `/api/registros-alimentares/{id}` | Altera quantidade ou refeição |
 | DELETE | `/api/registros-alimentares/{id}` | Remove item do diário |
 | GET | `/api/usuarios/{id}/pesagens` | Histórico de peso |
-| POST | `/api/pesagens` | Registra pesagem |
+| POST | `/api/pesagens` | Registra pesagem (uma por dia: no mesmo dia, atualiza) |
 | DELETE | `/api/pesagens/{id}` | Remove pesagem |
-| POST | `/api/treinos-realizados` | Registra treino concluído |
+| POST | `/api/treinos-realizados` | Registra treino concluído (409 se o mesmo dia do plano já foi feito na data) |
 | GET | `/api/usuarios/{id}/treinos-realizados` | Lista treinos concluídos |
 | DELETE | `/api/treinos-realizados/{id}` | Remove treino registrado |
 | GET | `/api/usuarios/{id}/progresso` | Resumo de progresso (perfil, semana, sequência, últimos 7 dias) |
@@ -276,7 +278,7 @@ erDiagram
                          text data }
 ```
 
-A tabela `alimentos` é preenchida automaticamente com 44 alimentos comuns. Os valores são aproximados, com base na Tabela Brasileira de Composição de Alimentos (TACO). As calorias de cada registro são calculadas por `kcal_por_100g × quantidade ÷ 100`.
+A tabela `alimentos` é preenchida automaticamente com 74 alimentos comuns (inclusive manteiga, requeijão, presunto, azeite e óleos), e o usuário pode **criar os seus** a partir da tabela nutricional da embalagem. Os valores são aproximados, com base na Tabela Brasileira de Composição de Alimentos (TACO). As calorias de cada registro são calculadas por `kcal_por_100g × quantidade ÷ 100`.
 
 ---
 

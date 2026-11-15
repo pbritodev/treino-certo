@@ -174,6 +174,7 @@
     <string name="peso_grafico_vazio">Registre pelo menos 2 pesagens para ver o gráfico</string>
     <string name="peso_registrar_titulo">Nova pesagem</string>
     <string name="peso_campo">Peso</string>
+    <string name="peso_ajuda">Uma por dia (no mesmo dia, substitui)</string>
     <string name="peso_data">Data</string>
     <string name="peso_observacao">Observação (opcional)</string>
     <string name="peso_registrar">Registrar peso</string>
@@ -267,4 +268,31 @@
     <string name="treino_registrado">Treino registrado! 💪</string>
     <string name="menu_progresso">Meu progresso</string>
     <string name="menu_progresso_desc">Treinos feitos, sequência e evolução</string>
+
+    <!-- Criar alimento -->
+    <string name="criar_alimento_titulo">Criar alimento</string>
+    <string name="criar_alimento_explicacao">Copie os valores da tabela nutricional da embalagem. Informe os valores de uma porção; o app converte para 100 g.</string>
+    <string name="criar_alimento_nome">Nome do alimento</string>
+    <string name="criar_alimento_categoria">Categoria</string>
+    <string name="criar_alimento_porcao">Porção</string>
+    <string name="criar_alimento_porcao_descricao">Descrição da porção</string>
+    <string name="criar_alimento_porcao_descricao_ajuda">Ex.: 1 fatia, 1 colher de sopa</string>
+    <string name="criar_alimento_valores">Valores nutricionais da porção</string>
+    <string name="criar_alimento_kcal">Calorias</string>
+    <string name="criar_alimento_salvar">Salvar alimento</string>
+    <string name="criar_alimento_criado">%1$s criado!</string>
+    <string name="criar_alimento_previa">Por 100 g: %1$s kcal · P %2$s g · C %3$s g · G %4$s g</string>
+    <string name="criar_alimento_erro_nome">Informe de 2 a 60 caracteres</string>
+    <string name="criar_alimento_erro_porcao">Entre 1 e 2000</string>
+    <string name="criar_alimento_erro_valor">Valor inválido</string>
+    <string name="criar_alimento_erro_macros">Proteína + carboidrato + gordura não pode passar do peso da porção</string>
+    <string name="criar_alimento_porcao_padrao">1 porção</string>
+    <string name="alimento_porcao_personalizado">%1$s (%2$s g) · %3$d kcal · criado por você</string>
+    <string name="unidade_g">g</string>
+    <string name="unidade_kcal">kcal</string>
+
+    <!-- Treino já feito -->
+    <string name="treino_concluido_hoje">Concluído hoje</string>
+    <string name="treino_ja_feito">Esse treino já foi registrado hoje ✓</string>
+    <string name="progresso_opcao_feita">✓ %1$s (feito hoje)</string>
 </resources>

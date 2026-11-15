@@ -75,6 +75,10 @@
             android:parentActivityName=".ui.diario.DiarioActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
+            android:name=".ui.alimento.CriarAlimentoActivity"
+            android:parentActivityName=".ui.alimento.AdicionarAlimentoActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".ui.peso.PesoActivity"
             android:parentActivityName=".ui.home.MainActivity"
             android:windowSoftInputMode="adjustResize" />

@@ -49,13 +49,48 @@ const ALIMENTOS = [
   ['Pizza de muçarela', 'OUTROS', 280, 12.0, 30.0, 12.0, 110, '1 fatia'],
   ['Hambúrguer (sanduíche)', 'OUTROS', 254, 13.0, 30.0, 9.0, 200, '1 unidade'],
   ['Pão de queijo', 'OUTROS', 363, 5.1, 34.2, 24.6, 40, '2 unidades médias'],
+  // Frios, laticínios e gorduras do dia a dia
+  ['Manteiga com sal', 'GORDURAS', 726, 0.4, 0.1, 82.4, 10, '2 colheres de chá'],
+  ['Margarina', 'GORDURAS', 596, 0.0, 0.0, 67.4, 10, '2 colheres de chá'],
+  ['Óleo de soja', 'GORDURAS', 884, 0.0, 0.0, 100.0, 8, '1 colher de sopa'],
+  ['Óleo de coco', 'GORDURAS', 862, 0.0, 0.0, 100.0, 13, '1 colher de sopa'],
+  ['Requeijão cremoso', 'LATICINIOS', 257, 9.6, 2.4, 23.4, 30, '1 colher de sopa'],
+  ['Requeijão light', 'LATICINIOS', 183, 11.0, 3.0, 14.0, 30, '1 colher de sopa'],
+  ['Queijo prato', 'LATICINIOS', 360, 22.7, 1.9, 29.1, 20, '1 fatia'],
+  ['Creme de leite', 'LATICINIOS', 221, 1.5, 4.5, 22.5, 15, '1 colher de sopa'],
+  ['Leite condensado', 'LATICINIOS', 313, 7.7, 57.0, 6.7, 20, '1 colher de sopa'],
+  ['Presunto cozido', 'PROTEINAS', 94, 14.3, 2.1, 2.7, 30, '2 fatias'],
+  ['Peito de peru defumado', 'PROTEINAS', 110, 18.0, 3.0, 2.5, 30, '2 fatias'],
+  ['Bacon frito', 'PROTEINAS', 541, 37.0, 1.4, 42.0, 15, '2 fatias'],
+  ['Linguiça toscana grelhada', 'PROTEINAS', 296, 23.2, 0.0, 21.9, 60, '1 gomo'],
+  ['Ovo frito', 'PROTEINAS', 240, 15.6, 1.2, 18.6, 50, '1 unidade'],
+  ['Salmão grelhado', 'PROTEINAS', 229, 26.1, 0.0, 13.0, 120, '1 posta'],
+  ['Sardinha em lata (óleo)', 'PROTEINAS', 285, 24.0, 0.0, 21.0, 60, '1/2 lata'],
+  ['Tofu', 'PROTEINAS', 76, 8.0, 2.0, 4.2, 100, '4 cubos médios'],
+  // Acompanhamentos, frutas e verduras
+  ['Batata inglesa cozida', 'CEREAIS', 52, 1.2, 11.9, 0.0, 140, '1 unidade média'],
+  ['Mandioca cozida', 'CEREAIS', 125, 0.6, 30.1, 0.3, 100, '2 pedaços'],
+  ['Farofa pronta', 'CEREAIS', 406, 2.1, 80.0, 9.1, 15, '1 colher de sopa'],
+  ['Granola', 'CEREAIS', 421, 10.0, 66.0, 13.0, 40, '4 colheres de sopa'],
+  ['Abacaxi', 'FRUTAS', 48, 0.9, 12.3, 0.1, 100, '1 fatia'],
+  ['Melancia', 'FRUTAS', 33, 0.9, 8.1, 0.0, 200, '1 fatia'],
+  ['Uva', 'FRUTAS', 53, 0.7, 13.6, 0.2, 100, '1 cacho pequeno'],
+  ['Pepino', 'VEGETAIS', 10, 0.9, 2.0, 0.0, 50, '1/2 unidade'],
+  ['Abobrinha cozida', 'VEGETAIS', 15, 1.1, 3.0, 0.2, 80, '3 colheres de sopa'],
+  // Doces e bebidas
+  ['Açúcar refinado', 'OUTROS', 387, 0.3, 99.5, 0.0, 5, '1 colher de chá'],
+  ['Mel', 'OUTROS', 309, 0.0, 84.0, 0.0, 15, '1 colher de sopa'],
+  ['Refrigerante zero', 'BEBIDAS', 0, 0.0, 0.0, 0.0, 350, '1 lata'],
+  ['Cerveja', 'BEBIDAS', 41, 0.3, 3.3, 0.0, 350, '1 lata'],
 ];
 
+/**
+ * Insere os alimentos da lista que ainda não existem no banco (pelo nome).
+ * Assim, bancos criados por versões anteriores também recebem os alimentos novos.
+ */
 function popularAlimentos(db) {
-  const { total } = db.prepare('SELECT COUNT(*) AS total FROM alimentos').get();
-  if (total > 0) return;
   const inserir = db.prepare(`
-    INSERT INTO alimentos (nome, categoria, kcal, proteina, carboidrato, gordura, porcao_g, porcao_descricao)
+    INSERT OR IGNORE INTO alimentos (nome, categoria, kcal, proteina, carboidrato, gordura, porcao_g, porcao_descricao)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `);
   db.exec('BEGIN');
@@ -63,4 +98,4 @@ function popularAlimentos(db) {
   db.exec('COMMIT');
 }
 
-module.exports = { popularAlimentos };
+module.exports = { popularAlimentos, TOTAL_ALIMENTOS_PADRAO: ALIMENTOS.length };

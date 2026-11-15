@@ -24,6 +24,18 @@ function criarPesagemRepository(db) {
         .run(usuarioId, peso, data, observacao.trim());
       return this.buscarPorId(Number(lastInsertRowid));
     },
+    /**
+     * Uma pesagem por dia: se já existe pesagem nesta data, atualiza o peso;
+     * senão, cria. Devolve a pesagem e se ela foi criada agora.
+     */
+    salvarDoDia({
+      usuarioId, peso, data, observacao = '',
+    }) {
+      const existente = db.prepare('SELECT id FROM pesagens WHERE usuario_id = ? AND data = ?').get(usuarioId, data);
+      if (!existente) return { pesagem: this.criar({ usuarioId, peso, data, observacao }), criada: true };
+      db.prepare('UPDATE pesagens SET peso = ?, observacao = ? WHERE id = ?').run(peso, observacao.trim(), existente.id);
+      return { pesagem: this.buscarPorId(existente.id), criada: false };
+    },
     remover(id) {
       return db.prepare('DELETE FROM pesagens WHERE id = ?').run(id).changes > 0;
     },

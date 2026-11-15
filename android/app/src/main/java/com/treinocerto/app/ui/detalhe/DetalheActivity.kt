@@ -12,7 +12,7 @@ import com.treinocerto.app.ui.common.ExibidorPlano
 import com.treinocerto.app.ui.common.Extras
 import com.treinocerto.app.ui.common.TelaBase
 import com.treinocerto.app.ui.common.confirmarExclusao
-import com.treinocerto.app.ui.common.registrarTreinoConcluido
+import com.treinocerto.app.ui.common.exibirPlanoComTreinosDeHoje
 import com.treinocerto.app.util.Formatos
 import com.treinocerto.app.util.IntentsExternas
 import com.treinocerto.app.util.mostrarErro
@@ -55,9 +55,7 @@ class DetalheActivity : TelaBase() {
     private fun exibir(avaliacao: Avaliacao) {
         binding.conteudo.visivel(true)
         binding.txtData.text = getString(R.string.detalhe_criado_em, Formatos.dataHora(avaliacao.criadoEm))
-        ExibidorPlano.exibir(binding.plano, avaliacao) { dia ->
-            registrarTreinoConcluido(avaliacao.id, dia, avaliacao.minutosSessao)
-        }
+        exibirPlanoComTreinosDeHoje(binding.plano, avaliacao)
         binding.edtObservacao.setText(avaliacao.observacao)
         binding.swFavorita.isChecked = avaliacao.favorita
         binding.btnCompartilhar.setOnClickListener {

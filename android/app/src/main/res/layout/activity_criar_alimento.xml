@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/espaco_medio">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="4dp"
+            android:text="@string/criar_alimento_explicacao"
+            android:textAppearance="@style/Texto.Secundario" />
+
+        <!-- Identificação -->
+        <androidx.cardview.widget.CardView
+            style="@style/Cartao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espaco_pequeno">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/campoNome"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/criar_alimento_nome">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtNome"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textCapSentences"
+                        android:maxLength="60" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/espaco_medio"
+                    android:text="@string/criar_alimento_categoria"
+                    android:textAppearance="@style/Texto.Secundario" />
+
+                <Spinner
+                    android:id="@+id/spnCategoria"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/campoPorcao"
+                        style="@style/CampoTexto"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/espaco_pequeno"
+                        android:layout_weight="1"
+                        android:hint="@string/criar_alimento_porcao"
+                        app:suffixText="@string/unidade_g">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edtPorcao"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:maxLength="6" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/campoPorcaoDescricao"
+                        style="@style/CampoTexto"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/espaco_pequeno"
+                        android:layout_weight="1.4"
+                        android:hint="@string/criar_alimento_porcao_descricao"
+                        app:helperText="@string/criar_alimento_porcao_descricao_ajuda">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edtPorcaoDescricao"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:maxLength="40" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Valores da porção -->
+        <androidx.cardview.widget.CardView
+            style="@style/Cartao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/criar_alimento_valores"
+                    android:textAppearance="@style/Texto.Secao" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/campoKcal"
+                    style="@style/CampoTexto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/criar_alimento_kcal"
+                    app:startIconDrawable="@drawable/ic_fogo"
+                    app:suffixText="@string/unidade_kcal">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtKcal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:maxLength="6" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/campoProteina"
+                        style="@style/CampoTexto"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="4dp"
+                        android:layout_weight="1"
+                        android:hint="@string/diario_proteina"
+                        app:suffixText="@string/unidade_g">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edtProteina"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:maxLength="5" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/campoCarboidrato"
+                        style="@style/CampoTexto"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="4dp"
+                        android:layout_weight="1"
+                        android:hint="@string/diario_carboidrato"
+                        app:suffixText="@string/unidade_g">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edtCarboidrato"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:maxLength="5" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/campoGordura"
+                        style="@style/CampoTexto"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_weight="1"
+                        android:hint="@string/diario_gordura"
+                        app:suffixText="@string/unidade_g">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edtGordura"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:maxLength="5" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/txtPrevia"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/espaco_medio"
+                    android:background="@drawable/fundo_chip"
+                    android:padding="10dp"
+                    android:textAppearance="@style/Texto.Secundario" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <ProgressBar
+            android:id="@+id/progresso"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnSalvar"
+            style="@style/Botao.Principal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/espaco_pequeno"
+            android:layout_marginBottom="@dimen/espaco_grande"
+            android:text="@string/criar_alimento_salvar"
+            app:icon="@drawable/ic_check" />
+    </LinearLayout>
+</ScrollView>

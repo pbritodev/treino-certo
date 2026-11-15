@@ -24,8 +24,10 @@ class AlimentoAdapter(
         val alimento = getItem(position)
         with(holder.binding) {
             txtNome.text = alimento.nome
+            // Alimentos criados pelo usuário recebem a marcação "criado por você".
+            val formato = if (alimento.personalizado) R.string.alimento_porcao_personalizado else R.string.alimento_porcao
             txtPorcao.text = root.context.getString(
-                R.string.alimento_porcao,
+                formato,
                 alimento.porcaoDescricao,
                 Formatos.decimal(alimento.porcaoG),
                 alimento.kcalPara(alimento.porcaoG).roundToInt(),

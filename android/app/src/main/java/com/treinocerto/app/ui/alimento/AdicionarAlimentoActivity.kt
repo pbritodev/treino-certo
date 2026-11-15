@@ -1,7 +1,9 @@
 package com.treinocerto.app.ui.alimento
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,6 +45,12 @@ class AdicionarAlimentoActivity : TelaBase() {
     private var categoriaSelecionada: CategoriaAlimento? = null
     private var buscaAtual: Job? = null
 
+    /** Abre "Criar alimento" e, ao voltar com sucesso, já abre a quantidade do alimento criado. */
+    private val criarAlimento = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { retorno ->
+        val id = retorno.data?.getLongExtra(Extras.ALIMENTO_ID, -1) ?: -1
+        if (retorno.resultCode == RESULT_OK && id > 0) abrirAlimentoCriado(id)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAdicionarAlimentoBinding.inflate(layoutInflater)
@@ -58,6 +66,10 @@ class AdicionarAlimentoActivity : TelaBase() {
         binding.rvAlimentos.adapter = adapter
         binding.vazio.imgVazio.setImageResource(R.drawable.ic_busca)
         binding.vazio.txtVazio.setText(R.string.alimento_nenhum)
+        binding.vazio.btnVazio.visivel(true)
+        binding.vazio.btnVazio.setText(R.string.criar_alimento_titulo)
+        binding.vazio.btnVazio.setOnClickListener { abrirCriarAlimento() }
+        binding.fabCriarAlimento.setOnClickListener { abrirCriarAlimento() }
 
         criarChipsDeCategoria()
         // Pequeno atraso (debounce) para não chamar a API a cada letra digitada.
@@ -88,7 +100,7 @@ class AdicionarAlimentoActivity : TelaBase() {
             delay(atraso)
             binding.progresso.visivel(true)
             val busca = binding.edtBusca.text.toString()
-            when (val resultado = repositorio.listarAlimentos(busca, categoriaSelecionada?.api)) {
+            when (val resultado = repositorio.listarAlimentos(sessao.usuarioId, busca, categoriaSelecionada?.api)) {
                 is Resultado.Sucesso -> {
                     adapter.submitList(resultado.dado)
                     binding.vazio.root.visivel(resultado.dado.isEmpty())
@@ -96,6 +108,21 @@ class AdicionarAlimentoActivity : TelaBase() {
                 is Resultado.Erro -> mostrarErro(resultado.mensagem) { buscar() }
             }
             binding.progresso.visivel(false)
+        }
+    }
+
+    private fun abrirCriarAlimento() {
+        // Se a busca não encontrou nada, o texto digitado já vira o nome do novo alimento.
+        val intent = Intent(this, CriarAlimentoActivity::class.java)
+            .putExtra(Extras.NOME_ALIMENTO, binding.edtBusca.text.toString().trim())
+        criarAlimento.launch(intent)
+    }
+
+    private fun abrirAlimentoCriado(id: Long) {
+        buscar()
+        lifecycleScope.launch {
+            val resultado = repositorio.listarAlimentos(sessao.usuarioId)
+            (resultado as? Resultado.Sucesso)?.dado?.firstOrNull { it.id == id }?.let { abrirQuantidade(it) }
         }
     }
 

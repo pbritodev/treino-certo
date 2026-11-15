@@ -2,7 +2,9 @@ const { HttpError } = require('../middlewares/erros');
 const { validarAvaliacao, validarAtualizacaoAvaliacao } = require('../validators/avaliacao.validator');
 const { gerarRecomendacao } = require('../services/recomendacao.service');
 
-function criarAvaliacaoController(avaliacoes, usuarios) {
+const { dataLocal } = require('../utils/datas');
+
+function criarAvaliacaoController(avaliacoes, usuarios, pesagens) {
   return {
     criar(req, res) {
       const erros = validarAvaliacao(req.body);
@@ -12,7 +14,10 @@ function criarAvaliacaoController(avaliacoes, usuarios) {
 
       const respostas = { possuiEquipamento: false, restricoes: [], pesoMeta: null, ...req.body };
       const resultado = gerarRecomendacao(respostas, usuario);
-      res.status(201).json(avaliacoes.criar({ ...respostas, ...resultado }));
+      const avaliacao = avaliacoes.criar({ ...respostas, ...resultado });
+      // O peso informado no questionário passa a ser o peso atual do usuário.
+      pesagens.salvarDoDia({ usuarioId: usuario.id, peso: respostas.peso, data: dataLocal() });
+      res.status(201).json(avaliacao);
     },
     buscar(req, res) {
       const avaliacao = avaliacoes.buscarPorId(Number(req.params.id));

@@ -1,4 +1,4 @@
-const { REFEICOES } = require('./dominio');
+const { REFEICOES, CATEGORIAS_ALIMENTO } = require('./dominio');
 
 const DATA_REGEX = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -32,6 +32,32 @@ function validarAtualizacaoRegistro(body = {}) {
   return erros;
 }
 
+const numeroEntre = (valor, minimo, maximo) => typeof valor === 'number' && valor >= minimo && valor <= maximo;
+
+/** Valida um alimento criado pelo usuário (valores por 100 g ou 100 ml). */
+function validarAlimento(body = {}) {
+  const erros = [];
+  const {
+    usuarioId, nome, categoria, kcal, proteina, carboidrato, gordura, porcaoG, porcaoDescricao,
+  } = body;
+  if (!Number.isInteger(usuarioId)) erros.push('usuarioId é obrigatório');
+  if (typeof nome !== 'string' || nome.trim().length < 2 || nome.length > 60) erros.push('nome deve ter entre 2 e 60 caracteres');
+  if (!CATEGORIAS_ALIMENTO.includes(categoria)) erros.push(`categoria deve ser um de: ${CATEGORIAS_ALIMENTO.join(', ')}`);
+  if (!numeroEntre(kcal, 0, 900)) erros.push('kcal (por 100 g) deve estar entre 0 e 900');
+  [['proteina', proteina], ['carboidrato', carboidrato], ['gordura', gordura]].forEach(([campo, valor]) => {
+    if (!numeroEntre(valor, 0, 100)) erros.push(`${campo} (por 100 g) deve estar entre 0 e 100`);
+  });
+  if (numeroEntre(proteina, 0, 100) && numeroEntre(carboidrato, 0, 100) && numeroEntre(gordura, 0, 100)
+      && proteina + carboidrato + gordura > 100) {
+    erros.push('a soma de proteína, carboidrato e gordura não pode passar de 100 g a cada 100 g');
+  }
+  if (!numeroEntre(porcaoG, 1, 2000)) erros.push('porcaoG deve estar entre 1 e 2000');
+  if (typeof porcaoDescricao !== 'string' || !porcaoDescricao.trim() || porcaoDescricao.length > 40) {
+    erros.push('porcaoDescricao deve ter entre 1 e 40 caracteres');
+  }
+  return erros;
+}
+
 /** Valida um registro de peso corporal. */
 function validarPesagem(body = {}) {
   const erros = [];
@@ -46,5 +72,5 @@ function validarPesagem(body = {}) {
 }
 
 module.exports = {
-  validarRegistroAlimentar, validarAtualizacaoRegistro, validarPesagem, dataValida,
+  validarRegistroAlimentar, validarAtualizacaoRegistro, validarPesagem, validarAlimento, dataValida,
 };

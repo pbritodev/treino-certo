@@ -177,8 +177,10 @@ paths:
     get:
       tags: [Alimentação]
       summary: Lista alimentos (valores por 100 g/ml)
+      description: Sem usuarioId, lista só os alimentos padrão; com usuarioId, inclui os alimentos que o usuário criou.
       parameters:
         - { name: busca, in: query, schema: { type: string }, description: Parte do nome, example: arroz }
+        - { name: usuarioId, in: query, schema: { type: integer }, description: Inclui os alimentos criados por este usuário, example: 1 }
         - name: categoria
           in: query
           schema: { type: string, enum: [CEREAIS, PROTEINAS, LEGUMINOSAS, FRUTAS, LATICINIOS, VEGETAIS, GORDURAS, BEBIDAS, OUTROS] }
@@ -190,6 +192,28 @@ paths:
               schema:
                 type: array
                 items: { $ref: '#/components/schemas/Alimento' }
+    post:
+      tags: [Alimentação]
+      summary: Cria um alimento personalizado
+      description: Valores nutricionais por 100 g (ou 100 ml). O alimento fica visível apenas para quem o criou.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AlimentoEntrada' }
+      responses:
+        '201':
+          description: Alimento criado
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Alimento' }
+        '400': { $ref: '#/components/responses/Invalido' }
+        '404': { $ref: '#/components/responses/NaoEncontrado' }
+        '409':
+          description: Já existe um alimento com esse nome
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Erro' }
   /api/alimentos/{id}:
     parameters:
       - $ref: '#/components/parameters/Id'
@@ -285,13 +309,19 @@ paths:
   /api/pesagens:
     post:
       tags: [Pesagens]
-      summary: Registra uma pesagem
+      summary: Registra uma pesagem (uma por dia)
+      description: Se já existir pesagem na mesma data, o peso é atualizado (200). Criar uma avaliação também registra o peso do dia.
       requestBody:
         required: true
         content:
           application/json:
             schema: { $ref: '#/components/schemas/PesagemEntrada' }
       responses:
+        '200':
+          description: Pesagem do dia atualizada
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Pesagem' }
         '201':
           description: Pesagem registrada
           content:
@@ -376,6 +406,11 @@ paths:
               schema: { $ref: '#/components/schemas/TreinoRealizado' }
         '400': { $ref: '#/components/responses/Invalido' }
         '404': { $ref: '#/components/responses/NaoEncontrado' }
+        '409':
+          description: Este dia do plano já foi registrado nesta data
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Erro' }
   /api/treinos-realizados/{id}:
     parameters:
       - $ref: '#/components/parameters/Id'
@@ -391,6 +426,8 @@ paths:
     get:
       tags: [Progresso]
       summary: Lista os treinos concluídos (mais recentes primeiro)
+      parameters:
+        - { name: data, in: query, schema: { type: string, format: date }, description: Filtra por um dia (AAAA-MM-DD), example: '2026-11-16' }
       responses:
         '200':
           description: Treinos realizados
@@ -534,6 +571,20 @@ components:
         gordura: { type: number, example: 0.2 }
         porcaoG: { type: number, description: Porção sugerida em g/ml, example: 100 }
         porcaoDescricao: { type: string, example: 4 colheres de sopa }
+        personalizado: { type: boolean, description: Criado pelo usuário, example: false }
+    AlimentoEntrada:
+      type: object
+      required: [usuarioId, nome, categoria, kcal, proteina, carboidrato, gordura, porcaoG, porcaoDescricao]
+      properties:
+        usuarioId: { type: integer, example: 1 }
+        nome: { type: string, example: Bolo de cenoura da vó }
+        categoria: { type: string, enum: [CEREAIS, PROTEINAS, LEGUMINOSAS, FRUTAS, LATICINIOS, VEGETAIS, GORDURAS, BEBIDAS, OUTROS] }
+        kcal: { type: number, description: kcal por 100 g, example: 350 }
+        proteina: { type: number, example: 5 }
+        carboidrato: { type: number, example: 50 }
+        gordura: { type: number, example: 14 }
+        porcaoG: { type: number, example: 60 }
+        porcaoDescricao: { type: string, example: 1 fatia }
     RegistroAlimentarEntrada:
       type: object
       required: [usuarioId, alimentoId, data, refeicao, quantidade]
