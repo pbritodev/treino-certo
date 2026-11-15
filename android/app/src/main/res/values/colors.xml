@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="verde_primario">#2E7D32</color>
-    <color name="verde_escuro">#1B5E20</color>
     <color name="verde_claro">#C8E6C9</color>
     <color name="laranja">#F57C00</color>
     <color name="laranja_claro">#FFE0B2</color>

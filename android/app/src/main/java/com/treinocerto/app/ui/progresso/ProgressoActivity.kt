@@ -31,6 +31,8 @@ import com.treinocerto.app.util.mostrarErro
 import com.treinocerto.app.util.toast
 import com.treinocerto.app.util.visivel
 import kotlinx.coroutines.launch
+import java.util.Calendar
+import java.util.Locale
 
 /**
  * "Meu progresso": perfil, plano atual, estatísticas dos treinos feitos
@@ -133,7 +135,7 @@ class ProgressoActivity : AppCompatActivity() {
         val tamanho = (36 * resources.displayMetrics.density).toInt()
         dias.forEach { dia ->
             val calendario = Formatos.calendarioDe(dia.data)
-            val letra = "DSTQQSS"[calendario.get(java.util.Calendar.DAY_OF_WEEK) - 1].toString()
+            val letra = "DSTQQSS"[calendario.get(Calendar.DAY_OF_WEEK) - 1].toString()
             val treinou = dia.treinos > 0
 
             val coluna = LinearLayout(this).apply {
@@ -146,7 +148,7 @@ class ProgressoActivity : AppCompatActivity() {
                 setTextAppearance(R.style.Texto_Secundario)
             })
             coluna.addView(TextView(this).apply {
-                text = calendario.get(java.util.Calendar.DAY_OF_MONTH).toString()
+                text = String.format(Locale.getDefault(), "%d", calendario.get(Calendar.DAY_OF_MONTH))
                 gravity = Gravity.CENTER
                 setBackgroundResource(if (treinou) R.drawable.fundo_dia_ativo else R.drawable.fundo_dia_inativo)
                 setTextColor(ContextCompat.getColor(context, if (treinou) R.color.sobre_primario else R.color.texto_secundario))

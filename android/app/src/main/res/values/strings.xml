@@ -201,7 +201,6 @@
     <string name="tema_escuro">Escuro</string>
 
     <!-- Login / Cadastre-se -->
-    <string name="login_titulo">Entrar</string>
     <string name="login_bem_vindo">Bem-vindo de volta!</string>
     <string name="login_subtitulo">Entre para acessar seus treinos, diário e progresso.</string>
     <string name="login_senha">Senha</string>
