@@ -48,7 +48,7 @@ Aplicativo Android que monta um **plano de treino personalizado** a partir de um
 | 3 | `TrocarSenhaActivity` | Troca de senha |
 | 4 | `PerfilActivity` | Meu perfil |
 | 5 | `ProgressoActivity` | Meu progresso (treinos realizados) |
-| 6 | `MainActivity` | Home: saudação, resumo do dia, menu em grade e botão de tema |
+| 6 | `MainActivity` | Home: saudação, resumo do dia, menu e botão de tema |
 | 7 | `QuestionarioActivity` | Formulário da avaliação |
 | 8 | `ResultadoActivity` | Plano gerado |
 | 9 | `HistoricoActivity` | Lista de planos salvos |

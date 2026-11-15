@@ -10,7 +10,7 @@ import com.treinocerto.app.data.local.SessaoUsuario
 import com.treinocerto.app.data.repository.Resultado
 import com.treinocerto.app.data.repository.TreinoRepository
 import com.treinocerto.app.databinding.ActivityMainBinding
-import com.treinocerto.app.databinding.ItemMenuGradeBinding
+import com.treinocerto.app.databinding.ItemMenuHomeBinding
 import com.treinocerto.app.ui.common.TelaBase
 import com.treinocerto.app.ui.common.sair
 import com.treinocerto.app.ui.diario.DiarioActivity
@@ -26,7 +26,7 @@ import kotlin.math.roundToInt
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
-/** Home: saudação, resumo do dia, menu em grade e botão de tema. Exige usuário logado. */
+/** Home: saudação, resumo do dia, menu em lista e botão de tema. Exige usuário logado. */
 class MainActivity : TelaBase() {
 
     private lateinit var binding: ActivityMainBinding
@@ -96,7 +96,7 @@ class MainActivity : TelaBase() {
     }
 
     private fun configurarMenu(
-        atalho: ItemMenuGradeBinding,
+        atalho: ItemMenuHomeBinding,
         @DrawableRes icone: Int,
         @StringRes titulo: Int,
         @StringRes descricao: Int,

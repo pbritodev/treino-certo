@@ -122,7 +122,7 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Menu em grade (2 colunas) -->
+        <!-- Menu: um cartão por linha, todos com a largura da tela -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -131,40 +131,40 @@
             android:text="@string/home_o_que_fazer"
             android:textAppearance="@style/Texto.Secao" />
 
-        <GridLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnCount="2"
+            android:orientation="vertical"
             android:paddingHorizontal="12dp"
             android:paddingBottom="@dimen/espaco_grande">
 
             <include
                 android:id="@+id/menuNovaAvaliacao"
-                layout="@layout/item_menu_grade" />
+                layout="@layout/item_menu_home" />
 
             <include
                 android:id="@+id/menuProgresso"
-                layout="@layout/item_menu_grade" />
+                layout="@layout/item_menu_home" />
 
             <include
                 android:id="@+id/menuDiario"
-                layout="@layout/item_menu_grade" />
+                layout="@layout/item_menu_home" />
 
             <include
                 android:id="@+id/menuPeso"
-                layout="@layout/item_menu_grade" />
+                layout="@layout/item_menu_home" />
 
             <include
                 android:id="@+id/menuHistorico"
-                layout="@layout/item_menu_grade" />
+                layout="@layout/item_menu_home" />
 
             <include
                 android:id="@+id/menuPerfil"
-                layout="@layout/item_menu_grade" />
+                layout="@layout/item_menu_home" />
 
             <include
                 android:id="@+id/menuSobre"
-                layout="@layout/item_menu_grade" />
-        </GridLayout>
+                layout="@layout/item_menu_home" />
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>
