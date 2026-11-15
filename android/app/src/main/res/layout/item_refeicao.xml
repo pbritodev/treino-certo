@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Cartao"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/fundo_chip"
+                android:importantForAccessibility="no"
+                android:padding="7dp"
+                android:src="@drawable/ic_restaurante"
+                app:tint="@color/laranja" />
+
+            <TextView
+                android:id="@+id/txtRefeicao"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/espaco_pequeno"
+                android:layout_weight="1"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                android:textColor="@color/texto_primario"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtKcalRefeicao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+                android:textColor="@color/verde_primario"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="@dimen/espaco_pequeno"
+            android:alpha="0.12"
+            android:background="@color/texto_primario" />
+
+        <TextView
+            android:id="@+id/txtVazio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/diario_refeicao_vazia"
+            android:textAppearance="@style/Texto.Secundario" />
+
+        <LinearLayout
+            android:id="@+id/containerItens"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+        <Button
+            android:id="@+id/btnAdicionar"
+            style="@style/Widget.Material3.Button.TextButton.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/diario_adicionar"
+            app:icon="@drawable/ic_adicionar" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

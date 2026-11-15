@@ -1,0 +1,58 @@
+package com.treinocerto.app.ui.diario
+
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.treinocerto.app.R
+import com.treinocerto.app.data.model.Refeicao
+import com.treinocerto.app.data.model.RefeicaoDiario
+import com.treinocerto.app.data.model.RegistroAlimentar
+import com.treinocerto.app.data.model.rotuloDe
+import com.treinocerto.app.databinding.ItemRefeicaoBinding
+import com.treinocerto.app.databinding.ItemRegistroBinding
+import com.treinocerto.app.util.Formatos
+import com.treinocerto.app.util.visivel
+
+/** Um card por refeição (café, almoço, lanche, jantar) com os alimentos registrados. */
+class RefeicaoAdapter(
+    private val aoAdicionar: (refeicao: String) -> Unit,
+    private val aoClicarItem: (RegistroAlimentar) -> Unit,
+) : RecyclerView.Adapter<RefeicaoAdapter.ViewHolder>() {
+
+    private var refeicoes: List<RefeicaoDiario> = emptyList()
+
+    class ViewHolder(val binding: ItemRefeicaoBinding) : RecyclerView.ViewHolder(binding.root)
+
+    fun atualizar(novas: List<RefeicaoDiario>) {
+        refeicoes = novas
+        notifyDataSetChanged()
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        ViewHolder(ItemRefeicaoBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+
+    override fun getItemCount() = refeicoes.size
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val refeicao = refeicoes[position]
+        val contexto = holder.itemView.context
+        with(holder.binding) {
+            txtRefeicao.text = rotuloDe<Refeicao>(refeicao.refeicao)
+            txtKcalRefeicao.text = contexto.getString(R.string.diario_kcal, Formatos.decimal(refeicao.kcal))
+            txtVazio.visivel(refeicao.itens.isEmpty())
+            btnAdicionar.setOnClickListener { aoAdicionar(refeicao.refeicao) }
+
+            containerItens.removeAllViews()
+            refeicao.itens.forEach { registro ->
+                val item = ItemRegistroBinding.inflate(LayoutInflater.from(contexto), containerItens, false)
+                item.txtAlimento.text = registro.alimento
+                item.txtDetalhe.text = contexto.getString(
+                    R.string.diario_item_detalhe, Formatos.decimal(registro.quantidade), Formatos.decimal(registro.proteina) + " g proteína",
+                )
+                item.txtKcal.text = contexto.getString(R.string.diario_kcal, Formatos.decimal(registro.kcal))
+                item.root.setOnClickListener { aoClicarItem(registro) }
+                containerItens.addView(item.root)
+            }
+        }
+    }
+}

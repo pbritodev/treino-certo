@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/espaco_medio"
+            android:paddingTop="@dimen/espaco_pequeno"
+            android:paddingBottom="96dp">
+
+            <!-- Navegação entre dias -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/btnDiaAnterior"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/diario_dia_anterior"
+                    android:src="@drawable/ic_seta_esquerda"
+                    app:tint="@color/verde_primario" />
+
+                <TextView
+                    android:id="@+id/txtData"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawablePadding="8dp"
+                    android:gravity="center"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                    android:textColor="@color/texto_primario"
+                    app:drawableStartCompat="@drawable/ic_calendario"
+                    app:drawableTint="@color/verde_primario" />
+
+                <ImageButton
+                    android:id="@+id/btnProximoDia"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/diario_proximo_dia"
+                    android:src="@drawable/ic_seta_direita"
+                    app:tint="@color/verde_primario" />
+            </LinearLayout>
+
+            <!-- Resumo de calorias e macros -->
+            <androidx.cardview.widget.CardView
+                style="@style/Cartao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txtRestante"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textAppearance="@style/TextAppearance.Material3.DisplayMedium"
+                        android:textColor="@color/verde_primario"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txtRotuloRestante"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/diario_restante"
+                        android:textAppearance="@style/Texto.Secundario" />
+
+                    <ProgressBar
+                        android:id="@+id/barraCalorias"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="14dp"
+                        android:layout_marginTop="@dimen/espaco_medio" />
+
+                    <TextView
+                        android:id="@+id/txtEquacao"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:textAppearance="@style/Texto.Secundario" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/espaco_medio"
+                        android:orientation="horizontal">
+
+                        <include
+                            android:id="@+id/macroProteina"
+                            layout="@layout/layout_macro" />
+
+                        <include
+                            android:id="@+id/macroCarboidrato"
+                            layout="@layout/layout_macro" />
+
+                        <include
+                            android:id="@+id/macroGordura"
+                            layout="@layout/layout_macro" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/txtOrigemMeta"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/espaco_medio"
+                        android:gravity="center"
+                        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+                        android:textColor="@color/texto_secundario" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <ProgressBar
+                android:id="@+id/progresso"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/espaco_medio" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRefeicoes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fabAdicionar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/espaco_medio"
+        android:text="@string/diario_adicionar"
+        app:icon="@drawable/ic_adicionar" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
