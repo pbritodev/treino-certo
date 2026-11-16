@@ -4,6 +4,10 @@ Aplicativo Android que monta um **plano de treino personalizado** a partir de um
 
 > Trabalho da Avaliação Parcial 2 (AP2) de Desenvolvimento Mobile.
 
+🌐 **API publicada na nuvem:** https://treino-certo-api.onrender.com
+📖 **Swagger:** https://treino-certo-api.onrender.com/docs
+🔑 **Login de demonstração:** `maria@email.com` / senha `123456`
+
 ---
 
 ## 📌 Proposta
@@ -161,20 +165,30 @@ O banco `treino_certo.db` é criado automaticamente na pasta `backend/`. O camin
 2. Configure o endereço da API em `android/gradle.properties`:
    | Onde o app roda | `API_BASE_URL` |
    |---|---|
-   | Emulador do Android Studio | `http://10.0.2.2:3000/` (padrão) |
-   | Celular físico na mesma rede Wi-Fi | `http://IP_DO_COMPUTADOR:3000/` (ex.: `http://192.168.0.15:3000/`) |
-   | API publicada na nuvem | `https://seu-servico.onrender.com/` |
+   | API publicada na nuvem (emulador ou celular, em qualquer rede) | `https://treino-certo-api.onrender.com/` (padrão) |
+   | API no computador, app no emulador | `http://10.0.2.2:3000/` |
+   | API no computador, app no celular (mesmo Wi-Fi) | `http://IP_DO_COMPUTADOR:3000/` (ex.: `http://192.168.0.15:3000/`) |
 3. Clique em **Run ▶**.
 
-> No celular físico, descubra o IP do computador com `ipconfig` (Windows) ou `ip a` (Linux/macOS) e libere a porta 3000 no firewall.
+> Com o endereço padrão (nuvem), o app funciona sem rodar a API no computador. Para usar a API local, troque o `API_BASE_URL` e clique em **File → Sync Project with Gradle Files**.
+>
+> No celular físico com a API local, descubra o IP do computador com `ipconfig` (Windows) ou `ip a` (Linux/macOS) e libere a porta 3000 no firewall.
 
 ### 3. (Bônus) Deploy da API na nuvem
 
-O arquivo `render.yaml` permite publicar a API no [Render](https://render.com) (plano gratuito):
+A API está publicada no [Render](https://render.com) (plano gratuito) em **https://treino-certo-api.onrender.com** ([Swagger](https://treino-certo-api.onrender.com/docs)). A cada `git push` na branch `main`, o Render faz um novo deploy automaticamente.
 
-1. Crie uma conta no Render e escolha **New → Blueprint**.
-2. Selecione este repositório e confirme.
-3. Ao final, o Swagger fica em `https://<nome-do-servico>.onrender.com/docs`. Coloque essa URL em `API_BASE_URL`.
+Configuração do serviço (a mesma do arquivo `render.yaml`):
+
+| Campo | Valor |
+|---|---|
+| Root Directory | `backend` |
+| Build Command | `npm install && npm run seed` |
+| Start Command | `npm start` |
+| Variáveis | `NODE_VERSION=22.13.0`, `TZ=America/Sao_Paulo` |
+| Health check | `/api/health` |
+
+Para publicar em outra conta: no Render, **New → Blueprint**, selecione o repositório e confirme.
 
 > No plano gratuito o disco é temporário: o banco é recriado com os dados de exemplo a cada novo deploy, e o primeiro acesso após um período parado pode levar cerca de 1 minuto.
 

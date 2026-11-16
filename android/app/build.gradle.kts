@@ -15,7 +15,7 @@ android {
         versionName = "1.0"
 
         // A URL da API vem do gradle.properties para ser trocada sem alterar o código.
-        val apiBaseUrl = project.findProperty("API_BASE_URL") as String? ?: "http://10.0.2.2:3000/"
+        val apiBaseUrl = project.findProperty("API_BASE_URL") as String? ?: "https://treino-certo-api.onrender.com/"
         buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrl\"")
     }
 
