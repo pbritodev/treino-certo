@@ -1,254 +1,166 @@
+<div align="center">
+
 # 🏋️ TreinoCerto
 
-Aplicativo Android que monta um **plano de treino personalizado** a partir de um questionário e acompanha a **alimentação (contagem de calorias)** e o **peso** do usuário. Todos os dados ficam em um banco relacional, acessado por uma **API REST documentada com Swagger**.
+**Treino personalizado, contagem de calorias e acompanhamento de progresso em um só app.**
 
-> Trabalho da Avaliação Parcial 2 (AP2) de Desenvolvimento Mobile.
+Aplicativo Android nativo em Kotlin integrado a uma API REST própria (Node.js + SQLite), documentada com Swagger e publicada na nuvem.
 
-🌐 **API publicada na nuvem:** https://treino-certo-api.onrender.com
-📖 **Swagger:** https://treino-certo-api.onrender.com/docs
-🔑 **Login de demonstração:** `maria@email.com` / senha `123456`
+<p>
+  <img src="https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white" alt="Kotlin">
+  <img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Android">
+  <img src="https://img.shields.io/badge/Material%20Design%203-757575?style=for-the-badge&logo=materialdesign&logoColor=white" alt="Material Design 3">
+  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js">
+  <img src="https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express">
+  <img src="https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite">
+  <img src="https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=black" alt="Swagger">
+  <img src="https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=black" alt="Render">
+</p>
+
+<p>
+  <img src="https://img.shields.io/badge/telas-17-2E7D32?style=flat-square" alt="17 telas">
+  <img src="https://img.shields.io/badge/endpoints-30%2B-2E7D32?style=flat-square" alt="30+ endpoints">
+  <img src="https://img.shields.io/badge/testes%20da%20API-39%20passando-2E7D32?style=flat-square" alt="39 testes passando">
+  <img src="https://img.shields.io/badge/licen%C3%A7a-MIT-blue?style=flat-square" alt="Licença MIT">
+</p>
+
+[**📖 Swagger (API no ar)**](https://treino-certo-api.onrender.com/docs) ·
+[**🌐 API**](https://treino-certo-api.onrender.com/api/health) ·
+[**👤 Autor**](#-autor)
+
+</div>
 
 ---
 
-## 📌 Proposta
+## 📌 Sobre o projeto
 
-1. O usuário **cria uma conta (Cadastre-se)** com nome, e-mail, idade, sexo e senha, e depois **entra com login e senha**.
-2. Responde um questionário com 7 blocos: objetivo, nível, disponibilidade, local de treino, rotina (atividade diária e sono), medidas (peso, altura e peso desejado) e limitações físicas.
-3. A API processa as respostas e devolve um **resultado personalizado**:
-   - perfil (ex.: *Queimador de Calorias · Intermediário*);
-   - intensidade recomendada (0 a 100) e classificação (Leve, Moderada ou Intensa);
-   - IMC e classificação;
-   - **meta diária de calorias e proteínas** (TMB de Mifflin-St Jeor × fator de atividade, ajustada ao objetivo);
-   - plano semanal com exercícios, séries e repetições, **sem os exercícios contraindicados** para as limitações informadas;
-   - dicas personalizadas (sono, tempo estimado até o peso desejado, cuidados cardíacos etc.).
-4. No **diário alimentar** (no estilo MyFitnessPal), o usuário registra o que comeu em cada refeição. As calorias e os macronutrientes são calculados pela quantidade ingerida e comparados à meta do dia.
-5. Em **Meu peso**, registra as pesagens e acompanha a evolução em um gráfico.
-6. Em cada dia do plano, toca em **"Concluí este treino"**. A tela **Meu progresso** mostra o perfil, os treinos feitos, a meta da semana, a sequência de dias e os últimos 7 dias.
+O **TreinoCerto** ajuda o usuário a treinar e se alimentar melhor. A partir de um questionário, o app monta um **plano de treino semanal personalizado**, calcula a **meta diária de calorias e proteínas** e acompanha o dia a dia: **diário alimentar** (no estilo de um contador de calorias), **registro de peso** com gráfico, **treinos realizados** e **progresso semanal**.
 
-## ✨ Funcionalidades
+O projeto foi desenvolvido para a disciplina de **Desenvolvimento Mobile** do curso de Análise e Desenvolvimento de Sistemas (Ibmec) e evoluiu para um projeto de portfólio, com back-end próprio, testes automatizados e deploy na nuvem.
+
+> 🔑 **Para testar:** login `maria@email.com` · senha `123456`. A API gratuita "dorme" após 15 min sem uso; o primeiro acesso pode levar cerca de 50 segundos.
+
+## ✨ Destaques
+
+- 🧠 **Motor de recomendação próprio:** calcula IMC, taxa metabólica basal (Mifflin-St Jeor), intensidade recomendada e monta o plano semanal, **removendo exercícios contraindicados** para as limitações do usuário (joelho, coluna, ombro, cardíaca).
+- 🍽️ **Contador de calorias:** 74 alimentos (base TACO), cálculo em tempo real pela quantidade ingerida, macronutrientes, meta × consumido × restante e **criação de alimentos próprios** a partir da tabela nutricional da embalagem.
+- 🏃 **Treinos:** marcação de treino concluído (sem duplicar), cadastro de treinos avulsos com **estimativa de calorias pelo MET**, sequência de dias e meta semanal.
+- 📈 **Gráfico de peso** desenhado com `Canvas` (View personalizada), com linha da meta.
+- 🔐 **Autenticação:** cadastro, login e troca de senha, com senhas guardadas como **hash scrypt + salt**.
+- 🌓 **Tema claro e escuro**, Material Design 3 e layout preparado para o Android 15 (edge-to-edge).
+- 📲 **Integração com o celular** por Intents implícitas: agenda, mapas, compartilhamento, navegador e e-mail.
+- ☁️ **API publicada no Render**, documentada com **OpenAPI/Swagger** e coberta por **39 testes automatizados**.
+
+## 🧩 Funcionalidades
 
 | Área | O que faz |
 |---|---|
-| Conta | **Login**, **Cadastre-se**, **trocar senha** (senha guardada com hash scrypt + salt) e sair |
-| Meu perfil | Avatar com iniciais, dados da conta, edição (PUT), atalhos para progresso e troca de senha |
-| Meus treinos | Cadastro de treinos avulsos (corrida, natação, futebol...) com intensidade e **calorias estimadas pelo MET**, resumo dos últimos 7 dias, **adicionar o treino na agenda do celular** e **academias próximas** no mapa |
-| Meu progresso | Perfil e plano atual, treinos na semana × meta, dias seguidos, total de treinos e minutos, últimos 7 dias, peso e lista de treinos realizados |
-| Avaliação | Questionário completo, geração do plano e da meta calórica |
-| Histórico | Lista de planos, filtro de favoritos, anotações e favorito (PATCH), exclusão (DELETE) com deslize |
-| Diário alimentar | Meta × consumido × restante, macros, navegação por dias, busca de alimentos por nome e categoria, **criação de alimentos próprios**, cálculo em tempo real pela quantidade, edição e exclusão de itens |
-| Peso | Registro com data e observação (uma pesagem por dia; o peso do questionário já entra como peso atual), gráfico de evolução com linha da meta, variação entre pesagens |
-| Aparência | Tema **claro e escuro**: botão na Home e opção Sistema/Claro/Escuro em Sobre |
-| Compartilhar | Envio do plano por WhatsApp, e-mail etc. |
+| **Conta** | Login, cadastre-se, trocar senha e sair |
+| **Avaliação** | Questionário em 7 blocos (objetivo, nível, disponibilidade, local, rotina, medidas e limitações) que gera perfil, IMC, intensidade, meta calórica, plano semanal e dicas |
+| **Planos** | Histórico com favoritos, anotações, compartilhamento e "Concluí este treino" em cada dia |
+| **Meus treinos** | Cadastro de corrida, natação, musculação etc., resumo dos últimos 7 dias, agenda do celular e academias próximas |
+| **Diário alimentar** | Refeições do dia, metas, macros, navegação por datas, busca por nome ou categoria e alimentos personalizados |
+| **Peso** | Uma pesagem por dia, variação, quanto falta para a meta e gráfico de evolução |
+| **Progresso** | Treinos na semana × meta, dias seguidos, total de treinos e minutos, últimos 7 dias |
+| **Perfil** | Dados da conta, edição, troca de senha e atalhos |
 
----
+## 🏗️ Arquitetura
 
-## ✅ Requisitos da AP2 atendidos
+```mermaid
+flowchart LR
+    subgraph App["📱 App Android (Kotlin)"]
+        A[Activities<br/>17 telas] --> R[TreinoRepository]
+        R --> RF[Retrofit + OkHttp]
+        A --> SP[(SharedPreferences<br/>sessão e tema)]
+    end
+    subgraph API["☁️ API REST (Node.js + Express)"]
+        RT[routes] --> C[controllers]
+        C --> V[validators]
+        C --> S[services<br/>recomendação · diário · calorias]
+        C --> RP[repositories]
+        RP --> DB[(SQLite)]
+    end
+    RF -- "JSON / HTTPS" --> RT
+    SW[Swagger /docs] -.-> RT
+```
 
-### 17 Activities
-
-| # | Activity | Função |
-|---|---|---|
-| 1 | `LoginActivity` | Login (tela de entrada) |
-| 2 | `CadastroActivity` | Cadastre-se e edição dos dados |
-| 3 | `TrocarSenhaActivity` | Troca de senha |
-| 4 | `PerfilActivity` | Meu perfil |
-| 5 | `ProgressoActivity` | Meu progresso (treinos realizados) |
-| 6 | `MainActivity` | Home: saudação, resumo do dia, menu e botão de tema |
-| 7 | `QuestionarioActivity` | Formulário da avaliação |
-| 8 | `ResultadoActivity` | Plano gerado |
-| 9 | `HistoricoActivity` | Lista de planos salvos |
-| 10 | `DetalheActivity` | Detalhes, anotações, favorito e exclusão de um plano |
-| 11 | `DiarioActivity` | Diário alimentar do dia |
-| 12 | `AdicionarAlimentoActivity` | Busca de alimentos e quantidade consumida |
-| 13 | `CriarAlimentoActivity` | Cadastro de alimento próprio (valores da embalagem) |
-| 14 | `PesoActivity` | Pesagens e gráfico de evolução |
-| 15 | `SobreActivity` | Informações, tema e links |
-| 16 | `TreinosActivity` | Meus treinos: histórico, resumo da semana, agenda e academias |
-| 17 | `NovoTreinoActivity` | Cadastro de treino avulso |
-
-### Intents
-
-- **Explícitas**: navegação entre todas as telas, passando dados por `putExtra` (ex.: `Extras.AVALIACAO_ID` do questionário para o resultado e do histórico para o detalhe; data e refeição do diário para a busca de alimentos).
-- **Implícitas** (centralizadas em `util/IntentsExternas.kt`):
-  - `ACTION_SEND`: compartilhar o plano e indicar o app;
-  - `ACTION_VIEW` com `https://`: abrir o Swagger, a página da OMS e um vídeo de execução de cada exercício (toque no exercício);
-  - `ACTION_VIEW` com `geo:`: academias ou parques próximos no app de mapas (telas Resultado e Meus treinos);
-  - `ACTION_INSERT` em `CalendarContract.Events`: adiciona o treino na agenda do celular (Google Agenda), já com título, horário e duração;
-  - `ACTION_SENDTO` com `mailto:`: e-mail de contato.
-
-### Componentes de interface (Views)
-
-`TextView`, `EditText` (`TextInputEditText`), `Button`, `ImageView`, `ImageButton`, `CheckBox`, `RadioButton`/`RadioGroup`, `Spinner`, `Switch` (`MaterialSwitch`), `SeekBar`, `ProgressBar` (circular e horizontal), `RecyclerView`, `CardView`, `Chip`/`ChipGroup`, `ExtendedFloatingActionButton`, `BottomSheetDialog`, `DatePickerDialog`, `AlertDialog` e uma **View personalizada** desenhada com `Canvas` (`GraficoPesoView`).
-
-### UX/UI
-
-- Material Design 3 com paleta verde e laranja consistente e **modo escuro** com cores próprias.
-- Feedback em todas as ações: `ProgressBar` durante as chamadas à API, `Snackbar` com **"Tentar novamente"** em caso de erro, `Toast` de confirmação, diálogo antes de excluir e estados vazios com ação.
-- Validação de formulários com mensagens no próprio campo.
-- Cálculo de calorias **em tempo real** enquanto o usuário digita a quantidade.
-
----
+- **App:** as Activities cuidam só da interface; o `TreinoRepository` concentra o acesso à API e devolve um `Resultado` (`Sucesso` ou `Erro`), com tratamento de falhas de rede e mensagens amigáveis. Uma `TelaBase` comum aplica a barra superior, o botão de tema e o espaçamento das barras do sistema.
+- **API:** camadas separadas (rotas → controllers → validações/serviços → repositórios → banco), injeção do banco para facilitar os testes, erros em formato único e documentação OpenAPI servida em `/docs`.
 
 ## 🛠️ Tecnologias
 
-**Aplicativo Android**
-- Kotlin, Activities + layouts XML, ViewBinding
-- Retrofit 2 + Gson + OkHttp (logging)
-- Kotlin Coroutines (`lifecycleScope`)
-- Material Components 3, RecyclerView, CardView
-- SharedPreferences (sessão do usuário e tema)
-- minSdk 24 · targetSdk 35
-
-**API REST**
-- Node.js 22+ e Express
-- SQLite pelo módulo nativo `node:sqlite` (sem dependências nativas para compilar)
-- Swagger UI (`swagger-ui-express`) com especificação OpenAPI 3
-- Senhas com hash `scrypt` + salt (módulo nativo `node:crypto`)
-- Testes automatizados com `node:test` + `supertest` (39 testes)
-
----
-
-## 📁 Estrutura do projeto
-
-```
-treino-certo/
-├── backend/                     # API REST (Node.js + Express + SQLite)
-│   ├── src/
-│   │   ├── app.js               # monta o Express (rotas, Swagger, erros)
-│   │   ├── server.js            # ponto de entrada
-│   │   ├── config/              # porta e caminho do banco
-│   │   ├── db/                  # schema das tabelas e carga inicial de alimentos
-│   │   ├── routes/              # definição dos endpoints
-│   │   ├── controllers/         # recebem a requisição e devolvem a resposta
-│   │   ├── services/            # regras de negócio (recomendação, diário)
-│   │   ├── repositories/        # SQL e conversão banco ⇄ JSON
-│   │   ├── validators/          # validação dos dados de entrada
-│   │   ├── middlewares/         # tratamento de erros
-│   │   └── docs/openapi.yaml    # documentação Swagger
-│   ├── scripts/dados-exemplo.js # dados de demonstração (npm run seed)
-│   └── test/                    # testes automatizados
-├── android/                     # Projeto Android Studio
-│   └── app/src/main/java/com/treinocerto/app/
-│       ├── data/
-│       │   ├── model/           # data classes e enums do domínio
-│       │   ├── remote/          # interface Retrofit e cliente HTTP
-│       │   ├── repository/      # TreinoRepository + Resultado (sucesso/erro)
-│       │   └── local/           # SharedPreferences (sessão e tema)
-│       ├── ui/                  # uma pasta por tela + componentes comuns
-│       └── util/                # Intents implícitas, formatação, extensões
-├── docs/screenshots/            # capturas de tela
-└── render.yaml                  # deploy da API no Render
-```
-
-O app segue uma separação em camadas: as **Activities** cuidam só da interface e chamam o **TreinoRepository**, que usa o **Retrofit** e devolve um `Resultado` (`Sucesso` ou `Erro` com mensagem amigável). Na API, **routes → controllers → services/validators → repositories → SQLite**.
-
----
+| App Android | API REST |
+|---|---|
+| Kotlin · Activities + XML · ViewBinding | Node.js 22 · Express |
+| Retrofit 2 · Gson · OkHttp | SQLite (`node:sqlite`) |
+| Coroutines (`lifecycleScope`) | Swagger UI · OpenAPI 3 |
+| Material Components 3 · RecyclerView · CardView | `node:crypto` (scrypt) |
+| SharedPreferences | `node:test` · Supertest |
+| minSdk 24 · targetSdk 35 | Deploy no Render |
 
 ## ▶️ Como executar
 
-### 1. API (backend)
+**Pré-requisitos:** Android Studio e Node.js 22.13+.
 
-Pré-requisito: **Node.js 22.13 ou superior** (`node --version`).
+### App Android
+
+1. Abra a pasta **`android/`** no Android Studio e aguarde o Gradle sincronizar.
+2. Clique em **Run ▶**. Por padrão o app usa a API na nuvem.
+
+Para usar a API rodando no seu computador, altere `API_BASE_URL` em `android/gradle.properties`:
+
+| Cenário | `API_BASE_URL` |
+|---|---|
+| API na nuvem (padrão) | `https://treino-certo-api.onrender.com/` |
+| API local + emulador | `http://10.0.2.2:3000/` |
+| API local + celular no mesmo Wi-Fi | `http://IP_DO_COMPUTADOR:3000/` |
+
+### API
 
 ```bash
 cd backend
 npm install
-npm run seed     # (opcional) dados de exemplo — login: maria@email.com / senha: 123456
-npm start
+npm run seed   # dados de exemplo (login maria@email.com / 123456)
+npm start      # http://localhost:3000/docs
+npm test       # 39 testes
 ```
 
-- API: `http://localhost:3000/api`
-- **Swagger: http://localhost:3000/docs**
-- Testes: `npm test`
+### Deploy
 
-O banco `treino_certo.db` é criado automaticamente na pasta `backend/`. O caminho e a porta podem ser alterados pelas variáveis `DB_PATH` e `PORT`.
-
-### 2. Aplicativo Android
-
-1. Abra a pasta **`android/`** no Android Studio e aguarde o Gradle sincronizar.
-2. Configure o endereço da API em `android/gradle.properties`:
-   | Onde o app roda | `API_BASE_URL` |
-   |---|---|
-   | API publicada na nuvem (emulador ou celular, em qualquer rede) | `https://treino-certo-api.onrender.com/` (padrão) |
-   | API no computador, app no emulador | `http://10.0.2.2:3000/` |
-   | API no computador, app no celular (mesmo Wi-Fi) | `http://IP_DO_COMPUTADOR:3000/` (ex.: `http://192.168.0.15:3000/`) |
-3. Clique em **Run ▶**.
-
-> Com o endereço padrão (nuvem), o app funciona sem rodar a API no computador. Para usar a API local, troque o `API_BASE_URL` e clique em **File → Sync Project with Gradle Files**.
->
-> No celular físico com a API local, descubra o IP do computador com `ipconfig` (Windows) ou `ip a` (Linux/macOS) e libere a porta 3000 no firewall.
-
-### 3. (Bônus) Deploy da API na nuvem
-
-A API está publicada no [Render](https://render.com) (plano gratuito) em **https://treino-certo-api.onrender.com** ([Swagger](https://treino-certo-api.onrender.com/docs)). A cada `git push` na branch `main`, o Render faz um novo deploy automaticamente.
-
-Configuração do serviço (a mesma do arquivo `render.yaml`):
-
-| Campo | Valor |
-|---|---|
-| Root Directory | `backend` |
-| Build Command | `npm install && npm run seed` |
-| Start Command | `npm start` |
-| Variáveis | `NODE_VERSION=22.13.0`, `TZ=America/Sao_Paulo` |
-| Health check | `/api/health` |
-
-Para publicar em outra conta: no Render, **New → Blueprint**, selecione o repositório e confirme.
-
-> No plano gratuito o disco é temporário: o banco é recriado com os dados de exemplo a cada novo deploy, e o primeiro acesso após um período parado pode levar cerca de 1 minuto.
-
----
+A API está no [Render](https://render.com) (plano gratuito), configurada pelo arquivo [`render.yaml`](render.yaml): raiz `backend`, build `npm install && npm run seed`, start `npm start`, variáveis `NODE_VERSION=22.13.0` e `TZ=America/Sao_Paulo` e health check em `/api/health`.
 
 ## 🌐 API REST
 
-Todos os dados trafegam em **JSON**. A documentação interativa completa (com exemplos e o botão *Try it out*) está no **Swagger em `/docs`**.
+Documentação interativa completa: **[treino-certo-api.onrender.com/docs](https://treino-certo-api.onrender.com/docs)**.
+
+<details>
+<summary><b>Ver todos os endpoints</b></summary>
 
 | Método | Endpoint | Descrição |
 |---|---|---|
 | GET | `/api/health` | Verifica se a API está no ar |
 | POST | `/api/auth/login` | Login (e-mail e senha) |
+| POST | `/api/usuarios` | Cadastre-se |
+| GET · PUT · DELETE | `/api/usuarios/{id}` | Consulta, edição e remoção do usuário |
 | PUT | `/api/usuarios/{id}/senha` | Troca a senha (exige a atual) |
-| GET | `/api/usuarios` | Lista usuários |
-| POST | `/api/usuarios` | Cadastre-se (com senha) |
-| GET | `/api/usuarios/{id}` | Busca usuário |
-| PUT | `/api/usuarios/{id}` | Atualiza usuário |
-| DELETE | `/api/usuarios/{id}` | Remove usuário e seus dados (cascade) |
 | GET | `/api/usuarios/{id}/avaliacoes` | Histórico de avaliações |
 | POST | `/api/avaliacoes` | Envia o questionário e gera o plano |
-| GET | `/api/avaliacoes/{id}` | Busca avaliação |
-| PATCH | `/api/avaliacoes/{id}` | Atualiza observação e favorito |
-| DELETE | `/api/avaliacoes/{id}` | Remove avaliação |
-| GET | `/api/alimentos?busca=&categoria=&usuarioId=` | Lista ou busca alimentos (padrão + criados pelo usuário) |
-| POST | `/api/alimentos` | Cria alimento personalizado |
-| GET | `/api/alimentos/{id}` | Busca alimento |
-| GET | `/api/usuarios/{id}/diario?data=AAAA-MM-DD` | Diário do dia com totais e meta |
-| POST | `/api/registros-alimentares` | Adiciona alimento consumido |
-| PUT | `/api/registros-alimentares/{id}` | Altera quantidade ou refeição |
-| DELETE | `/api/registros-alimentares/{id}` | Remove item do diário |
+| GET · PATCH · DELETE | `/api/avaliacoes/{id}` | Consulta, anotações/favorito e remoção |
+| GET · POST | `/api/alimentos` | Busca alimentos e cria alimento personalizado |
+| GET | `/api/usuarios/{id}/diario?data=` | Diário do dia com totais e meta |
+| POST | `/api/registros-alimentares` | Adiciona alimento ao diário |
+| PUT · DELETE | `/api/registros-alimentares/{id}` | Altera ou remove item do diário |
 | GET | `/api/usuarios/{id}/pesagens` | Histórico de peso |
-| POST | `/api/pesagens` | Registra pesagem (uma por dia: no mesmo dia, atualiza) |
-| DELETE | `/api/pesagens/{id}` | Remove pesagem |
-| POST | `/api/treinos-realizados` | Registra treino do plano ou avulso, com calorias estimadas (409 se o mesmo dia do plano já foi feito na data) |
-| GET | `/api/usuarios/{id}/treinos-realizados` | Lista treinos concluídos |
-| DELETE | `/api/treinos-realizados/{id}` | Remove treino registrado |
-| GET | `/api/usuarios/{id}/progresso` | Resumo de progresso (perfil, semana, sequência, últimos 7 dias) |
+| POST · DELETE | `/api/pesagens` · `/api/pesagens/{id}` | Registra (uma por dia) ou remove pesagem |
+| POST | `/api/treinos-realizados` | Registra treino do plano ou avulso, com calorias |
+| GET | `/api/usuarios/{id}/treinos-realizados` | Lista treinos feitos |
+| DELETE | `/api/treinos-realizados/{id}` | Remove treino |
+| GET | `/api/usuarios/{id}/progresso` | Resumo de progresso |
 
-Exemplo, criando uma avaliação:
+</details>
 
-```http
-POST /api/avaliacoes
-Content-Type: application/json
-
-{
-  "usuarioId": 1, "objetivo": "HIPERTROFIA", "nivel": "INICIANTE",
-  "diasSemana": 4, "minutosSessao": 60, "local": "ACADEMIA",
-  "restricoes": ["JOELHO"], "peso": 70.5, "altura": 1.72,
-  "pesoMeta": 74, "atividadeDiaria": "LEVE", "horasSono": 7
-}
-```
-
-Os erros seguem um formato único, por exemplo `400 { "erro": "Dados inválidos", "detalhes": ["peso deve estar entre 30 e 300 kg"] }`, e as mensagens aparecem no app.
-
-### Banco de dados (SQLite)
+<details>
+<summary><b>Modelo do banco de dados</b></summary>
 
 ```mermaid
 erDiagram
@@ -256,33 +168,26 @@ erDiagram
     usuarios ||--o{ registros_alimentares : registra
     usuarios ||--o{ pesagens : registra
     usuarios ||--o{ treinos_realizados : conclui
+    usuarios ||--o{ alimentos : cria
     avaliacoes ||--o{ treinos_realizados : origem
     alimentos ||--o{ registros_alimentares : compoe
 
     usuarios { int id PK
                text nome
                text email UK
-               int idade
-               text sexo
                text senha_hash }
     avaliacoes { int id PK
                  int usuario_id FK
                  text objetivo
-                 text nivel
-                 real peso
                  int meta_calorica
-                 text plano "JSON"
-                 int favorita }
+                 text plano "JSON" }
     alimentos { int id PK
-                text nome
-                text categoria
+                text nome UK
                 real kcal "por 100 g"
-                real proteina }
+                int criado_por FK }
     registros_alimentares { int id PK
                             int usuario_id FK
                             int alimento_id FK
-                            text data
-                            text refeicao
                             real quantidade }
     pesagens { int id PK
                int usuario_id FK
@@ -290,32 +195,60 @@ erDiagram
                text data }
     treinos_realizados { int id PK
                          int usuario_id FK
-                         int avaliacao_id FK
-                         text dia
+                         text tipo
                          int duracao_min
-                         text data }
+                         int kcal }
 ```
 
-A tabela `alimentos` é preenchida automaticamente com 74 alimentos comuns (inclusive manteiga, requeijão, presunto, azeite e óleos), e o usuário pode **criar os seus** a partir da tabela nutricional da embalagem. Os valores são aproximados, com base na Tabela Brasileira de Composição de Alimentos (TACO). As calorias de cada registro são calculadas por `kcal_por_100g × quantidade ÷ 100`.
+</details>
 
----
+<details>
+<summary><b>Estrutura de pastas</b></summary>
 
-## 📱 Capturas de tela
+```
+treino-certo/
+├── android/                         # App Android (Android Studio)
+│   └── app/src/main/java/com/treinocerto/app/
+│       ├── data/
+│       │   ├── model/               # data classes e enums do domínio
+│       │   ├── remote/              # interface Retrofit e cliente HTTP
+│       │   ├── repository/          # TreinoRepository + Resultado
+│       │   └── local/               # sessão e preferência de tema
+│       ├── ui/                      # uma pasta por tela + componentes comuns (TelaBase...)
+│       └── util/                    # Intents implícitas, formatação, extensões
+├── backend/                         # API REST
+│   ├── src/
+│   │   ├── routes/ controllers/ services/ repositories/ validators/
+│   │   ├── db/                      # schema, migrações e alimentos iniciais
+│   │   └── docs/openapi.yaml        # especificação Swagger
+│   ├── scripts/dados-exemplo.js     # npm run seed
+│   └── test/                        # testes automatizados
+└── render.yaml                      # deploy no Render
+```
 
-| Home | Home (escuro) | Questionário | Resultado | Histórico |
-|---|---|---|---|---|
-| ![](docs/screenshots/01_home.png) | ![](docs/screenshots/02_home_escuro.png) | ![](docs/screenshots/03_questionario.png) | ![](docs/screenshots/04_resultado.png) | ![](docs/screenshots/05_historico.png) |
+</details>
 
-| Detalhe | Diário alimentar | Adicionar alimento | Meu peso | Sobre |
-|---|---|---|---|---|
-| ![](docs/screenshots/06_detalhe.png) | ![](docs/screenshots/07_diario.png) | ![](docs/screenshots/08_adicionar_alimento.png) | ![](docs/screenshots/09_peso.png) | ![](docs/screenshots/10_sobre.png) |
+<details>
+<summary><b>Requisitos acadêmicos atendidos (AP2 · Desenvolvimento Mobile)</b></summary>
 
-| Login | Cadastre-se | Meu perfil | Meu progresso | Trocar senha |
-|---|---|---|---|---|
-| ![](docs/screenshots/11_login.png) | ![](docs/screenshots/12_cadastro.png) | ![](docs/screenshots/13_perfil.png) | ![](docs/screenshots/14_progresso.png) | ![](docs/screenshots/15_trocar_senha.png) |
+- **17 Activities** com navegação por **Intents explícitas** (dados passados por `putExtra`).
+- **Intents implícitas** (`util/IntentsExternas.kt`): `ACTION_SEND` (compartilhar), `ACTION_VIEW` com `https://` (Swagger, OMS e vídeos dos exercícios) e com `geo:` (academias próximas), `ACTION_INSERT` na agenda (`CalendarContract`) e `ACTION_SENDTO` com `mailto:`.
+- **Componentes de interface:** TextView, EditText, Button, ImageView, ImageButton, CheckBox, RadioButton, Spinner, Switch, SeekBar, ProgressBar, RecyclerView, CardView, Chip, FloatingActionButton, BottomSheet, DatePicker, AlertDialog e View personalizada.
+- **API REST documentada com Swagger**, operações de cadastro, consulta, alteração e remoção, dados em JSON.
+- **Banco relacional (SQLite)** com chaves estrangeiras, persistido pela API.
+- **Bônus:** deploy da API em nuvem (Render).
 
----
+</details>
 
-## ⚠️ Aviso
+## 👤 Autor
 
-As recomendações têm caráter educativo e não substituem a orientação de um profissional de Educação Física, de um nutricionista ou de um médico.
+**Pedro Brito**: estudante de Análise e Desenvolvimento de Sistemas no Ibmec, desenvolvedor mobile (Kotlin, Swift, React Native) e front-end (React).
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Pedro%20Brito-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/pedro-brito-12b13a218/)
+[![GitHub](https://img.shields.io/badge/GitHub-pbritodev-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/pbritodev)
+
+## 📄 Licença
+
+Distribuído sob a licença MIT. Veja [`LICENSE`](LICENSE).
+
+> ⚠️ As recomendações do app têm caráter educativo e não substituem a orientação de um profissional de Educação Física, nutricionista ou médico.
