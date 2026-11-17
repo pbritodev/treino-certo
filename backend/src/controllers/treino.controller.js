@@ -2,6 +2,7 @@ const { HttpError } = require('../middlewares/erros');
 const { validarTreinoRealizado } = require('../validators/treino.validator');
 const { montarProgresso } = require('../services/progresso.service');
 const { dataValida } = require('../validators/nutricao.validator');
+const { estimarKcal } = require('../services/gasto.service');
 
 function criarTreinoController({
   treinos, usuarios, avaliacoes, pesagens,
@@ -26,8 +27,14 @@ function criarTreinoController({
       if (req.body.avaliacaoId && !avaliacoes.buscarPorId(req.body.avaliacaoId)) {
         throw new HttpError(404, 'Avaliação não encontrada');
       }
-      if (treinos.jaRegistrado(req.body)) throw new HttpError(409, 'Este treino já foi registrado nesta data');
-      res.status(201).json(treinos.criar(req.body));
+      const treino = { tipo: 'PLANO', ...req.body };
+      // Só os dias do plano são únicos por data; treinos avulsos podem se repetir (ex.: 2 corridas).
+      if (treino.tipo === 'PLANO' && treinos.jaRegistrado(treino)) {
+        throw new HttpError(409, 'Este treino já foi registrado nesta data');
+      }
+      const peso = pesagens.listarPorUsuario(treino.usuarioId).at(-1)?.peso
+        ?? avaliacoes.buscarUltimaDoUsuario(treino.usuarioId)?.peso;
+      res.status(201).json(treinos.criar({ ...treino, kcal: estimarKcal({ ...treino, peso }) }));
     },
     remover(req, res) {
       if (!treinos.remover(Number(req.params.id))) throw new HttpError(404, 'Treino não encontrado');

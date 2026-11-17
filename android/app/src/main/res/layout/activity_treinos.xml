@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/espaco_medio"
+            android:paddingTop="@dimen/espaco_pequeno"
+            android:paddingBottom="96dp">
+
+            <!-- Resumo da semana -->
+            <androidx.cardview.widget.CardView
+                style="@style/Cartao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <include
+                        android:id="@+id/estatSemana"
+                        layout="@layout/layout_estatistica" />
+
+                    <include
+                        android:id="@+id/estatMinutos"
+                        layout="@layout/layout_estatistica" />
+
+                    <include
+                        android:id="@+id/estatKcal"
+                        layout="@layout/layout_estatistica" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Intents implícitas: mapa e agenda do celular -->
+            <Button
+                android:id="@+id/btnAcademias"
+                style="@style/Botao.Secundario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espaco_pequeno"
+                android:text="@string/treinos_academias"
+                app:icon="@drawable/ic_mapa" />
+
+            <Button
+                android:id="@+id/btnAgendar"
+                style="@style/Botao.Secundario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espaco_pequeno"
+                android:text="@string/treinos_agendar"
+                app:icon="@drawable/ic_calendario" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="4dp"
+                android:layout_marginTop="@dimen/espaco_grande"
+                android:text="@string/treinos_lista"
+                android:textAppearance="@style/Texto.Secao" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="4dp"
+                android:text="@string/historico_dica_swipe"
+                android:textAppearance="@style/Texto.Secundario" />
+
+            <ProgressBar
+                android:id="@+id/progresso"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/espaco_medio" />
+
+            <TextView
+                android:id="@+id/txtVazio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/espaco_medio"
+                android:gravity="center"
+                android:text="@string/treinos_vazio"
+                android:textAppearance="@style/Texto.Secundario"
+                android:visibility="gone" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTreinos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fabNovoTreino"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/espaco_medio"
+        android:text="@string/treinos_novo"
+        app:icon="@drawable/ic_adicionar" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

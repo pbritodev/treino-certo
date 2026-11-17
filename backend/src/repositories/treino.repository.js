@@ -4,9 +4,13 @@ function mapear(linha) {
     id: linha.id,
     usuarioId: linha.usuario_id,
     avaliacaoId: linha.avaliacao_id,
+    tipo: linha.tipo,
     dia: linha.dia,
     foco: linha.foco,
     duracaoMin: linha.duracao_min,
+    intensidade: linha.intensidade,
+    kcal: linha.kcal,
+    observacao: linha.observacao,
     data: linha.data,
   };
 }
@@ -28,19 +32,23 @@ function criarTreinoRepository(db) {
     }) {
       return Boolean(db.prepare(`
         SELECT 1 FROM treinos_realizados
-        WHERE usuario_id = ? AND avaliacao_id IS ? AND dia = ? AND data = ?
+        WHERE usuario_id = ? AND tipo = 'PLANO' AND avaliacao_id IS ? AND dia = ? AND data = ?
       `).get(usuarioId, avaliacaoId, dia.trim(), data));
     },
     buscarPorId(id) {
       return mapear(db.prepare('SELECT * FROM treinos_realizados WHERE id = ?').get(id));
     },
     criar({
-      usuarioId, avaliacaoId = null, dia, foco, duracaoMin, data,
+      usuarioId, avaliacaoId = null, tipo = 'PLANO', dia, foco = '', duracaoMin,
+      intensidade = null, kcal = null, observacao = '', data,
     }) {
       const { lastInsertRowid } = db.prepare(`
-        INSERT INTO treinos_realizados (usuario_id, avaliacao_id, dia, foco, duracao_min, data)
-        VALUES (?, ?, ?, ?, ?, ?)
-      `).run(usuarioId, avaliacaoId, dia.trim(), foco.trim(), duracaoMin, data);
+        INSERT INTO treinos_realizados
+          (usuario_id, avaliacao_id, tipo, dia, foco, duracao_min, intensidade, kcal, observacao, data)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `).run(
+        usuarioId, avaliacaoId, tipo, dia.trim(), foco.trim(), duracaoMin, intensidade, kcal, observacao.trim(), data,
+      );
       return this.buscarPorId(Number(lastInsertRowid));
     },
     remover(id) {

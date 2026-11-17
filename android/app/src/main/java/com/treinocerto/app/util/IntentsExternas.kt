@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.provider.CalendarContract
 import androidx.core.net.toUri
 
 /**
@@ -40,6 +41,21 @@ object IntentsExternas {
     /** Abre o app de mapas pesquisando o termo próximo à localização do usuário. */
     fun buscarNoMapa(context: Context, termo: String) {
         iniciar(context, Intent(Intent.ACTION_VIEW, "geo:0,0?q=${Uri.encode(termo)}".toUri()))
+    }
+
+    /**
+     * Abre o app de agenda/calendário do celular (Google Agenda, por exemplo) com um
+     * evento de treino já preenchido. O usuário só confirma e salva.
+     */
+    fun adicionarNaAgenda(context: Context, titulo: String, descricao: String, inicioMillis: Long, duracaoMin: Int) {
+        val intent = Intent(Intent.ACTION_INSERT).apply {
+            data = CalendarContract.Events.CONTENT_URI
+            putExtra(CalendarContract.Events.TITLE, titulo)
+            putExtra(CalendarContract.Events.DESCRIPTION, descricao)
+            putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, inicioMillis)
+            putExtra(CalendarContract.EXTRA_EVENT_END_TIME, inicioMillis + duracaoMin * 60_000L)
+        }
+        iniciar(context, intent)
     }
 
     /** Busca vídeos de execução do exercício no YouTube (app ou navegador). */

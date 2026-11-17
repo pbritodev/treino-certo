@@ -5,6 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardElevation="1dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
     app:contentPadding="12dp">
 
     <LinearLayout
@@ -14,11 +17,12 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:id="@+id/imgTipo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="@drawable/fundo_dia_ativo"
             android:importantForAccessibility="no"
-            android:padding="8dp"
+            android:padding="9dp"
             android:src="@drawable/ic_check"
             app:tint="@color/sobre_primario" />
 
@@ -42,5 +46,16 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/Texto.Secundario" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtKcal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/espaco_pequeno"
+            android:drawablePadding="2dp"
+            android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+            android:textColor="@color/laranja"
+            app:drawableStartCompat="@drawable/ic_fogo"
+            app:drawableTint="@color/laranja" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

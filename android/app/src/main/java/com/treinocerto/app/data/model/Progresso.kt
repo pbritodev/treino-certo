@@ -1,5 +1,10 @@
 package com.treinocerto.app.data.model
 
+/**
+ * Treino enviado para a API: um dia do plano (tipo "PLANO") ou um treino avulso
+ * cadastrado na tela "Meus treinos" (CORRIDA, NATACAO...). Em treinos avulsos,
+ * [dia] guarda o título do treino.
+ */
 data class TreinoRealizadoEntrada(
     val usuarioId: Long,
     val avaliacaoId: Long?,
@@ -7,6 +12,9 @@ data class TreinoRealizadoEntrada(
     val foco: String,
     val duracaoMin: Int,
     val data: String,
+    val tipo: String = TipoTreino.PLANO.api,
+    val intensidade: String? = null,
+    val observacao: String = "",
 )
 
 data class TreinoRealizado(
@@ -16,7 +24,14 @@ data class TreinoRealizado(
     val foco: String,
     val duracaoMin: Int,
     val data: String,
-)
+    val tipo: String = TipoTreino.PLANO.api,
+    val intensidade: String? = null,
+    /** Calorias estimadas pela API (MET x peso x horas). */
+    val kcal: Int? = null,
+    val observacao: String = "",
+) {
+    val doPlano get() = tipo == TipoTreino.PLANO.api
+}
 
 data class PlanoResumo(
     val id: Long,

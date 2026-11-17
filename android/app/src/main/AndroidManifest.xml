@@ -17,6 +17,10 @@
             <action android:name="android.intent.action.SENDTO" />
             <data android:scheme="mailto" />
         </intent>
+        <intent>
+            <action android:name="android.intent.action.INSERT" />
+            <data android:mimeType="vnd.android.cursor.dir/event" />
+        </intent>
     </queries>
 
     <application
@@ -49,6 +53,13 @@
         <activity
             android:name=".ui.perfil.TrocarSenhaActivity"
             android:parentActivityName=".ui.perfil.PerfilActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.treinos.TreinosActivity"
+            android:parentActivityName=".ui.home.MainActivity" />
+        <activity
+            android:name=".ui.treinos.NovoTreinoActivity"
+            android:parentActivityName=".ui.treinos.TreinosActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.progresso.ProgressoActivity"

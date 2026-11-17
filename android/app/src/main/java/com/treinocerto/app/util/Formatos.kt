@@ -47,6 +47,9 @@ object Formatos {
         if (valor % 1.0 == 0.0) valor.toLong().toString()
         else String.format(LOCALE_BR, "%.1f", valor)
 
+    /** Número inteiro formatado no padrão do aparelho (ex.: 1.250). */
+    fun inteiro(valor: Int): String = String.format(Locale.getDefault(), "%,d", valor)
+
     /** Lê números digitados com vírgula ou ponto. */
     fun lerDecimal(texto: String): Double? = texto.trim().replace(',', '.').toDoubleOrNull()
 }

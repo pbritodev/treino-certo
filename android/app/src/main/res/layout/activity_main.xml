@@ -143,6 +143,10 @@
                 layout="@layout/item_menu_home" />
 
             <include
+                android:id="@+id/menuTreinos"
+                layout="@layout/item_menu_home" />
+
+            <include
                 android:id="@+id/menuProgresso"
                 layout="@layout/item_menu_home" />
 

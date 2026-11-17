@@ -67,6 +67,32 @@ enum class CategoriaAlimento(override val api: String, override val rotulo: Stri
     OUTROS("OUTROS", "Outros"),
 }
 
+/** Tipos de treino. PLANO = dia do plano gerado; os demais são treinos avulsos. */
+enum class TipoTreino(override val api: String, override val rotulo: String) : OpcaoApi {
+    PLANO("PLANO", "Treino do plano"),
+    MUSCULACAO("MUSCULACAO", "Musculação"),
+    CORRIDA("CORRIDA", "Corrida"),
+    CAMINHADA("CAMINHADA", "Caminhada"),
+    CICLISMO("CICLISMO", "Ciclismo"),
+    NATACAO("NATACAO", "Natação"),
+    FUNCIONAL("FUNCIONAL", "Funcional / HIIT"),
+    YOGA("YOGA", "Yoga / alongamento"),
+    ESPORTE("ESPORTE", "Esporte (futebol, vôlei...)"),
+    OUTRO("OUTRO", "Outro"),
+    ;
+
+    companion object {
+        /** Tipos que o usuário pode escolher ao cadastrar um treino avulso. */
+        val avulsos get() = entries.filter { it != PLANO }
+    }
+}
+
+enum class IntensidadeTreino(override val api: String, override val rotulo: String) : OpcaoApi {
+    LEVE("LEVE", "Leve"),
+    MODERADA("MODERADA", "Moderada"),
+    INTENSA("INTENSA", "Intensa"),
+}
+
 /** Converte o valor vindo da API no rótulo amigável (ou devolve o próprio valor). */
 inline fun <reified T> rotuloDe(valorApi: String): String
     where T : Enum<T>, T : OpcaoApi =

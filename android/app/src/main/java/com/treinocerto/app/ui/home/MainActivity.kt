@@ -20,6 +20,7 @@ import com.treinocerto.app.ui.peso.PesoActivity
 import com.treinocerto.app.ui.progresso.ProgressoActivity
 import com.treinocerto.app.ui.questionario.QuestionarioActivity
 import com.treinocerto.app.ui.sobre.SobreActivity
+import com.treinocerto.app.ui.treinos.TreinosActivity
 import com.treinocerto.app.util.Formatos
 import com.treinocerto.app.util.visivel
 import kotlin.math.roundToInt
@@ -48,6 +49,8 @@ class MainActivity : TelaBase() {
 
         configurarMenu(binding.menuNovaAvaliacao, R.drawable.ic_haltere, R.string.menu_nova_avaliacao,
             R.string.menu_nova_avaliacao_desc, QuestionarioActivity::class.java)
+        configurarMenu(binding.menuTreinos, R.drawable.ic_corrida, R.string.menu_treinos,
+            R.string.menu_treinos_desc, TreinosActivity::class.java)
         configurarMenu(binding.menuProgresso, R.drawable.ic_grafico, R.string.menu_progresso,
             R.string.menu_progresso_desc, ProgressoActivity::class.java)
         configurarMenu(binding.menuDiario, R.drawable.ic_restaurante, R.string.menu_diario,

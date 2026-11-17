@@ -392,7 +392,8 @@ paths:
   /api/treinos-realizados:
     post:
       tags: [Progresso]
-      summary: Registra um treino concluído
+      summary: Registra um treino (dia do plano ou treino avulso)
+      description: Calcula as calorias gastas pelo MET da atividade e o peso atual. Dias do plano não podem se repetir na mesma data (409).
       requestBody:
         required: true
         content:
@@ -656,19 +657,27 @@ components:
             senha: { type: string, minLength: 6, maxLength: 64, example: '123456' }
     TreinoRealizadoEntrada:
       type: object
-      required: [usuarioId, dia, foco, duracaoMin, data]
+      required: [usuarioId, dia, duracaoMin, data]
       properties:
         usuarioId: { type: integer, example: 1 }
-        avaliacaoId: { type: integer, nullable: true, example: 2 }
-        dia: { type: string, example: Dia 1 }
-        foco: { type: string, example: Membros superiores }
-        duracaoMin: { type: integer, minimum: 5, maximum: 300, example: 60 }
+        avaliacaoId: { type: integer, nullable: true, description: Avaliação de origem (treinos do plano), example: 2 }
+        tipo:
+          type: string
+          enum: [PLANO, MUSCULACAO, CORRIDA, CAMINHADA, CICLISMO, NATACAO, FUNCIONAL, YOGA, ESPORTE, OUTRO]
+          default: PLANO
+          description: PLANO = dia do plano; os demais são treinos avulsos cadastrados pelo usuário
+        dia: { type: string, maxLength: 40, description: Dia do plano ou título do treino avulso, example: Corrida no parque }
+        foco: { type: string, maxLength: 100, example: 5 km }
+        duracaoMin: { type: integer, minimum: 5, maximum: 300, example: 35 }
+        intensidade: { type: string, enum: [LEVE, MODERADA, INTENSA], nullable: true, example: MODERADA }
+        observacao: { type: string, maxLength: 300, example: Ritmo bom }
         data: { type: string, format: date, example: '2026-11-16' }
     TreinoRealizado:
       allOf:
         - type: object
           properties:
             id: { type: integer, example: 7 }
+            kcal: { type: integer, nullable: true, description: 'Gasto estimado: MET x peso x horas', example: 402 }
         - $ref: '#/components/schemas/TreinoRealizadoEntrada'
     Progresso:
       type: object

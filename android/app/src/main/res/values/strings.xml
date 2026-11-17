@@ -260,7 +260,6 @@
     <string name="progresso_vazio">Nenhum treino registrado ainda.\nToque em "Concluí este treino" no seu plano.</string>
     <string name="progresso_escolher_dia">Qual treino você fez hoje?</string>
     <string name="progresso_treino_item">%1$s · %2$s</string>
-    <string name="progresso_treino_detalhe">%1$s · %2$d min</string>
     <string name="progresso_treino_removido">Treino removido</string>
     <string name="progresso_motivacao_meta">Meta da semana batida! 🏆</string>
     <string name="progresso_motivacao_falta">Faltam %1$d treino(s) para a meta da semana</string>
@@ -295,4 +294,48 @@
     <string name="treino_concluido_hoje">Concluído hoje</string>
     <string name="treino_ja_feito">Esse treino já foi registrado hoje ✓</string>
     <string name="progresso_opcao_feita">✓ %1$s (feito hoje)</string>
+
+    <!-- Meus treinos -->
+    <string name="treinos_titulo">Meus treinos</string>
+    <string name="treinos_semana">Treinos na semana</string>
+    <string name="treinos_minutos">Minutos</string>
+    <string name="treinos_kcal">kcal gastas</string>
+    <string name="treinos_novo">Novo treino</string>
+    <string name="treinos_academias">Academias próximas</string>
+    <string name="treinos_agendar">Agendar treino na agenda</string>
+    <string name="treinos_agendar_titulo">Treino · TreinoCerto</string>
+    <string name="treinos_agendar_descricao">Treino agendado pelo app TreinoCerto 💪</string>
+    <string name="treinos_lista">Histórico de treinos</string>
+    <string name="treinos_vazio">Nenhum treino registrado ainda.\nToque em "Novo treino" para cadastrar o primeiro.</string>
+    <string name="treinos_acao_agenda">Adicionar à agenda do celular</string>
+    <string name="treinos_acao_compartilhar">Compartilhar</string>
+    <string name="treinos_compartilhar_texto">Treinei hoje: %1$s (%2$d min%3$s) com o TreinoCerto 💪</string>
+    <string name="treinos_kcal_sufixo">, ≈ %1$d kcal</string>
+    <string name="treinos_removido">Treino removido</string>
+    <string name="treino_item_detalhe">%1$s · %2$d min</string>
+    <string name="treino_kcal">%1$d</string>
+    <string name="menu_treinos">Meus treinos</string>
+    <string name="menu_treinos_desc">Cadastre corridas, natação e outros treinos</string>
+
+    <!-- Novo treino -->
+    <string name="novo_treino_titulo">Novo treino</string>
+    <string name="novo_treino_tipo">Tipo de atividade</string>
+    <string name="novo_treino_nome">Título do treino</string>
+    <string name="novo_treino_nome_ajuda">Ex.: Corrida no parque, Natação no clube</string>
+    <string name="novo_treino_foco">Descrição (opcional)</string>
+    <string name="novo_treino_foco_ajuda">Ex.: 5 km, 20 piscinas, treino de pernas</string>
+    <string name="novo_treino_duracao">Duração</string>
+    <string name="novo_treino_intensidade">Intensidade</string>
+    <string name="novo_treino_data">Data</string>
+    <string name="novo_treino_observacao">Observações (opcional)</string>
+    <string name="novo_treino_agenda">Adicionar também à agenda do celular</string>
+    <string name="novo_treino_agenda_ajuda">Abre o app de agenda já com o treino preenchido</string>
+    <string name="novo_treino_salvar">Salvar treino</string>
+    <string name="novo_treino_salvo">Treino salvo! ≈ %1$d kcal gastas 🔥</string>
+    <string name="novo_treino_erro_nome">Informe um título (até 40 caracteres)</string>
+    <string name="novo_treino_erro_duracao">Entre 5 e 300 minutos</string>
+    <string name="unidade_min">min</string>
+    <string name="intensidade_leve">Leve</string>
+    <string name="intensidade_moderada">Moderada</string>
+    <string name="intensidade_intensa">Intensa</string>
 </resources>

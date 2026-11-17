@@ -31,6 +31,7 @@ Aplicativo Android que monta um **plano de treino personalizado** a partir de um
 |---|---|
 | Conta | **Login**, **Cadastre-se**, **trocar senha** (senha guardada com hash scrypt + salt) e sair |
 | Meu perfil | Avatar com iniciais, dados da conta, edição (PUT), atalhos para progresso e troca de senha |
+| Meus treinos | Cadastro de treinos avulsos (corrida, natação, futebol...) com intensidade e **calorias estimadas pelo MET**, resumo dos últimos 7 dias, **adicionar o treino na agenda do celular** e **academias próximas** no mapa |
 | Meu progresso | Perfil e plano atual, treinos na semana × meta, dias seguidos, total de treinos e minutos, últimos 7 dias, peso e lista de treinos realizados |
 | Avaliação | Questionário completo, geração do plano e da meta calórica |
 | Histórico | Lista de planos, filtro de favoritos, anotações e favorito (PATCH), exclusão (DELETE) com deslize |
@@ -43,7 +44,7 @@ Aplicativo Android que monta um **plano de treino personalizado** a partir de um
 
 ## ✅ Requisitos da AP2 atendidos
 
-### 15 Activities
+### 17 Activities
 
 | # | Activity | Função |
 |---|---|---|
@@ -62,6 +63,8 @@ Aplicativo Android que monta um **plano de treino personalizado** a partir de um
 | 13 | `CriarAlimentoActivity` | Cadastro de alimento próprio (valores da embalagem) |
 | 14 | `PesoActivity` | Pesagens e gráfico de evolução |
 | 15 | `SobreActivity` | Informações, tema e links |
+| 16 | `TreinosActivity` | Meus treinos: histórico, resumo da semana, agenda e academias |
+| 17 | `NovoTreinoActivity` | Cadastro de treino avulso |
 
 ### Intents
 
@@ -69,7 +72,8 @@ Aplicativo Android que monta um **plano de treino personalizado** a partir de um
 - **Implícitas** (centralizadas em `util/IntentsExternas.kt`):
   - `ACTION_SEND`: compartilhar o plano e indicar o app;
   - `ACTION_VIEW` com `https://`: abrir o Swagger, a página da OMS e um vídeo de execução de cada exercício (toque no exercício);
-  - `ACTION_VIEW` com `geo:`: academias ou parques próximos no app de mapas;
+  - `ACTION_VIEW` com `geo:`: academias ou parques próximos no app de mapas (telas Resultado e Meus treinos);
+  - `ACTION_INSERT` em `CalendarContract.Events`: adiciona o treino na agenda do celular (Google Agenda), já com título, horário e duração;
   - `ACTION_SENDTO` com `mailto:`: e-mail de contato.
 
 ### Componentes de interface (Views)
@@ -100,7 +104,7 @@ Aplicativo Android que monta um **plano de treino personalizado** a partir de um
 - SQLite pelo módulo nativo `node:sqlite` (sem dependências nativas para compilar)
 - Swagger UI (`swagger-ui-express`) com especificação OpenAPI 3
 - Senhas com hash `scrypt` + salt (módulo nativo `node:crypto`)
-- Testes automatizados com `node:test` + `supertest` (35 testes)
+- Testes automatizados com `node:test` + `supertest` (39 testes)
 
 ---
 
@@ -223,7 +227,7 @@ Todos os dados trafegam em **JSON**. A documentação interativa completa (com e
 | GET | `/api/usuarios/{id}/pesagens` | Histórico de peso |
 | POST | `/api/pesagens` | Registra pesagem (uma por dia: no mesmo dia, atualiza) |
 | DELETE | `/api/pesagens/{id}` | Remove pesagem |
-| POST | `/api/treinos-realizados` | Registra treino concluído (409 se o mesmo dia do plano já foi feito na data) |
+| POST | `/api/treinos-realizados` | Registra treino do plano ou avulso, com calorias estimadas (409 se o mesmo dia do plano já foi feito na data) |
 | GET | `/api/usuarios/{id}/treinos-realizados` | Lista treinos concluídos |
 | DELETE | `/api/treinos-realizados/{id}` | Remove treino registrado |
 | GET | `/api/usuarios/{id}/progresso` | Resumo de progresso (perfil, semana, sequência, últimos 7 dias) |

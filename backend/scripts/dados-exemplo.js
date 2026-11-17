@@ -14,6 +14,7 @@ const { gerarRecomendacao } = require('../src/services/recomendacao.service');
 const { dataLocal } = require('../src/utils/datas');
 const { gerarHash } = require('../src/utils/senha');
 const { criarTreinoRepository } = require('../src/repositories/treino.repository');
+const { estimarKcal } = require('../src/services/gasto.service');
 
 const diasAtras = (dias) => {
   const data = new Date();
@@ -55,6 +56,18 @@ const atual = avaliacoes.criar({ ...respostasAtuais, ...gerarRecomendacao(respos
   const dia = atual.plano[i % atual.plano.length];
   treinos.criar({
     usuarioId: maria.id, avaliacaoId: atual.id, dia: dia.dia, foco: dia.foco, duracaoMin: 60, data: diasAtras(dias),
+    kcal: estimarKcal({ duracaoMin: 60, peso: 71.2 }),
+  });
+});
+
+// Treinos avulsos cadastrados pela tela "Meus treinos"
+[
+  { tipo: 'CORRIDA', dia: 'Corrida no parque', foco: '5 km', duracaoMin: 35, intensidade: 'MODERADA', dias: 5 },
+  { tipo: 'NATACAO', dia: 'Natação', foco: 'Crawl', duracaoMin: 45, intensidade: 'LEVE', dias: 3 },
+  { tipo: 'YOGA', dia: 'Yoga em casa', foco: 'Alongamento', duracaoMin: 30, intensidade: 'LEVE', dias: 0 },
+].forEach(({ dias, ...treino }) => {
+  treinos.criar({
+    usuarioId: maria.id, ...treino, data: diasAtras(dias), kcal: estimarKcal({ ...treino, peso: 71.2 }),
   });
 });
 
